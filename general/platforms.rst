@@ -133,6 +133,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - No
      - Yes
 
+   * - `HiSilicon Hi3519AV100 Demo Board <http://www.hisilicon.com/en/Products/ProductList/Surveillance>`_
+     - ``PLATFORM=hisilicon-hi3519av100_demo``
+     - No
+     - Yes
+
    * - `HiKey Board (HiSilicon Kirin 620) <https://www.96boards.org/product/hikey>`_
      - ``PLATFORM=hikey` or `PLATFORM=hikey-hikey``
      - Yes
