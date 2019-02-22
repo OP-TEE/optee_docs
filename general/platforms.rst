@@ -38,6 +38,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Yes
      - Yes
 
+   * - `Broadcom ns3 <https://www.broadcom.com/products/ethernet-connectivity/smartnic/bcm58800>`_
+     - ``PLATFORM=bcm-ns3``
+     - No
+     - Yes
+
    * - `DeveloperBox (Socionext Synquacer SC2A11) <https://www.96boards.org/product/developerbox/>`_
      - ``PLATFORM=synquacer``
      - Yes
