@@ -223,7 +223,7 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Yes
      - Yes
 
-   * - `Texas Instruments AM65x <http://www.ti.com/lit/ug/spruid7/spruid7.pdf>`_
+   * - `Texas Instruments AM65x <http://www.ti.com/processors/sitara-arm/am6x-cortex-a53-r5/overview.html>`_
      - ``PLATFORM=k3-am65x``
      - Yes
      - Yes
