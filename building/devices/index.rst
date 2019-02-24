@@ -12,6 +12,6 @@ Device specific information
     hikey960
     juno
     qemu
+    zynqmp
     rpi3
     ti
-
