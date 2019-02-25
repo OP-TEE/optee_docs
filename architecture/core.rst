@@ -404,14 +404,7 @@ When switching to normal world either via a foreign interrupt (see
 :ref:`native_foreign_irqs` or RPC there is a chance that secure world will
 resume execution on a different CPU. This means that the new CPU need to be
 configured with the context of the currently active TA. This is solved by always
-setting the TA context in the CPU when resuming execution. Here is room for
-improvements since it is more likely than not that it is the same CPU that
-resumes execution in secure world.
-
-.. todo::
-
-    Joakim: Jens? Didn't you do some tweaks here already? I.e., "room for
-    improvements" above?
+setting the TA context in the CPU when resuming execution.
 
 ----
 
