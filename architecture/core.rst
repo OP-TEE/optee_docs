@@ -385,6 +385,57 @@ context is activated.
         "node_ttb":f1 -> "node_large_l1";
     }
 
+Page table cache
+================
+Page tables used to map TAs are managed with the page table cache. When the
+context of a TA is unmapped, all its page tables are released with a call
+to ``pgt_free()``. All page tables needed when mapping a TA are allocated
+using ``pgt_alloc()``.
+
+A fixed maximum number of translation tables are available in a pool. One
+thread may execute a TA which needs all or almost all tables. This can
+block TAs from being executed by other threads. To ensure that all TAs
+eventually will be permitted to execute ``pgt_alloc()`` temporarily frees
+eventual tables allocated before waiting for tables to become available.
+
+The page table cache behaves differently depending on configuration
+options.
+
+Without paging (``CFG_WITH_PAGER=n``)
+-------------------------------------
+This is the easiest configuration. All page tables are statically allocated
+in the ``.nozi.pgt_cache`` section. ``pgt_alloc()`` allocates tables from the
+free-list and ``pgt_free()`` returns the tables directly to the free-list.
+
+With paging enabled (``CFG_WITH_PAGER=y``)
+------------------------------------------
+
+Page tables are allocated as zero initialized locked pages during boot
+using ``tee_pager_alloc()``. Locked pages are populated with physical pages
+on demand from the pager. The physical page can be released when not needed
+any longer with ``tee_pager_release_phys()``.
+
+With ``CFG_WITH_LPAE=y`` each translation table has the same size as a
+physical page which makes it easy to release the physical page when the
+translation table isn't needed any longer. With the short-descriptor table
+format (``CFG_WITH_LPAE=n``) it becomes more complicated as four
+translation tables are stored in each page. Additional bookkeeping is used
+to tell when the page for used by four separate translation tables can be
+released.
+
+With paging of user TA enabled (``CFG_PAGED_USER_TA=y``)
+--------------------------------------------------------
+With paging of user TAs enabled a cache of recently used translation tables
+is used. This can save us from a storm of page faults when restoring the
+mappings of a recently unmapped TA. Which translation tables should be
+cached is indicated with reference counting by the pager on used tables.
+When a table needs to be forcefully freed
+``tee_pager_pgt_save_and_release_entries()`` is called to let the pager
+know that the table can't be used any longer.
+
+When a mapping in a TA is removed it also needs to be purged from cached
+tables with ``pgt_flush_ctx_range()`` to prevent old mappings from being
+accidentally reused.
 
 Switching to user mode
 ======================
