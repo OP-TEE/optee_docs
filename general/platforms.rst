@@ -213,9 +213,9 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - No
      - Yes
 
-   * - STMicroelectronics stm32mp1
+   * - `STMicroelectronics STM32MP1 series - <http://www.st.com/stm32mp1>`
      - ``PLATFORM=stm32mp1``
-     - No
+     - Yes
      - Yes
 
    * - `Allwinner A64 Pine64 Board <https://www.pine64.org/>`_
