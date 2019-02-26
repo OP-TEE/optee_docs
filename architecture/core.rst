@@ -695,6 +695,110 @@ is mapped new data is copied from backing store and the hash of the page is
 verified. If it is OK the pager returns from the exception to resume the
 execution.
 
+Data structures
+===============
+.. figure:: ../images/core/tee_pager_area.png
+    :figclass: align-center
+
+    How the main pager data structures relates to each other
+
+``struct tee_pager_area``
+-------------------------
+This is a central data structure when handling paged
+memory ranges. It's defined as:
+
+.. code-block:: c
+
+    struct tee_pager_area {
+        struct fobj *fobj;
+        size_t fobj_pgoffs;
+        enum tee_pager_area_type type;
+        uint32_t flags;
+        vaddr_t base;
+        size_t size;
+        struct pgt *pgt;
+        TAILQ_ENTRY(tee_pager_area) link;
+        TAILQ_ENTRY(tee_pager_area) fobj_link;
+    };
+
+Where ``base`` and ``size`` tells the memory range and ``fobj`` and
+``fobj_pgoffs`` holds the content. A ``struct tee_pager_area`` can only use
+``struct fobj`` and one ``struct pgt`` (translation table) so memory ranges
+spanning multiple fobjs or pgts are split into multiple areas.
+
+``struct fobj``
+---------------
+This is a polymorph object, using different implmentations depending on how
+it's initialized. It's defines as:
+
+.. code-block:: c
+
+    struct fobj_ops {
+        void (*free)(struct fobj *fobj);
+        TEE_Result (*load_page)(struct fobj *fobj, unsigned int page_idx,
+                                void *va);
+        TEE_Result (*save_page)(struct fobj *fobj, unsigned int page_idx,
+                                const void *va);
+    };
+
+    struct fobj {
+        const struct fobj_ops *ops;
+        unsigned int num_pages;
+        struct refcount refc;
+        struct tee_pager_area_head areas;
+    };
+
+:``num_pages``: Tells how many pages this ``fobj`` covers.
+:``refc``:      A reference counter, everyone referring to a ``fobj`` need to
+                increase and decrease this as needed.
+:``areas``:     A list of areas using this ``fobj``, traversed when making
+                a virtual page unavailable.
+
+``struct tee_pager_pmem``
+-------------------------
+This structure represents a physical page. It's defined as:
+
+.. code-block:: c
+
+    struct tee_pager_pmem {
+        unsigned int flags;
+        unsigned int fobj_pgidx;
+        struct fobj *fobj;
+        void *va_alias;
+        TAILQ_ENTRY(tee_pager_pmem) link;
+    };
+
+:``PMEM_FLAG_DIRTY``:   Bit is set in ``flags`` when the page is mapped
+                        read/write at at least one location.
+:``PMEM_FLAG_HIDDEN``:  Bit is set in ``flags`` when the page is hidden, that
+                        is, not accessible anywhere.
+:``fobj_pgidx``:        The page at this index in the ``fobj`` is used in this
+                        physical page.
+:``fobj``:              The ``fobj`` backing this page.
+:``va_alias``:          Virtual address where this physical page is updated
+                        when loading it from backing store or when writing it
+                        back.
+
+All ``struct tee_pager_pmem`` are stored either in the global list
+``tee_pager_pmem_head`` or in ``tee_pager_lock_pmem_head``. The latter is
+used by pages which are mapped and then locked in memory on demand. The
+pages are returned back to ``tee_pager_pmem_head`` when the pages are
+exlicitly released with a call to ``tee_pager_release_phys()``.
+
+A physical page can be used by more than one ``tee_pager_area``
+simultaneously. This is also know as shared secure memory and will appear
+as such for both read-only and read-write mappings.
+
+When a page is hidden it's unmapped from all translation tables and the
+``PMEM_FLAG_HIDDEN`` bit is set, but kept in memory. When a physical page
+is released it's also unmapped from all translation tables and it's content
+is written back to storage, then the ``fobj`` field is set to ``NULL`` to
+note the physical page as unused.
+
+Note that when ``struct tee_pager_pmem`` references a ``fobj`` it doesn't
+update the reference counter since it's already guaranteed to be available
+due the ``struct tee_pager_area`` which must reference the ``fobj`` too.
+
 Paging of user TA
 =================
 Paging of user TAs can optionally be enabled with ``CFG_PAGED_USER_TA=y``.
@@ -708,6 +812,25 @@ differences:
 needed when populating the TA. When the TA is fully populated and relocated
 ``tee_pager_set_uta_area_attr(...)`` changes the mapping of the area to strict
 permissions used when the TA is running.
+
+Paging shared secure memory
+---------------------------
+Shared secure memory is achieved by letting several ``tee_pager_area``
+using the same backing ``fobj``. When a ``tee_pager_area`` is allocated and
+assigned a ``fobj`` it's also added to a list for ``tee_pager_areas`` using
+this ``fobj``. This helps when a physical page is released.
+
+When a fault occurs first a matching ``tee_pager_area`` is located. Then
+``tee_pager_pmem_head`` is searched to see if a physical page already holds
+the page of the ``fobj`` needed. If so the ``pgt`` is updated to map the
+physical page at the appropriate locatation. If no physical page was holding
+the page a new physical page is allocated, initialized and finally mapped.
+
+In order to make as few updates to mappings as possible changes to less
+restricted, no access -> read-only or read-only to read-write, is done only
+for the virtual address was used when the page fault occurred. Changes in
+the other direction has to be done in all translation tables used to map
+the physical page.
 
 ----
 
