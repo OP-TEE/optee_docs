@@ -115,6 +115,108 @@ Now GDB is connected to the remote application. You may use GDB normally.
     (gdb) b main
     (gdb) c
 
+GDB - Secure world
+******************
+TEE core debugging
+==================
+To debug TEE core running QEMU with GDB, you don't have to enable any special
+flags as such, but it's easier to debug if you have optimization disabled. Other
+than that you will have four consoles that you are working with.
+
+    - Qemu console
+    - NW UART console
+    - SW UART console
+    - GDB console
+
+All of them but the GDB console are consoles you normally will see/use when
+running OP-TEE/xtest using QEMU. The first thing is to start QEMU, i.e.,
+
+.. code-block:: bash
+
+    $ cd <qemu-v7-project>/build
+    # make run-only also works if you don't want to rebuild things
+    $ make run
+
+Next launch another console for GDB and do this
+
+.. code-block:: bash
+
+    $ cd <qemu-v7-project>/toolchains/aarch32/bin
+    $ ./arm-linux-gnueabihf-gdb -q
+
+In the GDB console connect to the QEMU GDB server, like this (the output is
+included to show what you normally will see).
+
+.. code-block:: none
+
+    (gdb) target remote localhost:1234
+    Remote debugging using localhost:1234
+    warning: No executable has been specified and target does not support
+    determining executable automatically.  Try using the "file" command.
+    0x00000000 in ?? ()
+
+Still in the GDB console, load the symbols for TEE core
+
+.. code-block:: none
+
+    (gdb) symbol-file <qemu-v7-project>/optee_os/out/arm/core/tee.elf
+    Reading symbols from <qemu-v7-project>/optee_os/out/arm/core/tee.elf...done.
+
+Now you can set a breakpoint for any symbol in OP-TEE, for example
+
+.. code-block:: none
+
+    (gdb) b tee_entry_std
+    Breakpoint 1 at 0xe103012: file core/arch/arm/tee/entry_std.c, line 526.
+
+Last step is to initiate the boot, do that also from the GDB console
+
+.. code-block:: none
+
+    (gdb) c
+    Continuing.
+
+At this point will see UART output in the Normal world console as well as the
+Secure world UART console. If you now for example :ref:`optee_test_run_xtest`,
+then you will rather soon hit the breakpoint we previously set and you will see
+something like this in the GDB console:
+
+.. code-block:: none
+
+    Continuing.
+    [Switching to Thread 2]
+
+    Thread 2 hit Breakpoint 1, tee_entry_std (smc_args=0xe183f18
+    <stack_thread+8216>) at core/arch/arm/tee/entry_std.c:526
+    526             struct optee_msg_arg *arg = NULL;       /* fix gcc warning */
+    (gdb)
+
+From here you can start to poke around with GDB, single step, read memory, read
+registers, print variables and all sorts of things that you normally do with a
+debugger.
+
+.. hint::
+
+    Some people find it easier to see the source code also while debugging, you
+    can enable the "TUI mode" which will give you that by instead running GDB
+    with
+
+    .. code-block:: bash
+
+        $ ./arm-linux-gnueabihf-gdb -q -tui
+
+    Unfortunately a recent version of GDB that we are using wasn't built with
+    TUI mode enabled, which means that you eventually will see something like
+    this
+
+    .. code-block:: bash
+
+        $ ./arm-linux-gnueabihf-gdb -q -tui
+        ./arm-linux-gnueabihf-gdb: TUI mode is not supported
+
+    While waiting for a fix (`build/PR#340`_) to be merged, you can download and
+    use a more recent version of GCC where it has been re-enabled (download link
+    can be found in `Bug#4130`_).
 
 .. _qemu_v8:
 
@@ -133,4 +235,6 @@ All other things (networking, GDB etc) in the v7 section above is also
 applicable on QEMU v8 as long as you replace ``<qemu-v7-project>`` with
 ``<qemu-v8-project>`` to get the correct paths relative to your QEMU v8 setup.
 
+.. _build/PR#340: https://github.com/OP-TEE/build/pull/340
+.. _Bug#4130: https://bugs.linaro.org/show_bug.cgi?id=4130#c4
 .. _SLiRP: https://wiki.qemu.org/Documentation/Networking#User_Networking_.28SLIRP.29
