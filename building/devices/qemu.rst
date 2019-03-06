@@ -166,8 +166,8 @@ Now you can set a breakpoint for any symbol in OP-TEE, for example
 
 .. code-block:: none
 
-    (gdb) b tee_entry_std
-    Breakpoint 1 at 0xe103012: file core/arch/arm/tee/entry_std.c, line 526.
+    (gdb) hbreak tee_entry_std
+    Hardware assisted breakpoint 1 at 0xe103012: file core/arch/arm/tee/entry_std.c, line 526.
 
 Last step is to initiate the boot, do that also from the GDB console
 
