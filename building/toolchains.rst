@@ -14,8 +14,8 @@ Download/install
 We propose two ways to download the toolchains, both will put the toolchains
 under the same path(s).
 
-1. Direct download
-==================
+Direct download
+===============
 Go the `Arm GCC download page`_ and download the "`AArch32 target with soft
 float (arm-linux-gnueabi)`" for 32bit builds and the "`AArch64 GNU/Linux target
 (aarch64-linux-gnu)`" for 64bit builds. When the downloads have finished, you
@@ -37,8 +37,8 @@ Here is an example
     $ mkdir aarch64
     $ tar xf gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz -C aarch64 --strip-components=1
 
-2. Using build.git
-==================
+Using build.git
+===============
 As an alternative, you can let :ref:`build`.git download them for you, but this
 of course involves getting a git that you might not otherwise use.
 
