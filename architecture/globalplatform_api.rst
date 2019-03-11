@@ -120,6 +120,9 @@ to import the definitions of the extensions. For each extension, a configuration
 directive prefixed ``CFG_`` allows one to disable support for the extension when
 building the OP-TEE packages.
 
+
+.. _extensions_cache_maintenance:
+
 Cache Maintenance Support
 =========================
 Following functions have been introduced in order to allow Trusted Applications
@@ -132,10 +135,10 @@ to operate with the data cache:
     TEE_Result TEE_CacheInvalidate(char *buf, size_t len);
 
 These functions are available to any Trusted Application defined with the flag
-``TA_FLAG_CACHE_MAINTENANCE`` sets on. When not set, each function returns the
-error code ``TEE_ERROR_NOT_SUPPORTED``. Within these extensions, a Trusted
-Application is able to operate on the data cache, with the following
-specification:
+``TA_FLAG_CACHE_MAINTENANCE`` sets on, see :ref:`ta_property_cache_maintenance`.
+When not set, each function returns the error code ``TEE_ERROR_NOT_SUPPORTED``.
+Within these extensions, a Trusted Application is able to operate on the data
+cache, with the following specification:
 
 .. list-table::
     :widths: 10 60
@@ -162,7 +165,6 @@ returned:
     - The memory range has not the write access, that is
       ``TEE_MEMORY_ACCESS_WRITE`` is not set.
     - The memory is **not** user space memory.
-
 
 You may disable this extension by setting the following configuration variable
 in ``conf.mk``:

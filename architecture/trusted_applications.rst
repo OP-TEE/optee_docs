@@ -180,15 +180,16 @@ Refer to the OP-TEE OS for secure data path support. TAs that do not set
 to handle memory reference invocation parameters that relate to secure data path
 buffers.
 
+.. _ta_property_cache_maintenance:
 
 Cache maintenance Flag
 ----------------------
 ``TA_FLAG_CACHE_MAINTENANCE`` is a bit flag supported by ``TA_FLAGS``. This
-property flag claims access to the cache maintenance API for the TA:
-``TEE_CacheXxxx()``. Refer to the OP-TEE to check if cache API support is
-enabled. TAs that do not set ``TA_FLAG_CACHE_MAINTENANCE`` in the value of their
-``TA_FLAGS`` will not be able to call the cache maintenance API.
-
+property flag, when enabled, allows Trusted Applciation to use the cache
+maintenance API extension of the Internal Core API described in
+:ref:`extensions_cache_maintenance`. TAs that do not set
+``TA_FLAG_CACHE_MAINTENANCE`` in the value of their ``TA_FLAGS`` will not be
+able to call the cache maintenance API.
 
 Deprecated Property Flags
 -------------------------
