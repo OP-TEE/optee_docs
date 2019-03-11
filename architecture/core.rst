@@ -967,42 +967,47 @@ Shared Memory
 Shared Memory is a block of memory that is shared between the non-secure and the
 secure world. It is used to transfer data between both worlds.
 
-Shared Memory Allocation
-========================
-The shared memory is allocated by the Linux driver from a pool ``struct
-shm_pool``, the pool contains:
+The shared memory is allocated and managed by the non-secure world, i.e. the
+Linux OP-TEE driver. Secure world only considers the individual shared buffers,
+not their pool. Each shared memory is referenced with associated attributes:
 
-    - The physical address of the start of the pool
-    - The size of the pool
-    - Whether or not the memory is cached
-    - List of chunk of memory allocated.
+    - Buffer start address and byte size,
+    - Cache attributes of the shared memory buffer,
+    - List of chunks if mapped from noncontiguous pages.
 
-.. note::
-    - The shared memory pool is physically contiguous.
-    - The shared memory area is **not secure** as it is used by both non-secure
-      and secure world.
+Shared memory buffer references manipulated must fit inside one of the
+shared memory areas known from the OP-TEE core. OP-TEE supports two kinds
+of shared memory areas: a mandatory area for contiguous buffers
+an optional extra memory areas for noncontiguous buffers.
 
-Shared Memory Configuration
-===========================
-It is the Linux kernel driver for OP-TEE that is responsible for initializing
-the shared memory pool, given information provided by the OP-TEE core. The
-Linux driver issues a SMC call ``OPTEE_SMC_GET_SHM_CONFIG`` to retrieve the
-information
+Contiguous shared buffers
+=========================
+
+Configuration directives ``CFG_SHMEM_START`` and ``CFG_SHMEM_SIZE``
+define a share memory area where shared memory buffers are contiguous.
+Generic memory layout registers it as the ``MEM_AREA_NSEC_SHM`` memory area.
+
+The non-secure world issues ``OPTEE_SMC_GET_SHM_CONFIG`` to retrieve contiguous
+shared memory area configuration:
 
     - Physical address of the start of the pool
     - Size of the pool
     - Whether or not the memory is cached
 
-The shared memory pool configuration is platform specific. The memory mapping,
-including the area ``MEM_AREA_NSEC_SHM`` (shared memory with non-secure world),
-is retrieved by calling the platform-specific function ``bootcfg_get_memory()``.
-Please refer to this function and the area type ``MEM_AREA_NSEC_SHM`` to see the
-configuration for the platform of interest. The Linux driver will then
-initialize the shared memory pool accordingly.
+Noncontiguous shared buffers
+============================
 
-.. todo::
+To benefit from noncontiguous shared memory buffers, secure world register
+dynamic shared memory areas and non-secure world must register noncontiguous
+buffers prior to referring to them using the OP-TEE API.
 
-    Joakim: bootcfg_get_memory(...) is no longer in our code. Text needs update.
+The OP-TEE core generic boot sequence discovers dynamic shared areas from the
+device tree and/or areas explicitly registered by the platform.
+
+Non-secure side needs to register buffers as 4kByte chunks lists into OP-TEE
+core using the ``OPTEE_MSG_CMD_REGISTER_SHM`` API prior referencing to them
+using the OP-TEE invocation API.
+
 
 Shared Memory Chunk Allocation
 ==============================
@@ -1018,13 +1023,9 @@ Using shared memory
 From the Client Application
     The client application can ask for shared memory allocation using the
     GlobalPlatform Client API function ``TEEC_AllocateSharedMemory(...)``. The
-    client application can also provide shared memory through the GlobalPlatform
-    Client API function ``TEEC_RegisterSharedMemory(...)``. In such a case, the
-    provided memory must be physically contiguous, since OP-TEE core, who does
-    not handle scatter-gather memory, is able to use the provided range of
-    memory addresses. Note that the reference count of a shared memory chunk is
-    incremented when shared memory is registered, and initialized to 1 on
-    allocation.
+    client application can also register a memory through the GlobalPlatform
+    Client API function ``TEEC_RegisterSharedMemory(...)``. The shared memory
+    reference can then be used as parameter when invoking a trusted application.
 
 From the Linux Driver
     Occasionally the Linux kernel driver needs to allocate shared memory for the
