@@ -170,27 +170,8 @@ property must be defined by the macro ``TA_STACK_SIZE`` in
 
 2. Property extensions
 ======================
-2.1 User Mode Flag
-==================
-``TA_FLAG_USER_MODE`` is a bit flag supported by ``TA_FLAGS``. This property
-flag is currently meaningless in OP-TEE. It may be set or not without impact on
-TA execution. All OP-TEE TAs are executed in user mode/level. Because of this we
-**do not** recommend to use this flag.
 
-2.2 DDR Flag
-============
-``TA_FLAG_EXEC_DDR`` is a bit flag supported by ``TA_FLAGS``. This property flag
-is currently meaningless in OP-TEE. Nevertheless it shall be set. It is a legacy
-property flag that aimed at targeting location for the TA execution, internal
-RAM or external DDR. Therefore all TAs must set ``TA_FLAG_EXEC_DDR`` in
-``TA_FLAGS`` in their ``user_ta_header_defines.h`` header file (see
-:ref:`user_ta_header_defines_h`).
-
-.. note::
-
-    This flag will soon be deprecated.
-
-2.3 Secure Data Path Flag
+2.1 Secure Data Path Flag
 =========================
 ``TA_FLAG_SECURE_DATA_PATH`` is a bit flag supported by ``TA_FLAGS``. This
 property flag claims the secure data support from the OP-TEE OS for the TA.
@@ -199,17 +180,7 @@ Refer to the OP-TEE OS for secure data path support. TAs that do not set
 to handle memory reference invocation parameters that relate to secure data path
 buffers.
 
-2.4 Remap Support Flag
-======================
-``TA_FLAG_REMAP_SUPPORT`` is a bit flag supported by ``TA_FLAGS``. This property
-flag is currently meaningless in OP-TEE and therefore we recommend to not use
-this flag.
-
-.. note::
-
-    This flag will soon be deprecated.
-
-2.5 Cache maintenance Flag
+2.2 Cache maintenance Flag
 ==========================
 ``TA_FLAG_CACHE_MAINTENANCE`` is a bit flag supported by ``TA_FLAGS``. This
 property flag claims access to the cache maintenance API for the TA:
@@ -219,3 +190,10 @@ enabled. TAs that do not set ``TA_FLAG_CACHE_MAINTENANCE`` in the value of their
 
 .. _ELF: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
 .. _early TA commit: https://github.com/OP-TEE/optee_os/commit/d0c636148b3a
+
+2.3 Deprecated Property Flags
+=============================
+
+Older versions of OP-TEE used to define extended property flags that are
+deprecated and meaningless to current OP-TEE. These are ``TA_FLAG_USER_MODE``,
+``TA_FLAG_EXEC_DDR`` and ``TA_FLAG_REMAP_SUPPORT``.
