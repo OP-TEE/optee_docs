@@ -69,7 +69,7 @@ Host application
     $ cd optee_examples/hello_world/host
     $ make \
         CROSS_COMPILE=arm-linux-gnueabihf- \
-        TEEC_EXPORT=<optee_client>/out/export \
+        TEEC_EXPORT=<optee_client>/out/export/usr \
         --no-builtin-variables
 
 With this you end up with a binary ``optee_example_hello_world`` in the host
