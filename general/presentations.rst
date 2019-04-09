@@ -10,6 +10,28 @@ with latest version to understand whether things have changed or not.
 The links are sorted in chronological order, newest first and oldest at the
 end.
 
+    - BKK19
+        - BKK19-419 - Debugging with OP-TEE
+          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-419.pdf>`__,
+          `video <https://s3.amazonaws.com/connect.linaro.org/bkk19/videos/bkk19-419.mp4>`__)
+
+        - BKK19-415 - OP-TEE: Shared memory between TAs
+          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-415.pdf>`__,
+          `video <https://youtu.be/L-AfhBzxWTU>`__)
+
+        - BKK19-403 - Using DTB overlays in OP-TEE
+          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-403.pdf>`__,
+          `video <https://youtu.be/WFH4KGoToHI>`__)
+
+        - BKK19-215 - TPM in TEE
+          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-215.pdf>`__,
+          `video <https://youtu.be/-uR_oUp0wPE>`__)
+
+        - BKK19-117 - Security WG Lightning talks
+          (`slides
+          <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-117.pdf>`__,
+          `video <https://youtu.be/k6bmQrBe7sc>`__)
+
     - YVR18
         - YVR18-414 - Keymaster and Gatekeeper
           (`slides <https://s3.amazonaws.com/connect.linaro.org/yvr18/presentations/yvr18-414.pdf>`__, 
