@@ -6,4 +6,5 @@ Debugging techniques
 
    abort_dumps
    benchmark
+   ftrace
    gprof

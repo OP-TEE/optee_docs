@@ -14,7 +14,7 @@ Usage
 *****
 
     - Build OP-TEE OS with ``CFG_TA_GPROF_SUPPORT=y``. You may also set
-      ``CFG_ULIBS_GPROF=y`` to instrument the user TA libraries (libutee,
+      ``CFG_ULIBS_MCOUNT=y`` to instrument the user TA libraries (libutee,
       libutils, libmpa).
 
     - Build user TAs with ``-pg``, for instance using: ``CFLAGS_ta_arm32=-pg``
