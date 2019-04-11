@@ -27,6 +27,21 @@ are as follows:
        compilers here, since there are corner cases where compilers cannot
        reliably give a warning.
 
+Variables are initialized according to these general guidelines:
+
+    * Scalars (and types like ``time_t`` which are standardized as scalars)
+      are initialized with ``0``, unless another value makes more sense.
+
+    * For optee_client we need maximum portability. So only initialize
+      struct types (and ``pthread_t``) with ``memset()`` unless there is a
+      good reason not to do so.
+
+    * For the rest of the gits we assume that a recent version of GCC or
+      Clang is used so we initialize structs with ``{ }`` in order to avoid
+      the more clumsy ``memset()`` procedure. Types like ``pthread_t``
+      which can be a scalar or a composite type are initialized with
+      ``memset()`` in order to minimize the amount of future headache.
+
 Regarding the checkpatch tool, it is not included directly into this project.
 Please use checkpatch.pl from the Linux kernel git in combination with the local
 `checkpatch script`_.
