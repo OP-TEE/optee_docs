@@ -92,6 +92,18 @@ to each make command.
 	$ make -f zynqmp.mk PLATFORM=zcu=106 petalinux-build
 	$ make -f zynqmp.mk PLATFORM=zcu=106 qemu
 
+Building a given version of OP-TEE
+**********************************
+By default this is the lastest version of OP-TEE which is built. If you wish
+you can build a given version of OP-TEE instead of the last one by using
+variable ``OPTEE_VER`` with target ``petalinux-config``.
+
+.. code-block:: bash
+	 
+	$ make -f zynqmp.mk petalinux-create
+	$ make -f zynqmp.mk OPTEE_VER=3.4.0 petalinux-config
+	$ make -f zynqmp.mk petalinux-build
+
 Customizing the Peatlinux distribution
 **************************************
 You can customize the Petalinux project (i.e. kernel, rootfs, ...)
