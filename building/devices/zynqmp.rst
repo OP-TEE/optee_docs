@@ -94,9 +94,10 @@ to each make command.
 
 Building a given version of OP-TEE
 **********************************
-By default this is the lastest version of OP-TEE which is built. If you wish
+By default, the lastest version of OP-TEE is built. If you wish
 you can build a given version of OP-TEE instead of the last one by using
-variable ``OPTEE_VER`` with target ``petalinux-config``.
+variable ``OPTEE_VER`` with target ``petalinux-config``. See below an example
+where OP-TEE v3.4.0 is built.
 
 .. code-block:: bash
 	 
@@ -104,7 +105,7 @@ variable ``OPTEE_VER`` with target ``petalinux-config``.
 	$ make -f zynqmp.mk OPTEE_VER=3.4.0 petalinux-config
 	$ make -f zynqmp.mk petalinux-build
 
-Customizing the Peatlinux distribution
+Customizing the Petalinux distribution
 **************************************
 You can customize the Petalinux project (i.e. kernel, rootfs, ...)
 as any standard Petalinux project.
