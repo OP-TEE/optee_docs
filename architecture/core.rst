@@ -982,7 +982,6 @@ an optional extra memory areas for noncontiguous buffers.
 
 Contiguous shared buffers
 =========================
-
 Configuration directives ``CFG_SHMEM_START`` and ``CFG_SHMEM_SIZE``
 define a share memory area where shared memory buffers are contiguous.
 Generic memory layout registers it as the ``MEM_AREA_NSEC_SHM`` memory area.
@@ -994,9 +993,11 @@ shared memory area configuration:
     - Size of the pool
     - Whether or not the memory is cached
 
+Contiguous shared memory (also known as static or reserved shared memory)
+is enabled with the configuration flag ``CFG_CORE_RESERVED_SHM=y``.
+
 Noncontiguous shared buffers
 ============================
-
 To benefit from noncontiguous shared memory buffers, secure world register
 dynamic shared memory areas and non-secure world must register noncontiguous
 buffers prior to referring to them using the OP-TEE API.
@@ -1008,6 +1009,8 @@ Non-secure side needs to register buffers as 4kByte chunks lists into OP-TEE
 core using the ``OPTEE_MSG_CMD_REGISTER_SHM`` API prior referencing to them
 using the OP-TEE invocation API.
 
+Noncontiguous shared memory (also known as dynamic shared memory) is
+enabled with the configuration flag ``CFG_CORE_DYN_SHM=y``.
 
 Shared Memory Chunk Allocation
 ==============================
