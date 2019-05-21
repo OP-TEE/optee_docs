@@ -197,26 +197,13 @@ debugger.
 
 .. hint::
 
-    Some people find it easier to see the source code also while debugging, you
-    can enable the "TUI mode" which will give you that by instead running GDB
-    with
+    Some people find it easier to also see the source code while debugging. You
+    can enable the "TUI mode" to see the source code in GDB. To enable that, run
+    GDB with
 
     .. code-block:: bash
 
         $ ./arm-linux-gnueabihf-gdb -q -tui
-
-    Unfortunately a recent version of GDB that we are using wasn't built with
-    TUI mode enabled, which means that you eventually will see something like
-    this
-
-    .. code-block:: bash
-
-        $ ./arm-linux-gnueabihf-gdb -q -tui
-        ./arm-linux-gnueabihf-gdb: TUI mode is not supported
-
-    While waiting for a fix (`build/PR#340`_) to be merged, you can download and
-    use a more recent version of GCC where it has been re-enabled (download link
-    can be found in `Bug#4130`_).
 
 .. _qemu_v8:
 
