@@ -9,7 +9,7 @@ Core
 Interrupt handling
 ******************
 This section describes how :ref:`optee_os` handles switches of world execution
-context based on :ref:`SMC` exceptions and interrupt notifications Interrupt
+context based on :ref:`SMC` exceptions and interrupt notifications. Interrupt
 notifications are IRQ/FIQ exceptions which may also imply switching of world
 execution context: normal world to secure world, or secure world to normal
 world.
