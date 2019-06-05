@@ -93,6 +93,10 @@ related questions etc. Please see the MAINTAINERS_ file for contact information.
       - ``PLATFORM=vexpress-fvp``
       - Yes
 
+    * - `DeveloperBox`_
+      - ``PLATFORM=synquacer``
+      - Yes
+
     * - `HiKey Kirin 620`_
       - ``PLATFORM=hikey``
       - Yes
@@ -149,31 +153,33 @@ gits, then please refer to the next section instead.
 
 .. Please keep this list sorted in alphabetic order:
 
-+----------------+------------------+----------------------+
-| Target         | Manifest xml     | Device documentation |
-+================+==================+======================+
-| AM43xx         | ``am43xx.xml``   | :ref:`ti`            |
-+----------------+------------------+----------------------+
-| AM57xx         | ``am57xx.xml``   | :ref:`ti`            |
-+----------------+------------------+----------------------+
-| ARM Juno board | ``juno.xml``     | :ref:`juno`          |
-+----------------+------------------+----------------------+
-| DRA7xx         | ``dra7xx.xml``   | :ref:`ti`            |
-+----------------+------------------+----------------------+
-| FVP            | ``fvp.xml``      | :ref:`fvp`           |
-+----------------+------------------+----------------------+
-| HiKey 960      | ``hikey960.xml`` | :ref:`hikey960`      |
-+----------------+------------------+----------------------+
-| HiKey          | ``hikey.xml``    | :ref:`hikey`         |
-+----------------+------------------+----------------------+
-| Poplar Debian  | ``poplar.xml``   |                      |
-+----------------+------------------+----------------------+
-| QEMU           | ``default.xml``  | :ref:`qemu_v7`       |
-+----------------+------------------+----------------------+
-| QEMUv8         | ``qemu_v8.xml``  | :ref:`qemu_v8`       |
-+----------------+------------------+----------------------+
-| Raspberry Pi 3 | ``rpi3.xml``     | :ref:`rpi3`          |
-+----------------+------------------+----------------------+
++----------------+-------------------+----------------------+
+| Target         | Manifest xml      | Device documentation |
++================+===================+======================+
+| AM43xx         | ``am43xx.xml``    | :ref:`ti`            |
++----------------+-------------------+----------------------+
+| AM57xx         | ``am57xx.xml``    | :ref:`ti`            |
++----------------+-------------------+----------------------+
+| DeveloperBox   | ``synquacer.xml`` | :ref:`devbox`        |
++----------------+-------------------+----------------------+
+| ARM Juno board | ``juno.xml``      | :ref:`juno`          |
++----------------+-------------------+----------------------+
+| DRA7xx         | ``dra7xx.xml``    | :ref:`ti`            |
++----------------+-------------------+----------------------+
+| FVP            | ``fvp.xml``       | :ref:`fvp`           |
++----------------+-------------------+----------------------+
+| HiKey 960      | ``hikey960.xml``  | :ref:`hikey960`      |
++----------------+-------------------+----------------------+
+| HiKey          | ``hikey.xml``     | :ref:`hikey`         |
++----------------+-------------------+----------------------+
+| Poplar Debian  | ``poplar.xml``    |                      |
++----------------+-------------------+----------------------+
+| QEMU           | ``default.xml``   | :ref:`qemu_v7`       |
++----------------+-------------------+----------------------+
+| QEMUv8         | ``qemu_v8.xml``   | :ref:`qemu_v8`       |
++----------------+-------------------+----------------------+
+| Raspberry Pi 3 | ``rpi3.xml``      | :ref:`rpi3`          |
++----------------+-------------------+----------------------+
 
 Stable releases
 ===============
@@ -460,6 +466,7 @@ don't have to think about anything.
 .. Links to devices etc:
 .. _ARM Juno Board: http://www.arm.com/products/tools/development-boards/versatile-express/juno-arm-development-platform.php
 .. _ARM Foundation FVP: http://www.arm.com/fvp
+.. _DeveloperBox: https://www.96boards.org/product/developerbox
 .. _HiKey Kirin 620: https://www.96boards.org/products/hikey
 .. _HiKey 960: https://www.96boards.org/product/hikey960
 .. _MediaTek MT8173 EVB Board: http://www.mediatek.com/en/products/mobile-communications/tablet/mt8173
