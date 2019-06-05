@@ -16,4 +16,4 @@ notifications:
   - email: false
 
 script:
-  - make html
+  - SPHINXOPTS="-W --keep-going" make html
