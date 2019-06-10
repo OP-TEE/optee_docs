@@ -17,8 +17,8 @@ Usage
       ``CFG_ULIBS_MCOUNT=y`` to instrument the user TA libraries (libutee,
       libutils, libmpa).
 
-    - Build user TAs with ``-pg``, for instance using: ``CFLAGS_ta_arm32=-pg``
-      or ``CFLAGS_ta_arm64=-pg``. Note that instrumented TAs have a larger
+    - Build user TAs with ``-pg``, for instance enable: ``CFG_TA_MCOUNT=y`` to
+      instrument whole user TA. Note that instrumented TAs have a larger
       ``.bss`` section. The memory overhead is 1.36 times the ``.text`` size for
       32-bit TAs, and 1.77 times for 64-bit ones (refer to the TA linker script
       for details: ``ta/arch/arm/ta.ld.S``).
