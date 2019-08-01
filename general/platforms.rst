@@ -68,6 +68,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Yes
      - Yes
 
+   * - `NXP ls1028ardb <https://www.nxp.com/pages/design/qoriq-developer-resources/ls1028a-reference-design-board:LS1028ARDB>`_
+     - ``PLATFORM=ls-ls1028ardb``
+     - Yes
+     - Yes
+
    * - `NXP ls1088ardb <http://www.nxp.com/products/microcontrollers-and-processors/power-architecture-processors/qoriq-platforms/developer-resources/qoriq-ls1088a-reference-design-board:LS1088A-RDB>`_
      - ``PLATFORM=ls-ls1088ardb``
      - Yes
