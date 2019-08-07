@@ -33,7 +33,7 @@ To build a TA, one must provide:
     - **user_ta_header_defines.h**, a specific ANSI-C header file to define most
       of the TA properties.
 
-    - A implementation of at least the TA entry points, as extern functions:
+    - An implementation of at least the TA entry points, as extern functions:
       ``TA_CreateEntryPoint()``, ``TA_DestroyEntryPoint()``,
       ``TA_OpenSessionEntryPoint()``, ``TA_CloseSessionEntryPoint()``,
       ``TA_InvokeCommandEntryPoint()``
@@ -52,21 +52,21 @@ As an example, :ref:`hello_world` looks like this:
         ├── sub.mk                    srcs-y += hello_world_ta.c
         ├── include
         │   └── hello_world_ta.h      Header exported to non-secure: TA commands API
-        ├── hello_world_ta.c          Implementaion of TA entry points
+        ├── hello_world_ta.c          Implementation of TA entry points
         └── user_ta_header_defines.h  TA_UUID, TA_FLAGS, TA_DATA/STACK_SIZE, ...
 
 TA Makefile Basics
 ******************
 Required variables
 ==================
-The main TA-devkit make file is located in in :ref:`optee_os` at
+The main TA-devkit make file is located in :ref:`optee_os` at
 ``ta/mk/ta_dev_kit.mk``. The make file supports make targets such as ``all`` and
 ``clean`` to build a TA or a library and clean the built objects.
 
 The make file expects a couple of configuration variables:
 
 TA_DEV_KIT_DIR
-    Base directory of the TA-devkit. Used the TA-devkit itself to locate its tools.
+    Base directory of the TA-devkit. Used by the TA-devkit itself to locate its tools.
 
 BINARY and LIBNAME
     These are exclusive, meaning that you cannot use both at the same time. If
@@ -133,7 +133,7 @@ sub.mk make file:
     libnames += foo
 
     # Adds the directory path to the libraries pathes list. Archive file
-    # libfoo.a is expectd in this directory.
+    # libfoo.a is expected in this directory.
     libdirs += path/to/libfoo/install/directory
 
     # Adds the static library binary to the TA build dependencies.
@@ -163,7 +163,7 @@ A typical ``Android.mk`` file for a TA looks like this (``Android.mk`` for
     # Define the module name as the signed TA binary filename.
     local_module := 8aaaf200-2450-11e4-abe2-0002a5d5c51b.ta
 
-    # Include the devikt Android mak script
+    # Include the devkit Android make script
     include $(OPTEE_OS_DIR)/mk/aosp_optee.mk
 
 TA Mandatory Entry Points
