@@ -133,6 +133,16 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Yes
      - Yes
 
+   * - `NXP i.MX8MQEVK Board <https://www.nxp.com/support/developer-resources/run-time-software/i.mx-developer-resources/evaluation-kit-for-the-i.mx-8m-applications-processor:MCIMX8M-EVK>`_
+     - ``PLATFORM=imx-imx8mqevk``
+     - Yes
+     - Yes
+
+   * - `NXP i.MX8MMEVK Board <https://www.nxp.com/products/processors-and-microcontrollers/arm-based-processors-and-mcus/i.mx-applications-processors/i.mx-8-processors/i.mx-8m-mini-family-arm-cortex-a53-cortex-m4-audio-voice-video:i.MX8MMINI?lang=en&lang_cd=en&>`_
+     - ``PLATFORM=imx-imx8mmevk``
+     - Yes
+     - Yes
+
    * - `ARM Foundation FVP <https://developer.arm.com/products/system-design/fixed-virtual-platforms>`_
      - ``PLATFORM=vexpress-fvp``
      - Yes
