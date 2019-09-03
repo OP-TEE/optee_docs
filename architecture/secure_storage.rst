@@ -7,7 +7,7 @@ Secure storage
 Background
 **********
 Secure Storage in OP-TEE is implemented according to what has been defined in
-GloblaPlatform's :ref:`tee_internal_core_api` (here called Trusted Storage).
+GlobalPlatform's :ref:`tee_internal_core_api` (here called Trusted Storage).
 This specification mandates that it should be possible to store general-purpose
 data and key material that guarantees confidentiality and integrity of the data
 stored and the atomicity of the operations that modifies the storage (atomicity
