@@ -36,3 +36,34 @@ Usage
     - Run helper script called ``symbolize.py`` to translate the function graph
       addresses into function names: ``cat ftrace-<ta_uuid>.out |
       ./optee_os/scripts/symbolize.py -d <ta_uuid>.elf``
+
+Typical output
+**************
+
+.. code-block:: bash
+
+              | __ta_entry() {
+              |  __utee_entry() {
+     1.664 us |   ta_header_get_session();
+    11.264 us |   from_utee_params();
+      .896 us |   memcpy();
+              |   TA_InvokeCommandEntryPoint() {
+              |    TEE_GenerateRandom() {
+   163.360 us |     utee_cryp_random_number_generate();
+   186.848 us |    }
+   214.288 us |   }
+    19.088 us |   to_utee_params();
+              |   ta_header_save_params() {
+      .736 us |    memset();
+     2.832 us |   }
+   304.880 us |  }
+   307.168 us | }
+
+
+The duration (function's time of execution) is displayed on the closing bracket
+line of a function or on the same line in case the function is the leaf one.
+In other words, duration is displayed whenever an instrumented function returns.
+It comprises the time spent executing the function and any of its callees. The
+Counter-timer Physical Count register (CNTPCT) and the Counter-timer Frequency
+register (CNTFRQ) are used to compute durations. Time spent servicing foreign
+interrupts is subtracted.
