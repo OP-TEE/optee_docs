@@ -22,7 +22,7 @@ There are currently two secure storage implementations in OP-TEE:
     
     - The second one makes use of the Replay Protected Memory Block (RPMB)
       partition of an eMMC device, and is enabled by setting ``CFG_RPMB_FS=y``.
-      It is described in [secure_storage_rpmb.md](secure_storage_rpmb.md).
+      It is described in :ref:`rpmb`.
 
 It is possible to use the normal world file systems and the RPMB implementations
 simultaneously. For this, two OP-TEE specific storage identifiers have been
