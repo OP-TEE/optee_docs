@@ -18,7 +18,7 @@ Use cases of world context switch
 =================================
 This section lists all the cases where optee_os is involved in world context
 switches. Optee_os executes in the secure world. World switch is done by the
-cores secure monitor level/mode, referred below as the Monitor.
+core's secure monitor level/mode, referred below as the Monitor.
 
 When the normal world invokes the secure world, the normal world executes a SMC
 instruction. The SMC exception is always trapped by the Monitor. If the related
