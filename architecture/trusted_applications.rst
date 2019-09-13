@@ -14,7 +14,7 @@ cases this is the preferred type of TA to write and use.
 Pseudo Trusted Applications
 ***************************
 These are implemented directly to the OP-TEE core tree in, e.g.,
-``core/arch/arm/pta`` and are built along with and statically built into the
+``core/pta`` and are built along with and statically built into the
 OP-TEE core blob.
 
 The Pseudo Trusted Applications included in OP-TEE already are OP-TEE secure
@@ -35,7 +35,7 @@ code itself and that might or might not be desirable depending on the use case.
 In most cases an unprivileged (user mode) TA is the best choice instead of
 adding your code directly to the OP-TEE core. However if you decide your
 application is best handled directly in OP-TEE core like this, you can look at
-``core/arch/arm/pta/stats.c`` as a template and just add your Pseudo TA based on
+``core/pta/stats.c`` as a template and just add your Pseudo TA based on
 that to the ``sub.mk`` in the same directory.
 
 .. _user_mode_ta:
