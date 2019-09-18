@@ -15,3 +15,4 @@ new to OP-TEE.
    license_headers
    platforms
    presentations
+   releases
