@@ -39,7 +39,7 @@ Build instructions
 
 .. code-block:: bash
 
-    $ git clone https://github.com/linaro-swg/optee_android_manifest
+    $ git clone https://github.com/linaro-swg/optee_android_manifest [-b <release_tag>]
     $ cd optee_android_manifest
 
 
