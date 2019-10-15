@@ -56,6 +56,10 @@ tl;dr
       -
 
     * - 1w
+      - Increment the revision number in `mk/config.mk`_
+      - ``CFG_OPTEE_REVISION_MAJOR ?= 3`` ``CFG_OPTEE_REVISION_MINOR ?= x``
+
+    * - 1w
       - Create release candidate tag in optee_* + build.git
       - git tag -a 3.x.y-rc1 -m "3.x.y-rc1"
 
@@ -110,7 +114,12 @@ Long version
                 $ cat MAINTAINERS | grep '[RM]:.*<.*@.*>' | \
                   sed 's/>.*/>/' | sed 's/.:\t//' | sort | uniq
 
-    3. Create a release candidate (RC) tag (annotated tag, i.e., ``git tag -a
+    3. Increment the revision number in `mk/config.mk`:
+       ``CFG_OPTEE_REVISION_MAJOR`` and ``CFG_OPTEE_REVISION_MINOR``. These
+       values are made available to TAs and to the Normal World driver at boot
+       time.
+
+    4. Create a release candidate (RC) tag (annotated tag, i.e., ``git tag -a
        3.x.y-rc1 -m "3.x.y-rc1"``) in the following gits
        ``optee_*`` and ``build.git``. One way to do it is like this
 
@@ -121,33 +130,33 @@ Long version
             $ for d in optee* build; do ( cd $d; git push origin $VER ); done
 
 
-    4. Send a follow up email to all maintainers to let them know that there is
+    5. Send a follow up email to all maintainers to let them know that there is
        a release tag ready to be tested on their devices for the platforms that
        they are maintaining.
 
-    5. In case major regressions are found, then fix those and create a another
+    6. In case major regressions are found, then fix those and create a another
        release candidate tag (i.e., repeat step 3 and 4 until there are no
        remaining issues left).
 
-    6. On release day: Update CHANGELOG.md_ see this `changelog example`_ to see
+    7. On release day: Update CHANGELOG.md_ see this `changelog example`_ to see
        how that should look like.
 
-    7. Collect all tags (``Tested-By`` etc) from maintainers and use those in
+    8. Collect all tags (``Tested-By`` etc) from maintainers and use those in
        the commit message, for an example see this `commit example`_.
 
-    8. Create a release tag (annotated tag, i.e., ``git tag -a 3.x.y -m
+    9. Create a release tag (annotated tag, i.e., ``git tag -a 3.x.y -m
        "3.x.y"``) in the following gits ``optee_*`` and ``build.git``.
 
        .. hint::
 
             You can use the same steps as in step 3, when creating the tags.
 
-    9. Create a new branch in :ref:`manifest` from ``master`` where the name
-       corresponds to the release you are preparing. I.e., ``git checkout -b
-       3.x.y origin/master``.
+    10. Create a new branch in :ref:`manifest` from ``master`` where the name
+        corresponds to the release you are preparing. I.e., ``git checkout -b
+        3.x.y origin/master``.
 
 
-    10. Update all :ref:`manifest` XML-files in the :ref:`manifest` git, so they
+    11. Update all :ref:`manifest` XML-files in the :ref:`manifest` git, so they
         refer to the tag in the release we are working with (see `3.6.0 stable`_
         commit as an example). This can be done with the make_stable.sh_ script.
         Now it is also time to push the new branch and tag it. Example:
@@ -164,7 +173,7 @@ Long version
             $ git tag -s -a $VER -m $VER
             $ git push upstream tag $VER
 
-    11. Send a last email to maintainers and other stakeholders telling that the
+    12. Send a last email to maintainers and other stakeholders telling that the
         release has been completed.
 
 
@@ -176,3 +185,4 @@ Long version
 .. _make_stable.sh: https://github.com/OP-TEE/manifest/blob/master/make_stable.sh
 .. _PR#3099: https://github.com/OP-TEE/optee_os/pull/3099
 .. _Semantic Versioning 2.0.0: https://semver.org
+.. _mk/config.mk: https://github.com/OP-TEE/optee_os/blob/master/mk/config.mk
