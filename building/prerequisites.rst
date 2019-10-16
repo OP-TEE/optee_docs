@@ -16,5 +16,6 @@ target you will use in the end.
             expect flex ftp-upload gdisk iasl libattr1-dev libc6:i386 libcap-dev \
             libfdt-dev libftdi-dev libglib2.0-dev libhidapi-dev libncurses5-dev \
             libpixman-1-dev libssl-dev libstdc++6:i386 libtool libz1:i386 make \
-            mtools netcat python-crypto python3-pyelftools python-serial \
-            rsync unzip uuid-dev xdg-utils xterm xz-utils zlib1g-dev
+            mtools netcat python-crypto python3-crypto python-pyelftools \
+            python3-pyelftools python-serial python3-serial rsync unzip uuid-dev \
+            xdg-utils xterm xz-utils zlib1g-dev
