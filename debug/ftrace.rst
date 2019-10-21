@@ -5,19 +5,27 @@ Ftrace
 This section describes how to generate function call graph for user Trusted
 Applications using ``ftrace``.
 
-The configuration option ``CFG_TA_FTRACE_SUPPORT=y`` enables OP-TEE to collect
+The configuration option ``CFG_FTRACE_SUPPORT=y`` enables OP-TEE to collect
 function graph information from Trusted Applications running in user mode and
 compiled with ``-pg``. Once collected, the function graph data is formatted
 in the ``ftrace.out`` format and sent to ``tee-supplicant`` via RPC, so they
 can be saved to disk, later processed and displayed using helper script called
 ``symbolize.py`` present as part of ``optee_os`` repo.
 
+Another configuration option ``CFG_SYSCALL_FTRACE=y`` in addition to
+``CFG_FTRACE_SUPPORT=y`` enables OP-TEE to collect function graph information
+for syscalls as well while running in kernel mode on behalf of Trusted
+Applications.
+
 Usage
 *****
 
-    - Build OP-TEE OS and OP-TEE Client with ``CFG_TA_FTRACE_SUPPORT=y``. You
+    - Build OP-TEE OS and OP-TEE Client with ``CFG_FTRACE_SUPPORT=y``. You
       may also set ``CFG_ULIBS_MCOUNT=y`` in OP-TEE OS to instrument the
       user TA libraries (libutee, libutils, libmpa).
+
+    - Optionally build OP-TEE OS with ``CFG_SYSCALL_FTRACE=y`` to dump
+      additional syscall function graph information.
 
     - Build user TAs with ``-pg``, for instance enable ``CFG_TA_MCOUNT=y`` to
       instrument whole TA. Also, in case user wants to set ``-pg`` for a
@@ -35,7 +43,7 @@ Usage
 
     - Run helper script called ``symbolize.py`` to translate the function graph
       addresses into function names: ``cat ftrace-<ta_uuid>.out |
-      ./optee_os/scripts/symbolize.py -d <ta_uuid>.elf``
+      ./optee_os/scripts/symbolize.py -d <ta_uuid>.elf -d tee.elf``
 
 Typical output
 **************
