@@ -213,9 +213,19 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - No
      - Yes
 
+   * - `Rockchip PX30 <http://rock-chips.com/a/en/products/rkpower/2018/0709/913.html>`_
+     - ``PLATFORM=rockchip-px30``
+     - No
+     - Yes
+
    * - `Rockchip RK322X <http://www.rock-chips.com/a/en/products/RK32_Series/2016/1109/799.html>`_
      - ``PLATFORM=rockchip-rk322x``
      - No
+     - Yes
+
+   * - `Rockchip RK3399 <http://rock-chips.com/a/en/products/RK33_Series/2016/0419/758.html>`_
+     - ``PLATFORM=rockchip-rk3399``
+     - Yes
      - Yes
 
    * - `STMicroelectronics b2260 - h410 (96boards fmt) <http://www.st.com/web/en/catalog/mmc/FM131/SC999/SS1628/PF258776>`_
