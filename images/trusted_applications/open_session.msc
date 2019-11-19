@@ -1,0 +1,38 @@
+# Generate with:
+# mscgen -T png -o images/trusted_applications/open_session.png \
+# 		images/trusted_applications/open_session.msc
+
+msc {
+	hscale = "2", wordwraparcs = on;
+
+	a [label = "client"],
+	b [label = "tee-supplicant"],
+	c [label = "kernel"],
+	d [label = "OP-TEE core"],
+	e [label = "ldelf"],
+	f [label = "TA"];
+
+	||| ;
+	--- [ label = " Open a session to a TA "];
+	a=>c [ label = "TEEC_InitializeContext() /\nopen(/dev/teeX" ];
+	c>>a;
+	a=>c [ label = "TEEC_OpenSession() /\nioctl(TEE_IOC_OPEN_SESSION)" ];
+	c=>d [ label = "MSG_CMD_OPEN_SESSION" ];
+	d=>e [ label = "_ldelf_start" ];
+	e=>d [ label = "PTA_SYSTEM_OPEN_TA_BINARY" ];
+	d=>c [ label = "RPC_CMD_LOAD_TA" ];
+	c=>b [ label = "RPC_CMD_LOAD_TA" ];
+	b>>c;
+	c>>d;
+	d>>e;
+	e=>d [label = "PTA_SYSTEM_MAP_TA_BINARY" ];
+	d>>e;
+	e=>d [label = "PTA_SYSTEM_CLOSE_TA_BINARY" ];
+	d>>e;
+	e>>d [label = "return from _ldelf_start" ];
+	d=>f [label = "UTEE_ENTRY_FUNC_OPEN_SESSION" ];
+	f>>d;
+	d>>c [label = "return from MSG_CMD_OPEN_SESSION"];
+	c>>a [label = "return from TEEC_OpenSession()"];
+}
+
