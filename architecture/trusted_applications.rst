@@ -132,8 +132,13 @@ All REE filesystems TAs has common header, ``struct shdr``, defined as:
     #define SHDR_GET_SIG(x)         (SHDR_GET_HASH(x) + (x)->hash_size)
 
 
-The field ``image_type`` tells the type of TA, if it's ``SHDR_TA`` (0),
+The field ``img_type`` tells the type of TA, if it's ``SHDR_TA`` (0),
 it's a legacy TA. If it's ``SHDR_BOOTSTRAP_TA`` (1) it's a bootstrap TA.
+
+The field ``algo`` tells the algorithm used. The script used to sign TAs
+currently uses ``TEE_ALG_RSASSA_PKCS1_V1_5_SHA256`` (0x70004830). This
+means RSA with PKCS#1v1.5 padding and SHA-256 hash function. OP-TEE accepts
+any of the ``TEE_ALG_RSASSA_PKCS1_*`` algorithms.
 
 For bootstrap TAs ``struct shdr`` is followed by a subheader, ``struct
 shdr_bootstrap_ta`` which is defined as:
@@ -209,6 +214,40 @@ with the command:
 .. code-block:: bash
 
     $ xtest --install-ta
+
+
+Loading and preparing TA for execution
+**************************************
+
+User mode TAs are loaded into final memory in the same way using the user
+mode ELF loader ``ldelf``. The different TA locations has a common
+interface towards ``ldelf`` which makes the user mode operations identical
+regarless of how the TA is stored.
+
+The TA is loaded into secure memory in :ref:`prepare_ta`.
+
+.. _prepare_ta:
+
+.. figure:: ../images/trusted_applications/prepare_ta.png
+    :figclass: align-center
+
+    Preparing TA for execution
+
+After ``ldelf`` has returned with a TA prepared for execution it still
+remains in memory to serve the TA if dlopen() and friends are used.
+``ldelf`` is also used to dump stack trace and detailed memory mappings if
+a TA is terminated via an abort.
+
+A high level view of the entire flow from the client application in Linux
+user space where a session is opened to a TA is given in
+:ref:`open_session`.
+
+.. _open_session:
+
+.. figure:: ../images/trusted_applications/open_session.png
+    :figclass: align-center
+
+    Open session to a TA
 
 
 .. _ta_properties:

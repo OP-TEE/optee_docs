@@ -1,0 +1,42 @@
+# Generate with:
+# mscgen -T png -o images/trusted_applications/prepare_ta.png \
+# 		images/trusted_applications/prepare_ta.msc
+
+msc {
+	hscale = "2", wordwraparcs = on;
+
+	a [ label = "OP-TEE Core" ],
+	b [ label = "ldelf" ];
+
+	||| ;
+	--- [ label = " Preparing TA from init_with_ldelf() "];
+	a=>b [ label = "_ldelf_start" ];
+	--- [ label = " Load main ELF "];
+	b=>a [ label = "PTA_SYSTEM_OPEN_TA_BINARY" ];
+	a=>a [ label = "Lookup user TA ELF in storages" ];
+	a>>b [ label = "return storage ELF handle" ];
+	b=>a [ label = "PTA_SYSTEM_MAP_TA_BINARY -- map ELF headers" ];
+	a>>b;
+	b=>b [ label = "parse ELF" ];
+	b=>a [ label = "PTA_SYSTEM_MAP_TA_BINARY -- map sections" ];
+	a>>b;
+	b=>a [ label = "PTA_SYSTEM_CLOSE_TA_BINARY" ];
+	b=>a [ label = "PTA_SYSTEM_MAP_ZI -- map zero initialized memory" ];
+	a>>b;
+	b=>a [ label = "PTA_SYSTEM_MAP_ZI -- map stack" ];
+	a>>b;
+	--- [ label = " Load dynamically linked library, repeat until done "];
+	a=>a [ label = "Lookup user TA ELF library in storages" ];
+	a>>b [ label = "return storage ELF handle" ];
+	b=>a [ label = "PTA_SYSTEM_MAP_TA_BINARY -- map ELF headers" ];
+	a>>b;
+	b=>b [ label = "parse ELF" ];
+	b=>a [ label = "PTA_SYSTEM_MAP_TA_BINARY -- map sections" ];
+	a>>b;
+	b=>a [ label = "PTA_SYSTEM_CLOSE_TA_BINARY" ];
+	b=>a [ label = "PTA_SYSTEM_MAP_ZI -- map zero initialized memory" ];
+	a>>b;
+	--- [ label = " TA and its library are loaded "];
+	b>>a [ label = "return to init_with_ldelf()" ];
+}
+
