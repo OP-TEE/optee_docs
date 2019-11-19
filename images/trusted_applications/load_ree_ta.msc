@@ -1,0 +1,38 @@
+# Generate with:
+# mscgen -T png -o images/trusted_applications/load_ree_ta.png \
+# 		images/trusted_applications/load_ree_ta.msc
+
+msc {
+	hscale = "2", wordwraparcs = on;
+
+	a [label="OP-TEE Core"], b [label="Kernel OP-TEE driver"],
+	c [label="tee-supplicant"];
+
+	||| ;
+	--- [ label = " OP-TEE loading a REE TA using rpc_load() "];
+	... ;
+	--- [ label = " Query size of TA " ];
+	a=>b [ label = "RPC_CMD_LOAD_TA(TA uuid)" ];
+	b=>c [ label = "RPC_CMD_LOAD_TA(TA uuid)" ];
+	c=>c [ label = "Check size of TA with uuid" ];
+	c>>b [ label = "Return size of TA" ];
+	b>>a [ label = "Return size of TA" ];
+	--- [ label = " Allocate payload buffer " ];
+	a=>b [ label = "RPC_CMD_SHM_ALLOC(SHM_TYPE_APPL, size)" ];
+	b=>c [ label = "RPC_CMD_SHM_ALLOC(SHM_TYPE_APPL, size)" ];
+	c=>c [ label = "malloc(size)" ];
+	c=>b [ label = "ioctl(SHM_REGISTER)" ];
+	b=>b [ label = "allocate shm_ref" ];
+	b=>b [ label = "create shm_ref ID" ];
+	b=>a [ label = "CMD_REGISTER_SHM(shm_ref)" ];
+	a>>b;
+	b>>c [ label = "return shm_ref ID" ];
+	c>>b [ label = "return shm_ref ID" ];
+	b>>a [ label = "return shm_ref" ];
+	--- [ label = " Load TA into payload buffer " ];
+	a=>b [ label = "RPC_CMD_LOAD_TA(TA uuid, shm_ref)" ];
+	b=>c [ label = "RPC_CMD_LOAD_TA(TA uuid, shm_ref ID)" ];
+	c=>c [ label = "Copy TA into payload buffer" ];
+	c>>b;
+	b>>a;
+}
