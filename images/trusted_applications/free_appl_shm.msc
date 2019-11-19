@@ -1,0 +1,19 @@
+
+# Generate with:
+# mscgen -T png -o images/trusted_applications/free_appl_shm.png \
+# 		images/trusted_applications/free_appl_shm.msc
+
+msc {
+	hscale = "2", wordwraparcs = on;
+
+	a [label="OP-TEE Core"], b [label="Kernel OP-TEE driver"],
+	c [label="tee-supplicant"];
+
+	||| ;
+	--- [ label = " Freeing nonsecure application shared memory "];
+	a=>b [ label = "RPC_CMD_SHM_FREE(SHM_TYPE_APPL, shm_ref)" ];
+	b=>c [ label = "RPC_CMD_SHM_FREE(SHM_TYPE_APPL, shm_ref ID)" ];
+	c=>c [ label = "free(payload buffer)" ];
+	c>>b;
+	b>>a;
+}

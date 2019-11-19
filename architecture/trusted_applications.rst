@@ -81,6 +81,118 @@ filesystem, and ``tee-supplicant`` will take care of passing them to be checked
 and loaded by the Secure World OP-TEE core. Note that this type of TA isn't
 encrypted.
 
+REE filesystem TAs come in two formats, the legacy TA and the bootstrap TA.
+The bootstrap TA format is used by ``scripts/sign.py`` since version 3.7.0.
+
+All REE filesystems TAs has common header, ``struct shdr``, defined as:
+
+.. code-block:: c
+
+    enum shdr_img_type {
+            SHDR_TA = 0,
+            SHDR_BOOTSTRAP_TA = 1,
+    };
+
+    #define SHDR_MAGIC      0x4f545348
+
+    /**
+     * struct shdr - signed header
+     * @magic:      magic number must match SHDR_MAGIC
+     * @img_type:   image type, values defined by enum shdr_img_type
+     * @img_size:   image size in bytes
+     * @algo:       algorithm, defined by public key algorithms TEE_ALG_*
+     *              from TEE Internal API specification
+     * @hash_size:  size of the signed hash
+     * @sig_size:   size of the signature
+     * @hash:       hash of an image
+     * @sig:        signature of @hash
+     */
+    struct shdr {
+            uint32_t magic;
+            uint32_t img_type;
+            uint32_t img_size;
+            uint32_t algo;
+            uint16_t hash_size;
+            uint16_t sig_size;
+            /*
+             * Commented out element used to visualize the layout dynamic part
+             * of the struct.
+             *
+             * hash is accessed through the macro SHDR_GET_HASH and
+             * signature is accessed through the macro SHDR_GET_SIG
+             *
+             * uint8_t hash[hash_size];
+             * uint8_t sig[sig_size];
+             */
+    };
+
+    #define SHDR_GET_SIZE(x)        (sizeof(struct shdr) + (x)->hash_size + \
+                                     (x)->sig_size)
+    #define SHDR_GET_HASH(x)        (uint8_t *)(((struct shdr *)(x)) + 1)
+    #define SHDR_GET_SIG(x)         (SHDR_GET_HASH(x) + (x)->hash_size)
+
+
+The field ``image_type`` tells the type of TA, if it's ``SHDR_TA`` (0),
+it's a legacy TA. If it's ``SHDR_BOOTSTRAP_TA`` (1) it's a bootstrap TA.
+
+For bootstrap TAs ``struct shdr`` is followed by a subheader, ``struct
+shdr_bootstrap_ta`` which is defined as:
+
+.. code-block:: c
+
+    /**
+     * struct shdr_bootstrap_ta - bootstrap TA subheader
+     * @uuid:       UUID of the TA
+     * @ta_version: Version of the TA
+     */
+    struct shdr_bootstrap_ta {
+            uint8_t uuid[sizeof(TEE_UUID)];
+            uint32_t ta_version;
+    };
+
+The fields ``uuid`` and ``ta_version`` allows extra checks to be performed
+when loading the TA. Currently only the ``uuid`` field is checked.
+
+Last in the TA binary follows the ELF file which normally is stripped
+as additional symbols etc will be ignored when loading the TA.
+
+Legacy TA binary is formatted as:
+
+.. code-block:: none
+
+    hash = H(<struct shdr> || <stripped ELF>)
+    signature = RSA-Sign(hash)
+    legacy_binary = <struct shdr> || <hash> || <signature> || <stripped ELF>
+
+Bootstrap TA binary is formatted as:
+
+.. code-block:: none
+
+    hash = H(<struct shdr> || <struct shdr_bootstrap_ta> || <stripped ELF>)
+    signature = RSA-Sign(<hash>)
+    bootstrap_binary = <struct shdr> || <hash> || <signature> ||
+                       <struct shdr_bootstrap_ta> || <stripped ELF>
+
+A REE TA is loaded into shared memory using a series or RPC in
+:ref:`load_ree_ta`. The payload memory is allocated via TEE-supplicant and
+later freed when the TA has been loaded into secure memory in
+:ref:`free_appl_shm`.
+
+.. _load_ree_ta:
+
+.. figure:: ../images/trusted_applications/load_ree_ta.png
+    :figclass: align-center
+
+    Loading a REE TA into nonsecure shared memory
+
+.. _free_appl_shm:
+
+.. figure:: ../images/trusted_applications/free_appl_shm.png
+    :figclass: align-center
+
+    Freeing previously allocated nonsecure shared memory
+
+
 .. _secure_storage_ta:
 
 Secure Storage TA
