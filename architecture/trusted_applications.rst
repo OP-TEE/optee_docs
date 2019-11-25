@@ -215,6 +215,67 @@ with the command:
 
     $ xtest --install-ta
 
+TAs stored in secure storage are kept in a TA database. The TA database
+consists of a single file with the name ``dirf.db`` which is stored either
+in the REE filesystem based secure storage or in RPMB. The file is
+encrypted and integrity protected as any other object in secure storage.
+The TAs themselves are not stored in ``dirf.db``, they are instead stored
+in the REE filesystem encrypted and integrity protected. One reason for
+this is that TAs can potentially be quite large, several megabytes, while
+secure storage is designed to hold only small objects counted in kilobytes.
+
+``dirf.db`` constsist of an array of ``struct tadb_entry``, defined as:
+
+.. code-block:: C
+
+    /*
+     * struct tee_tadb_property
+     * @uuid:       UUID of Trusted Application (TA) or Security Domain (SD)
+     * @version:    Version of TA or SD
+     * @custom_size:Size of customized properties, prepended to the encrypted
+     *              TA binary
+     * @bin_size:   Size of the binary TA
+     */
+    struct tee_tadb_property {
+            TEE_UUID uuid;
+            uint32_t version;
+            uint32_t custom_size;
+            uint32_t bin_size;
+    };
+
+    #define TADB_IV_SIZE            TEE_AES_BLOCK_SIZE
+    #define TADB_TAG_SIZE           TEE_AES_BLOCK_SIZE
+    #define TADB_KEY_SIZE           TEE_AES_MAX_KEY_SIZE
+
+    /*
+     * struct tadb_entry - TA database entry
+     * @prop:        properties of TA
+     * @file_number: encrypted TA is stored in <file_number>.ta
+     * @iv:          Initialization vector of the authentication crypto
+     * @tag:         Tag used to validate the authentication encrypted TA
+     * @key:         Key used to decrypt the TA
+     */
+    struct tadb_entry {
+            struct tee_tadb_property prop;
+            uint32_t file_number;
+            uint8_t iv[TADB_IV_SIZE];
+            uint8_t tag[TADB_TAG_SIZE];
+            uint8_t key[TADB_KEY_SIZE];
+    };
+
+Entries where the ``UUID`` consists of zeros only are not valid and are
+ignored. The ``file_number`` field represents that name of the file stored
+in the REE filesystem. The filename is made from the decimal string
+representation of ``file_number`` with ``.ta`` appended, or if it was to be
+printed: ``printf("%u.ta", file_number)``.
+
+The TA is decrypted using the authentication encryption algorithm AES-GCM
+initialized with the ``iv`` and ``key`` fields, the ``tag`` field is used
+when finalizing the decryption
+
+A TA is looked up in the TA database by opening ``dirf.db`` and scanning
+through the elements which are of type ``struct tadb_entry`` until a
+matching UUID is found.
 
 Loading and preparing TA for execution
 **************************************
