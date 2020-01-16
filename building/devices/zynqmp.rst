@@ -22,23 +22,6 @@ to download and install the Petalinux 2018.2 toolchain from the Xilinx website
 website (`Downloads`_). You may have to create a free Xilinx account to proceed 
 with the two previous steps.
 
-Since OP-TEE 3.6.0, building process relies on `pyelftools`_ and `pycrypto`_ 
-package which are not available in the python distribution provided with 
-Petalinux, you have to manually install it by following steps described 
-hereafter (replace ``/path/to/petalinux`` with the right path):
-
-.. code-block:: bash
-
-	$ sudo apt install python3.5 python3-pip
-
-	$ pip3 install --system --target=/path/to/petalinux/components/yocto/
-	source/aarch64/buildtools/sysroots/x86_64-petalinux-linux/usr/lib/
-	python3.5/site-packages/ pycrypto
-
-	$ pip3 install --system --target=/path/to/petalinux/components/yocto/
-	source/aarch64/buildtools/sysroots/x86_64-petalinux-linux/usr/lib/
-	python3.5/site-packages/ pyelftools
-
 Configuring and building for zcu102 board
 *****************************************
 First, create a new directory which will be used as root directory:
