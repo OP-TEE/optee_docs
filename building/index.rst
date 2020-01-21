@@ -1,3 +1,5 @@
+.. _build_and_run:
+
 #############
 Build and run
 #############
@@ -13,6 +15,7 @@ OP-TEE developer setup. So a first place to start looking is probably at the
 .. toctree::
    :maxdepth: 2
 
+   quick_start_qemu
    aosp/aosp
    devices/index
    linux/tee_framework
