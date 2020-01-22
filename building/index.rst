@@ -10,6 +10,8 @@ Since you pressed this, it's likely that you want to know how to build a full
 OP-TEE developer setup. So a first place to start looking is probably at the
 ":ref:`build`" page to get started.
 
+You may also want to look at ":ref:`faq_try_optee`".
+
 .. toctree::
    :maxdepth: 2
 
