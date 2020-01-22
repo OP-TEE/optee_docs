@@ -180,6 +180,8 @@ Q: When running `make` from build.git it fails to download the toolchains?
   such an issue, please send the fix as pull request and we will be happy to
   merge it.
 
+.. _faq_try_optee:
+
 Q: What is the quickest and easiest way to try OP-TEE?
 ======================================================
     - That would be running it on QEMU on a local PC. To do that you would need to:
