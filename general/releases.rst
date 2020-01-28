@@ -170,7 +170,7 @@ Long version
             $ git commit -a -m "OP-TEE $VER stable"
             $ git remote add upstream git@github.com:OP-TEE/manifest
             $ git push upstream
-            $ git tag -s -a $VER -m $VER
+            $ git tag -a $VER -m $VER
             $ git push upstream tag $VER
 
     12. Send a last email to maintainers and other stakeholders telling that the
