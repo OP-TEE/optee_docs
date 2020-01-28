@@ -149,7 +149,7 @@ Long version
 
        .. hint::
 
-            You can use the same steps as in step 3, when creating the tags.
+            You can use the same steps as in step 4, when creating the tags.
 
     10. Create a new branch in :ref:`manifest` from ``master`` where the name
         corresponds to the release you are preparing. I.e., ``git checkout -b
