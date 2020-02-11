@@ -17,5 +17,11 @@ target you will use in the end.
             libfdt-dev libftdi-dev libglib2.0-dev libhidapi-dev libncurses5-dev \
             libpixman-1-dev libssl-dev libstdc++6:i386 libtool libz1:i386 make \
             mtools netcat python-crypto python3-crypto python-pyelftools \
-            python3-pyelftools python-serial python3-serial rsync unzip uuid-dev \
-            xdg-utils xterm xz-utils zlib1g-dev
+            python3-pycryptodome python3-pyelftools python-serial python3-serial \
+            rsync unzip uuid-dev xdg-utils xterm xz-utils zlib1g-dev
+
+For older versions, you might need to pull `pycryptodome` as a pip package:
+
+.. code-block:: bash
+
+    $ python3 -m pip install --user pycryptodome
