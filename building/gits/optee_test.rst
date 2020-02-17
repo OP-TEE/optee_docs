@@ -193,6 +193,15 @@ Coding standards
 ****************
 See :ref:`coding_standards`.
 
+The :ref:`optee_os` repository is required to run the checks. It's location may
+be passed using the `OPTEE_OS_PATH` environment variable:
+
+.. code-block:: bash
+
+  export OPTEE_OS_PATH=/path/to/optee_os
+
+In case `OPTEE_OS_PATH` is unset or empty, the dispatcher script will default to `../optee_os`.
+
 .. _BSD 2-Clause: http://opensource.org/licenses/BSD-2-Clause
 .. _GlobalPlatform Compliance Test suite: https://store.globalplatform.org/product/tee-initial-configuration-test-suite-with-excluded-tests-list-2/
 .. _GPL-2.0: http://opensource.org/licenses/GPL-2.0
