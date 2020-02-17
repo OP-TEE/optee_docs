@@ -46,6 +46,14 @@ Regarding the checkpatch tool, it is not included directly into this project.
 Please use checkpatch.pl from the Linux kernel git in combination with the local
 `checkpatch script`_.
 
+There are also targets for common use cases in the Makefiles:
+
+.. code-block:: none
+
+    make checkpatch         #check staging and working area
+    make checkpatch-staging #check staging area (added, but not committed files)
+    make checkpatch-working #check working area (modified, but not added files)
+
 .. _checkpatch script: https://github.com/OP-TEE/optee_os/blob/master/scripts/checkpatch.sh
 .. _checkpatch: http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/scripts/checkpatch.pl
 .. _CodingStyle: https://www.kernel.org/doc/html/latest/process/coding-style.html
