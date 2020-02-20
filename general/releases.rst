@@ -107,12 +107,11 @@ Long version
        MAINTAINERS_ file.
 
        .. hint::
-            With this command in bash you will get all email addresses
+            With this command you will get all email addresses
 
             .. code-block:: bash
 
-                $ cat MAINTAINERS | grep '[RM]:.*<.*@.*>' | \
-                  sed 's/>.*/>/' | sed 's/.:\t//' | sort | uniq
+                $ scripts/get_maintainer.py --release-to
 
     3. Increment the revision number in `mk/config.mk`:
        ``CFG_OPTEE_REVISION_MAJOR`` and ``CFG_OPTEE_REVISION_MINOR``. These
