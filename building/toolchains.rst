@@ -60,4 +60,32 @@ paths and then you are ready to starting compiling OP-TEE components.
 
     $ export PATH=$PATH:$HOME/toolchains/aarch32/bin:$HOME/toolchains/aarch64/bin
 
+.. _llvm:
+
+LLVM / Clang
+************
+It's possible to also compile :ref:`optee_os`.git using llvm/clang. Either get
+the toolchain using your package manager or alternatively build it yourself to
+get the version that you need. To build the llvm toolchain for use in OP-TEE do
+the following.
+
+.. code-block:: bash
+
+    $ sudo apt install ninja-build
+    $ cd /tmp
+    $ git clone https://github.com/llvm/llvm-project.git
+    $ mkdir -p llvm-project/build
+    $ cd llvm-project/build
+    # Check out a version known to be working with OP-TEE
+    $ git checkout llvmorg-9.0.1
+    $ cmake -G Ninja \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DLLVM_ENABLE_PROJECTS="clang;lld" \
+        -DLLVM_TARGETS_TO_BUILD="AArch64;ARM" \
+        -DCMAKE_INSTALL_PREFIX=<optee-project>/toolchains/clang-v9.0.1 ../llvm
+    $ ninja
+    $ ninja install
+
+Now you'll have a llvm/clang toolchain ready to be used.
+
 .. _Arm GCC download page: https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads
