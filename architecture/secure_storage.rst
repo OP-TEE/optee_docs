@@ -119,7 +119,7 @@ described below.
 
 Key Manager
 ***********
-Key manager is an component in TEE file system, and is responsible for handling
+Key manager is a component in TEE file system, and is responsible for handling
 data encryption and decryption and also management of the sensitive key
 materials. There are three types of keys used by the key manager: the Secure
 Storage Key (`SSK`), the TA Storage Key (`TSK`) and the File Encryption Key
