@@ -498,5 +498,168 @@ Some combinations of configuration variables may not be valid. This should be
 dealt with by custom checks in makefiles. ``mk/checkconf.h`` provides functions
 to help detect and deal with such situations.
 
+Import branches
+***************
+This section is more specifically intended for maintainers.
+
+The optee_os repository contains branches with the ``import/`` prefix,
+which we call *import branches* below. This section describes their purpose and
+how they are used.
+
+Import branches are meant to help import external libraries into the
+optee_os repository and maintain them:
+
+ - *Import* means copy source files from a given upstream version of the
+   library and commit them locally (typically under ``optee_os/lib`` or
+   ``optee_os/core/lib``), along with OP-TEE specific changes (build and
+   configuration files for instance)
+ - *Maintain* means carry local bug fixes or improvements that did not make
+   their way upstream, and periodically upgrade the library by importing
+   changes from upstream.
+
+Import branches have the version of the imported library in their names. For
+example: ``import/mbedtls-2.6.1``. They are forked from ``master``. They record
+the history of all changes made for OP-TEE to a library for a given library
+version. For example, the import branch for Mbed TLS 2.6.1 illustrates how the
+Mbed TLS library was initially imported and later modified:
+
+.. code-block:: none
+
+    $ BRANCH=github/import/mbedtls-2.6.1
+    $ BASE=`git merge-base master $BRANCH`
+    $ git log --oneline --no-merges $BASE..$BRANCH
+    8ff963a6 (github/import/mbedtls-2.6.1) mbedtls: fix memory leak in mpi_miller_rabin()
+    213cce52 libmedtls: mpi_miller_rabin: increase count limit
+    f934e291 mbedtls: add mbedtls_mpi_init_static()
+    782fddd1 libmbedtls: add mbedtls_mpi_init_mempool()
+    33873834 libmbedtls: make mbedtls_mpi_mont*() available
+    e0186224 libmbedtls: refine mbedtls license header
+    215609ae mbedtls: configure mbedtls to reach for config
+    6916dcd9 mbedtls: remove default include/mbedtls/config.h
+    b60fc42a Import mbedtls-2.6.1
+
+Commit b60fc42a imports the library under ``lib/libmbedtls/mbedtls`` with no
+modification to the code (not the whole library is imported however, since some
+files are not needed they are deleted as mentioned in the commit description).
+Then a couple of adjustments are made in commits 6916dcd9 and 215609ae in order
+to be able to build with optee_os. At this point the initial import is done and
+subsequent commits are local improvements or bug fixes made later on.
+
+The initial import (commits b60fc42a, 6916dcd9 and 215609ae) is merged into
+master as a "squashed" commit to preserve bisectability -- in other words, so
+that no commit in master breaks the build:
+
+.. code-block:: none
+
+    $ git show --quiet 817466cb
+    commit 817466cb476de705a8e3dabe1ef165fe27a18c2f
+    Author: Jens Wiklander <jens.wiklander@linaro.org>
+    Date:   Tue May 22 13:49:31 2018 +0200
+
+        Squashed commit importing mbedtls-2.6.1 source
+    
+        Squash merging branch import/mbedtls-2.6.1
+    
+        215609ae4d8c ("mbedtls: configure mbedtls to reach for config")
+        6916dcd9b9cd ("mbedtls: remove default include/mbedtls/config.h")
+        b60fc42a5cd5 ("Import mbedtls-2.6.1")
+    
+        Acked-by: Joakim Bech <joakim.bech@linaro.org>
+        Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+
+Later changes are reviewed and merged into master normally, and are also
+recorded on top of the import branch via pull requests against the import
+branch. Consider for example the two following commits, one is in the master
+branch and the other is applied on top of the import branch.
+
+.. code-block:: none
+
+    18c5148d357e ("mbedtls: add mbedtls_mpi_init_static()")  # In master
+    f934e2913b7b ("mbedtls: add mbedtls_mpi_init_static()")  # In import/mbedtls-2.6.1
+
+The master branch is occasionally merged into the import branches. Otherwise,
+some patches cherry-picked from master would not apply. Note that it is a
+"normal" merge (not a rebase), so the commits that are on master can easily
+be filtered out (``git log --oneline --first-parent import/...``).
+
+When it is time to upgrade a library, a new import branch is created from
+master, for example: ``import/mbedtls-2.16.0``. A pull request is created against
+this branch with the following commits:
+
+ - The first commit deletes the "old" version of the library and imports the
+   new upstream version.
+ - The subsequent commits are cherry-picked from the previous import branch and
+   adjusted as needed. These commits are effectively "rebased" onto the new
+   library.
+ - Build files are updated if needed.
+
+Here is the history of the ``import/mbedtls-2.16.0`` branch, for comparison with
+the initial import:
+
+.. code-block:: none
+
+    $ BRANCH=github/import/mbedtls-2.16.0
+    $ BASE=`git merge-base master $BRANCH`
+    $ git log --oneline --no-merges $BASE..$BRANCH
+    68df6eb0 libmbedtls: mbedtls_mpi_exp_mod(): reduce stack usage
+    f58facc6 libutee: increase MPI mempool size
+    be040a3e libmbedtls: preserve mempool usage on reinit
+    ae499f6a libmbedtls: mbedtls_mpi_exp_mod() initialize W
+    b95a6c5d libmbedtls: fix no CRT issue
+    ac34734a libmbedtls: add interfaces in mbedtls for context memory operation
+    9ee2a92d libmbedtls: compile new files added with 2.16.0
+    9b0818d4 mbedtls: fix memory leak in mpi_miller_rabin()
+    2d6644ee libmedtls: mpi_miller_rabin: increase count limit
+    d831db4c libmbedtls: add mbedtls_mpi_init_mempool()
+    df0f4886 libmbedtls: make mbedtls_mpi_mont*() available
+    7b079206 libmbedtls: refine mbedtls license header
+    2616e2d9 mbedtls: configure mbedtls to reach for config
+    d686ab1c mbedtls: remove default include/mbedtls/config.h
+    50a57cfa Import mbedtls-2.16.0
+    8bfc3de4 libutee: lessen dependency on mbedtls internals
+
+Note that the first commit 8bfc3de4 ("libutee: lessen dependency on mbedtls
+internals") can be ignored, it was applied to master in anticipation of the
+2.16.0 upgrade but the ``import/mbedtls-2.16.0`` was forked before.
+
+The upgrade from 2.6.1 to 2.16.0 is made of all the commits up to and
+including commit 9ee2a92d ("libmbedtls: compile new files added with 2.16.0"):
+
+ - Commit 50a57cfa ("Import mbedtls-2.16.0") deletes the "old" files and
+   library imports the new ones.
+ - Commits d686ab1c..9b0818d4 are cherry-picked from the previous import
+   branch.
+ - Commit 9ee2a92d ("libmbedtls: compile new files added with 2.16.0") adapts
+   the build files to the new version.
+
+The master branch contains a squashed equivalent of the above:
+
+.. code-block:: none
+
+    $ git show --quiet 3d3b0591
+    commit 3d3b05918ec9052ba13de82fbcaba204766eb636
+    Author: Jens Wiklander <jens.wiklander@linaro.org>
+    Date:   Wed Mar 20 15:30:29 2019 +0100
+
+        Squashed commit upgrading to mbedtls-2.16.0
+       
+        Squash merging branch import/mbedtls-2.16.0
+       
+        9ee2a92de51f ("libmbedtls: compile new files added with 2.16.0")
+        9b0818d48d29 ("mbedtls: fix memory leak in mpi_miller_rabin()")
+        2d6644ee0bbe ("libmedtls: mpi_miller_rabin: increase count limit")
+        d831db4c238a ("libmbedtls: add mbedtls_mpi_init_mempool()")
+        df0f4886b663 ("libmbedtls: make mbedtls_mpi_mont*() available")
+        7b0792062b65 ("libmbedtls: refine mbedtls license header")
+        2616e2d9709f ("mbedtls: configure mbedtls to reach for config")
+        d686ab1c51b7 ("mbedtls: remove default include/mbedtls/config.h")
+        50a57cfac892 ("Import mbedtls-2.16.0")
+   
+        Acked-by: Jerome Forissier <jerome.forissier@linaro.org>
+        Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+
+Subsequent commits in the ``import/mbedtls-2.16.0`` branch are modifications
+that happened later in master as a result of OP-TEE development.
+
 .. _BSD 2-Clause: http://opensource.org/licenses/BSD-2-Clause
 .. _ccache: https://ccache.samba.org/
