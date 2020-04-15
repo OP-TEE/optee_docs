@@ -20,8 +20,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'OP-TEE documentation'
-copyright = '2019 - 2020 Linaro'
-author = 'Linaro'
+copyright = '2019 - 2020 TrustedFirmware.org'
+author = 'TrustedFirmware.org'
 
 # The short X.Y version
 version = ''
@@ -136,7 +136,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'OP-TEE.tex', 'OP-TEE Documentation',
-     'Linaro', 'manual'),
+     'TrustedFirmware.org', 'manual'),
 ]
 
 

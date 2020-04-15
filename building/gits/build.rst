@@ -63,19 +63,16 @@ rootfs such that one can:
 How do I build using AOSP / OpenEmbedded?
 *****************************************
 For guides how to build AOSP, please refer to our :ref:`aosp` page. For
-OpenEmbedded we have no guide ready, however there are teams in Linaro who are
-building OP-TEE using OpenEmbedded. If you want to get in contact with them,
-please reach out to us (see :ref:`contact`).
+OpenEmbedded we have no guide ready.
 
 .. _optee_developer_setup:
 
 Platforms supported by build.git
 ********************************
 Below is a table showing the platforms supported by build.git. OP-TEE as such
-supports many more platforms, but since quite a few of the other platforms are
-maintained by people outside Linaro or are using a special setup, we encourage
-you to talk to the maintainer of that platform directly if you have build
-related questions etc. Please see the MAINTAINERS_ file for contact information.
+supports many more platforms. To find out how to run OP-TEE on those, please
+reach out to the maintainer of that platform directly if you have build related
+questions etc. Please see the MAINTAINERS_ file for contact information.
 
 .. Please keep this list sorted in alphabetic order:
 .. list-table::

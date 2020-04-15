@@ -82,9 +82,11 @@ to GitHub. A bit after this Linaro also made a `press release
 this. That press release contains a bit more information. At the first year as
 an open source project it was owned by STMicroelectronics but maintained by
 Linaro and STMicroelectronics. In 2015 there was an ownership transfer of
-OP-TEE from STMicroelectronics to Linaro and since then it has been Linaro who
-is the primary owner and maintainer of the project. But for the maintenance
-part, it has become a shared responsibility between Linaro, Linaro members and
-other companies who are using OP-TEE.
+OP-TEE from STMicroelectronics to Linaro. In September 2019, ownership was
+transferred from Linaro to the TrustedFirmware.org project (see _blogpost for
+more information). Maintenance is a shared responsibility between the members
+for TrustedFirmware.org and some community maintainers representing other
+companies who are using OP-TEE.
 
+.. _blogpost: https://www.trustedfirmware.org/blog/op-tee-moving-into-trusted-firmware/
 .. _checkpatch: http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/scripts/checkpatch.pl

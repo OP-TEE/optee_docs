@@ -132,10 +132,8 @@ Q: I got build errors running latest, why?
       setup using QEMU, HiKey, RPi3, Juno using repo? AOSP? OpenEmbedded? What
       we build on daily basis are the OP-TEE developer setups (see
       :ref:`optee_developer_setup`) , but other builds like AOSP and
-      OpenEmbedded are builds that we try from time to time, but not very often
-      within Security Working Group. Having that said there are other teams in
-      Linaro working with such builds, but they most often base their builds on
-      OP-TEE stable releases.
+      OpenEmbedded are builds that we try from time to time, but we have no
+      CI/regression testing configured for those builds.
 
     - By running latest instead of stable also comes with a risk of getting
       build errors due to version and/or interdependency skew which can result
@@ -207,16 +205,12 @@ Q: What is the quickest and easiest way to try OP-TEE?
 
 Certification and security reviews
 **********************************
-Q: Will linaro be involved in GlobalPlatform certification/qualification?
-=========================================================================
-    - No we will not, mainly for two reasons. The first is that there was a
-      board decision that Security WG in Linaro should not be part of
-      certifications. The second reason is that most often certification is done
-      using a certain software version and on a unique device. I.e., it is the
-      combination software + hardware that gets certified. Since Linaro have no
-      own devices in production or for sale, we cannot be part of any
-      certification. This is typically something that the SoC or OEM needs to
-      do.
+Q: Will TrustedFirmware.org be involved in GlobalPlatform certification/qualification?
+======================================================================================
+    - No, not as of now. Most often certification is performed using a certain
+      software version and on a unique device. I.e., it is the combination
+      software + hardware that gets certified. This is typically something that
+      the SoC or OEM needs to do on their own.
 
     - But it is worth mentioning that since OP-TEE is coming from a proprietary
       TEE solution that was GlobalPlatform certified on some products in the
@@ -240,10 +234,12 @@ Q: Has any test lab been testing OP-TEE?
 
 Q: Have there been any code audit / code review done?
 =====================================================
-    - Full audit? No! Not something initiated by Linaro. But there has been some
-      companies that have done audits internally and they have then shared the
-      result with us and where relevant, we have created patches resolving the
-      issues reported to us (see :ref:`q_has_any_test_lab_been_testing_op-tee`).
+    - Full audit? No! But in the past Linaro have been collaborating with
+      Riscure trying to identify and fix potential security issues. There has
+      also been some companies that have done audits internally and they have
+      then shared the result with us and where relevant, we have created patches
+      resolving the issues reported to us (see
+      :ref:`q_has_any_test_lab_been_testing_op-tee`).
 
     - Code review, yes! Every single patch going into OP-TEE has been reviewed
       in a pull request on GitHub. We more or less have a requirement that every
@@ -507,9 +503,10 @@ Q: How can I use or call OP-TEE from native Android (apk) applications?
 
 Q: I've heard that there is a Widevine and PlayReady TA, how do I get access?
 =============================================================================
-    - Those can only be shared are under WMLA and NDA/MLA with Google and
-      Microsoft. Linaro can help members of Linaro to get access to those. As of
-      now, we cannot share it with non-members.
+    - TrustedFirmware have no such implementation, but Linaro do have reference
+      implementations for that that they share with their members who have
+      signed the WMLA and NDA/MLA with Google and Microsoft. So the advice is to
+      reach out to Linaro if you have questions about that.
 
 .. _Issue#280: https://github.com/OP-TEE/optee_os/issues/280
 .. _Issue#601: https://github.com/OP-TEE/optee_os/issues/601

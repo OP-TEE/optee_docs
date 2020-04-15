@@ -8,10 +8,6 @@ Releases
 Cadence
 *******
 New versions of OP-TEE are released four times a year, i.e., quarterly releases.
-The releases have historically lined up with Linaro Connect events. I.e., a
-release has been made right after Linaro Connect and one release somewhere
-between two Linaro Connects. I.e., typically there has been releases in January,
-April, July and October.
 
 .. _releases_changelog:
 
