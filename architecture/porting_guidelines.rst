@@ -234,13 +234,12 @@ the end of file:
 
 **Maintainer**
 
-If you are submitting the board support upstream and cannot give Linaro
-maintainers a device, then we are going to ask you to become the maintainer for
-the device you have added. This means that you should also update the
-MAINTAINERS.md_ file accordingly. By being a maintainer for a device you are
-responsible to keep it up to date and you will be asked every quarter as part of
-the OP-TEE release schedule to test your device running the latest OP-TEE
-software.
+If you are submitting the board support upstream we are going to ask you to
+become the maintainer for the device you have added. This means that you should
+also update the MAINTAINERS.md_ file accordingly. By being a maintainer for a
+device you are responsible to keep it up to date and you will be asked every
+quarter as part of the OP-TEE release schedule to test your device running the
+latest OP-TEE software.
 
 **Update build.git and manifest.git**
 

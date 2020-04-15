@@ -9,9 +9,9 @@ well as report back to stakeholders in a responsible way. This page describes
 the responsible disclosure policy that applies to the OP-TEE project.
 
 .. note::
-    The "`core team`_" in Linaro (who owns the OP-TEE project) consists of
-    engineers directly employed by Linaro as well as engineers employed by
-    companies who are members of Linaro.
+    The "`core team`_" in the OP-TEE part of TrustedFirmware.org (who owns the
+    OP-TEE project) mainly consists of engineers coming from the members of
+    TrustedFirmware.org.
 
 Rules
 *****
@@ -19,15 +19,15 @@ To have some kind of ground to stand on we have defined a set of rules and
 conditions that applies both when it comes to being a taker of information as
 well as being reporter of security issues. It should be noted that it is hard to
 write rules that you can follow to 100%, since depending on the type of security
-issues being dealt with it might or might not be possible for the core team and
-Linaro to re-distribute the information right away.
+issues being dealt with it might or might not be possible for
+TrustedFirmware.org to re-distribute the information right away.
 
 As an example of when we couldn't follow our rules and disclosure policy was
 when we got informed (under NDA) about the Spectre and Meltdown issues (this was
 before it was public knowledge). That was considered so sensitive that we
-weren't even allowed to share or discuss this outside Linaro (employees). But in
-general, we strive and try to do our best to follow the rules etc that have been
-defined on this particular page.
+weren't even allowed to share or discuss this outside TrustedFirmware.org. But
+in general, we strive and try to do our best to follow the rules etc that have
+been defined on this particular page.
 
 Receiving information
 =====================
@@ -35,33 +35,33 @@ The one receiving information about and fixes related to OP-TEE security
 vulnerabilities must follow these rules:
 
     1. The **receiver** of vulnerability information and/or security fixes
-       shared by the core team and Linaro are **not allowed** to share,
-       re-distribute or otherwise spread knowledge about the issues and security
-       fixes outside their own company until the disclosure deadline has passed
-       and the information is publicly available.
+       shared by TrustedFirmware.org are **not allowed** to share, re-distribute
+       or otherwise spread knowledge about the issues and security fixes outside
+       their own company until the disclosure deadline has passed and the
+       information is publicly available.
 
        .. note::
 
         If the receiver still insists to share it with other people/companies he
-        must first get approval from the core team and Linaro to do so.
+        must first get approval from TrustedFirmware.org to do so.
 
 .. _reporting_issues:
 
 Reporting issues
 ================
-The one reporting security vulnerabilities to the core team and Linaro are asked
+The one reporting security vulnerabilities to the TrustedFirmware.org are asked
 to do it under the conditions mentioned below. It might seem like a long list,
 but we hope that it won't scare people away from reporting issues. It's mostly
 common sense and also aims to rule out questions that otherwise might come to
-mind. In short, the rules by default gives the core team and Linaro the power to
+mind. In short, the rules by default gives TrustedFirmware.org the power to
 decide what to do with the reported issue if nothing else has been agreed
 between them and the reporter.
 
-    1. If nothing else has been agreed between the reporter and the core team
-       and Linaro, then the rules and information as stated on this page
-       applies.
+    1. If nothing else has been agreed between the reporter and
+        TrustedFirmware.org, then the rules and information as stated on this
+        page applies.
 
-        1.1. This means that the core team and Linaro will re-distribute the
+        1.1. This means that the TrustedFirmware.org will re-distribute the
         information to the stakeholders according to the plan described further
         down here.
 
@@ -70,16 +70,16 @@ between them and the reporter.
         reporter after initial investigation.
 
     2. By default, the information about the reported issue(s) will be shared
-       within the core team (see the note about the core team at the beginning
-       of the page). If you as a reporter **aren't** OK with that, then you must
-       inform us about that when reporting the issue.
+       within TrustedFirmware.org and a vetted list of stakeholders. If you as a
+       reporter **aren't** OK with that, then you must inform us about that when
+       reporting the issue.
 
-    3. By default, the core team and Linaro decides whether there should be a
-       CVE created or not. If the reporter insist on having a CVE created, then
-       this should be expressed when doing the reporting.
+    3. By default, the TrustedFirmware.org decides whether there should be a CVE
+       created or not. If the reporter insist on having a CVE created, then this
+       should be expressed when doing the reporting.
 
-    4. The core team and Linaro have the rights to involve other experts to help
-       us with mitigations and patches. If you as a reporter **aren't** OK with
+    4. TrustedFirmware.org have the rights to involve other experts to help us
+       with mitigations and patches. If you as a reporter **aren't** OK with
        that, then you must inform us about that when reporting the issue.
 
     5. Reporting security issues under NDA should be seen as a last resort
@@ -93,10 +93,10 @@ between them and the reporter.
 
 Trusted Stakeholders
 ********************
-The core team keeps track of companies and maintainers who are considered as
-trustworthy OP-TEE users. This is a vetted list and people from companies can
-only be added to that list after first talking to the core team. In short what
-is required to be added to that list is:
+TrustedFirmware.org keeps track of companies and maintainers who are considered
+as trustworthy OP-TEE users. This is a vetted list and people from companies can
+only be added to that list after first talking to TrustedFirmware.org. In short
+what is required to be added to that list is:
 
     - A justification of why you need to know about security issues and should
       have access to security fixes before they are going public.
@@ -107,7 +107,7 @@ is required to be added to that list is:
     - You accept our disclosure policy rules (as described at here).
 
 .. note::
-    The core team and Linaro have the rights to deny anyone to be on this list.
+    The TrustedFirmware.org have the rights to deny anyone to be on this list.
     We also have the rights to remove people on the list if there should be a
     reason to do so.
 
@@ -126,7 +126,7 @@ However, for issues that falls in the severity category 'low' and in some cases
 'medium' (see :ref:`severity_table` below), we have the rights to decide whether
 to upstream patches as soon as they are ready. If the reporter or the some of
 the trustworthy stakeholders knowing about the security issue disagrees, then
-they must inform the core team and Linaro about it as soon as possible and then
+they must inform the TrustedFirmware.org about it as soon as possible and then
 we will come up with an alternate plan.
 
 0day exploits

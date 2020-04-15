@@ -679,7 +679,6 @@ you can debug using normal GDB commands.
 .. _core team: https://github.com/orgs/OP-TEE/teams/linaro/members
 .. _eBay: https://www.ebay.com/sch/i.html?&_nkw=UART+cable
 .. _J-Link debuggers: https://www.segger.com/jlink_base.html
-.. _Linaro rootfs: http://releases.linaro.org/debian/images/installer-arm64/latest/linaro*.tar.gz
 .. _official OpenOCD: http://openocd.org
 .. _RPi3 in TF-A: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/plat/rpi3.rst
 .. _RPi3 OpenOCD config: https://github.com/OP-TEE/build/blob/master/rpi3/debugger/pi3.cfg
