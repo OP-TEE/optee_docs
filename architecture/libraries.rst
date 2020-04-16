@@ -23,5 +23,5 @@ library while some services for the API are implemented inside the OP-TEE core
 
 libmpa
 ******
-Now deprectated, used to the the BigNum library in OP-TEE.
+Now deprecated, used to provide the BigNum library in OP-TEE.
 
