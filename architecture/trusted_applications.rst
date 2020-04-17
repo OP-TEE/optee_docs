@@ -71,19 +71,48 @@ more details in the `early TA commit`_.
 
 REE filesystem TA
 =================
-They consist of a cleartext signed ELF_ file, named from the UUID of the TA and
-the suffix ``.ta``. They are built separately from the OP-TEE core boot-time
-blob, although when they are built they use the same build system, and are
-signed with the key from the build of the original OP-TEE core blob.
+They consist of a ELF_ file, signed and optionally encrypted, named from the
+UUID of the TA and the suffix ``.ta``. They are built separately from the
+OP-TEE core boot-time blob, although when they are built they use the same
+build system, and are signed with the key from the build of the original OP-TEE
+core blob.
 
-Because the TAs are signed, they are able to be stored in the untrusted REE
+Because the TAs are signed and optionally encrypted with
+``scripts/sign_encrypt.py``, they are able to be stored in the untrusted REE
 filesystem, and ``tee-supplicant`` will take care of passing them to be checked
-and loaded by the Secure World OP-TEE core. Note that this type of TA isn't
-encrypted.
+and loaded by the Secure World OP-TEE core.
 
-REE filesystem TAs come in two formats, the legacy TA and the bootstrap TA.
-The bootstrap TA format is used by ``scripts/sign.py`` since version 3.7.0.
+REE-FS TA rollback protection
+-----------------------------
+OP-TEE core maintains a ``ta_ver.db`` file in secure storage to check for
+version of REE TAs as they are loaded from REE-FS in order to prevent against
+any TA version downgrades. TA version can be configured via TA build option:
+``CFG_TA_VERSION=<unsigned integer>``.
 
+Note: Here rollback protection is effective only when ``CFG_RPMB_FS=y``.
+
+REE-FS TA formats
+-----------------
+REE filesystem TAs come in three formats:
+
+    1. Legacy TAs signed, not encrypted, cannot be created anymore by the build
+       scripts since version 3.7.0.
+
+    2. Bootstrap TAs, signed with the key from the build of the original OP-TEE
+       core blob, not encrypted.
+
+    3. Encrypted TAs, sign-then-encrypt-then-MAC, encrypted with ``TA_ENC_KEY``
+       when ``CFG_ENCRYPT_TA=y``. During OP-TEE runtime, the symmetric key used
+       to decrypt TA has to be provided in a platform specific manner via
+       overriding API:
+
+    .. code-block:: c
+
+        TEE_Result tee_otp_get_ta_enc_key(uint32_t key_type, uint8_t *buffer,
+                                          size_t len);
+
+REE-FS TA header structure
+--------------------------
 All REE filesystems TAs has common header, ``struct shdr``, defined as:
 
 .. code-block:: c
@@ -91,6 +120,7 @@ All REE filesystems TAs has common header, ``struct shdr``, defined as:
     enum shdr_img_type {
             SHDR_TA = 0,
             SHDR_BOOTSTRAP_TA = 1,
+            SHDR_ENCRYPTED_TA = 2,
     };
 
     #define SHDR_MAGIC      0x4f545348
@@ -158,8 +188,60 @@ shdr_bootstrap_ta`` which is defined as:
 The fields ``uuid`` and ``ta_version`` allows extra checks to be performed
 when loading the TA. Currently only the ``uuid`` field is checked.
 
-Last in the TA binary follows the ELF file which normally is stripped
-as additional symbols etc will be ignored when loading the TA.
+For encrypted TAs ``struct shdr`` is followed by a subheader, ``struct
+shdr_bootstrap_ta`` which is followed by another subheader, ``struct
+shdr_encrypted_ta`` defined as:
+
+.. code-block:: c
+
+    /**
+     * struct shdr_encrypted_ta - encrypted TA header
+     * @enc_algo:   authenticated encyption algorithm, defined by symmetric key
+     *              algorithms TEE_ALG_* from TEE Internal API
+     *              specification
+     * @flags:      authenticated encyption flags
+     * @iv_size:    size of the initialization vector
+     * @tag_size:   size of the authentication tag
+     * @iv:         initialization vector
+     * @tag:        authentication tag
+     */
+    struct shdr_encrypted_ta {
+            uint32_t enc_algo;
+            uint32_t flags;
+            uint16_t iv_size;
+            uint16_t tag_size;
+            /*
+             * Commented out element used to visualize the layout dynamic part
+             * of the struct.
+             *
+             * iv is accessed through the macro SHDR_ENC_GET_IV and
+             * tag is accessed through the macro SHDR_ENC_GET_TAG
+             *
+             * uint8_t iv[iv_size];
+             * uint8_t tag[tag_size];
+             */
+    };
+
+The field ``enc_algo`` tells the algorithm used. The script used to encrypt
+TAs currently uses ``TEE_ALG_AES_GCM`` (0x40000810). OP-TEE core also accepts
+``TEE_ALG_AES_CCM`` algorithm.
+
+The field ``flags`` supports a single flag to tell encryption key type which
+is defined as:
+
+.. code-block:: c
+
+    #define SHDR_ENC_KEY_TYPE_MASK  0x1
+
+    enum shdr_enc_key_type {
+            SHDR_ENC_KEY_DEV_SPECIFIC = 0,
+            SHDR_ENC_KEY_CLASS_WIDE = 1,
+    };
+
+REE-FS TA binary formats
+------------------------
+TA binary follows the ELF file which normally is stripped as additional
+symbols etc will be ignored when loading the TA.
 
 Legacy TA binary is formatted as:
 
@@ -178,6 +260,22 @@ Bootstrap TA binary is formatted as:
     bootstrap_binary = <struct shdr> || <hash> || <signature> ||
                        <struct shdr_bootstrap_ta> || <stripped ELF>
 
+Encrypted TA binary is formatted as:
+
+.. code-block:: none
+
+    nonce = <unique random value>
+    ciphertext, tag = AES_GCM(<stripped ELF>)
+    hash = H(<struct shdr> || <struct shdr_bootstrap_ta> ||
+             <struct shdr_encrypted_ta> || <nonce> || <tag> || <stripped ELF>)
+    signature = RSA-Sign(<hash>)
+    encrypted_binary = <struct shdr> || <hash> || <signature> ||
+                       <struct shdr_bootstrap_ta> ||
+                       <struct shdr_encrypted_ta> || <nonce> || <tag> ||
+                       <ciphertext>
+
+Loading REE-FS TA
+-----------------
 A REE TA is loaded into shared memory using a series or RPC in
 :ref:`load_ree_ta`. The payload memory is allocated via TEE-supplicant and
 later freed when the TA has been loaded into secure memory in
