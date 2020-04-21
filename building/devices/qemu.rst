@@ -210,7 +210,7 @@ debugger.
 #######
 QEMU v8
 #######
-The instructions here will tell how to run OP-TEE using QEMU for Armv7-A.
+The instructions here will tell how to run OP-TEE using QEMU for Armv8-A.
 
 Build instructions
 ******************
