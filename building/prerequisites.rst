@@ -5,9 +5,17 @@ Prerequisites
 #############
 We believe that you can use any Linux distribution to build OP-TEE, but as
 maintainers of OP-TEE we are mainly using Ubuntu-based distributions and to be
-able to build and run OP-TEE there are a few packages that needs to be installed
-to start with. Therefore install the following packages regardless of what
-target you will use in the end.
+able to build and run OP-TEE there are a few packages that needs to be available.
+
+First enable installation of i386 architecture packages and update the package
+managers database.
+
+.. code-block:: bash
+
+    $ sudo dpkg --add-architecture i386
+    $ sudo apt-get update
+
+Install the following packages regardless of what target you will use in the end.
 
 .. code-block:: bash
 
