@@ -11,8 +11,8 @@ the regular OP-TEE releases.
 .. note::
 
     We **only** use and support this static/stable configuration. If you try
-    using it with latest available AOSP, there is a risk that both OP-TEE and
-    other parts are not working as expected.
+    using it with the latest available AOSP, there is a risk that both OP-TEE
+    and other parts are not working as expected.
 
 Prerequisites
 *************
@@ -40,6 +40,7 @@ Build instructions
 .. code-block:: bash
 
     $ git clone https://github.com/linaro-swg/optee_android_manifest [-b <release_tag>]
+    # release tags come in the form of X.Y.Z, e.g. 3.8.0
     $ cd optee_android_manifest
 
 
@@ -61,8 +62,11 @@ HiKey960
         $ ./sync-p-hikey960.sh
         $ ./build-p-hikey960.sh
 
-These steps should (must) finish with no errors. In case there are errors, then
-there is no need trying to flash the device.
+These steps **MUST** finish with **no errors**. For ``sync*.sh`` scripts, that
+means there must be no errors prior to the ``Sync done!`` console output. For
+``build*.sh`` scripts, that means there must be a ``#### build completed
+successfully (MM:SS (mm:ss)) ####`` console output! If there are errors, then
+there is no point in trying to flash the device.
 
 .. warning::
 
@@ -80,24 +84,8 @@ there is no need trying to flash the device.
     ``system.img`` size smaller, but this will make ``/system`` read-only, so
     you won't be able to push files to it.
 
-For older releases (other versions of relatively stable builds), use
-below instead of ``./sync-p.sh``.
-
-.. code-block:: bash
-
-    $ ./wrappers/sync.sh -v p -t <hikey|hikey960> \
-            -bm <name of a pinned manifest file in archive/> \
-            2>&1 |tee logs/sync-p.log
-
-E.g.
-    .. code-block:: bash
-
-        $ ./wrappers/sync.sh -v p -t hikey \
-            -bm pinned-manifest-stable_yvr18.xml \
-            2>&1 |tee logs/sync-p.log
-
-Other existing files are for internal development purposes ONLY and
-**NOT SUPPORTED**!
+Currently, only version P is supported. Other existing files are for internal
+development purposes ONLY and **NOT SUPPORTED**!
 
 Flashing the image
 ******************
@@ -134,7 +122,8 @@ After modifying and rebuilding Android, it is only necessary to flash `boot`,
 Experimental prebuilts
 **********************
 Available at http://snapshots.linaro.org/android under ``android-hikey*``
-directories.
+directories. Note that these images do not always work and are **NOT
+SUPPORTED** as well!
 
 Running xtest
 *************
