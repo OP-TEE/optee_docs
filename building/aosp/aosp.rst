@@ -32,7 +32,7 @@ Prerequisites
 	  optee-os.
 
 After following the AOSP setup instructions, the following additional packages
-from main `Prerequisites`_ page are needed. Please install them.
+from main :ref:`prerequisites` page are needed. Please install them.
 
 Build instructions
 ******************
@@ -175,4 +175,3 @@ Known issues
           generic HiKey960 builds under P.
 
 .. _official instructions: https://source.android.com/source/devices.html
-.. _Prerequisites: https://optee.readthedocs.io/building/prerequisites.html#prerequisites
