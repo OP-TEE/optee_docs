@@ -92,8 +92,8 @@ The same for an QEMU Armv8-A (AArch64) would look like this:
 
 Build using LLVM/clang
 ======================
-optee_os can be compiled using llvm/clang. Start by getting the toolchain (see
-:ref:`llvm`). After that you can compile by running.
+optee_os can be compiled using llvm/clang. Start by downloading the toolchain
+(see :ref:`llvm`). After that you can compile by running.
 
 .. note::
 

@@ -64,28 +64,38 @@ paths and then you are ready to starting compiling OP-TEE components.
 
 LLVM / Clang
 ************
-It's possible to also compile :ref:`optee_os`.git using llvm/clang. Either get
-the toolchain using your package manager or alternatively build it yourself to
-get the version that you need. To build the llvm toolchain for use in OP-TEE do
-the following.
+It's possible to also compile :ref:`optee_os`.git using llvm/clang. To do that,
+you can download and extract Clang from the GitHub release page. You'll need an
+x86_64 cross-compiler capable of generating aarch64 and armv7a code **and** the
+compiler-rt libraries for these architectures (libclang_rt.*.a).
+
+Clang is configured to be able to cross-compile to all the supported
+architectures by default (see <clang path>/bin/llc --version) which is great,
+but compiler-rt is included only for the host architecture. Therefore you need
+to combine several packages into one. Please refer to this `get_clang.sh`_
+script for details on creating a llvm/clang toolchain ready to be used.
+
+Using build.git
+===============
+As an alternative, you can let :ref:`build`.git download them for you, but this
+of course involves getting a git that you might not otherwise use.
 
 .. code-block:: bash
 
-    $ sudo apt install ninja-build
-    $ cd /tmp
-    $ git clone https://github.com/llvm/llvm-project.git
-    $ mkdir -p llvm-project/build
-    $ cd llvm-project/build
-    # Check out a version known to be working with OP-TEE
-    $ git checkout llvmorg-9.0.1
-    $ cmake -G Ninja \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DLLVM_ENABLE_PROJECTS="clang;lld" \
-        -DLLVM_TARGETS_TO_BUILD="AArch64;ARM" \
-        -DCMAKE_INSTALL_PREFIX=<optee-project>/toolchains/clang-v9.0.1 ../llvm
-    $ ninja
-    $ ninja install
+    $ cd $HOME
+    $ git clone https://github.com/OP-TEE/build.git
+    $ cd build
+    $ make -f toolchain.mk clang-toolchains
 
-Now you'll have a llvm/clang toolchain ready to be used.
+The above instructions will download and install Clang in ``$HOME/clang-9.0.1``.
+
+You can also get the toolchain using your package manager or alternatively build
+it yourself, but these alternative methods risk being incomplete. For example,
+the Ubuntu clang package does not install the needed ld.lld package. The package
+also does not contain the cross-compiled compiler-rt libraries. Building by
+yourself is hard for the same reason, i.e. no cross-compiled compiler-rt
+libraries are generated.
+
 
 .. _Arm GCC download page: https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads
+.. _get_clang.sh: https://github.com/OP-TEE/build/blob/master/get_clang.sh
