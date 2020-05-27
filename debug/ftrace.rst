@@ -22,7 +22,8 @@ Usage
 
     - Build OP-TEE OS and OP-TEE Client with ``CFG_FTRACE_SUPPORT=y``. You
       may also set ``CFG_ULIBS_MCOUNT=y`` in OP-TEE OS to instrument the
-      user TA libraries (libutee, libutils, libmpa).
+      user TA libraries contained in ``optee_os`` (such as ``libutee`` and
+      ``libutils``).
 
     - Optionally build OP-TEE OS with ``CFG_SYSCALL_FTRACE=y`` to dump
       additional syscall function graph information.
