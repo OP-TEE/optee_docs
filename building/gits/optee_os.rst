@@ -184,8 +184,8 @@ building either, because the proper instruction set is selected from the
 ``n``) to select 32-bit.
 
 Architecture-specific source code belongs to sub-directories that follow the
-``arch/$(ARCH)`` pattern, such as: ``core/arch/arm``, ``lib/libmpa/arch/arm``,
-``lib/libutee/arch/arm`` and so on.
+``arch/$(ARCH)`` pattern, such as: ``core/arch/arm``, ``lib/libutee/arch/arm``
+and so on.
 
 CROSS_COMPILE
 -------------
@@ -271,8 +271,7 @@ contains:
 
         - In ``lib/``: ``libutee.a`` (the GlobalPlatform Internal API),
           ``libutils.a`` (which implements a part of the standard C library),
-          and ``libmpa.a`` (which implements multiple precision arithmetic and
-          is required by ``libutee.a``).
+          and other libraries which provide additional APIs.
 
         - In ``include/``: header files for the above libraries
 
@@ -301,12 +300,12 @@ The following variables are defined in ``core/arch/$(ARCH)/$(ARCH).mk``:
     - ``$(core-platform-aflags)``, ``$(core-platform-cflags)`` and
       ``$(core-platform-cppflags)`` are added to the assembler / C compiler /
       preprocessor flags for all source files compiled for TEE Core including
-      the kernel versions of ``libmpa.a`` and ``libutils.a``.
+      the kernel versions of libraries such as ``libutils.a``.
 
     - ``$(ta_arm{32,64}-platform-aflags)``, ``$(ta_arm{32,64}-platform-cflags``)
       and ``$(ta_arm{32,64}-platform-cppflags)`` are added to the assembler / C
       compiler / preprocessor flags when building the user-mode libraries
-      (``libutee.a``, ``libutils.a``, ``libmpa.a``) or Trusted Applications.
+      (``libutee.a``, ``libutils.a``) or Trusted Applications.
 
       The following variables are defined in
       ``core/arch/$(ARCH)/plat-$(PLATFORM)/conf.mk``:
