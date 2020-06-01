@@ -14,5 +14,6 @@ Device specific information
     juno
     qemu
     rpi3
+    stm32mp1
     ti
     zynqmp

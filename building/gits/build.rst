@@ -122,6 +122,18 @@ questions etc. Please see the MAINTAINERS_ file for contact information.
       - ``PLATFORM=rpi3``
       - Yes
 
+    * - `STM32MP157A-DK1`_
+      - ``PLATFORM=stm32mp1-157A_DK1``
+      - Yes
+
+    * - `STM32MP157C-DK2`_
+      - ``PLATFORM=stm32mp1-157C_DK2``
+      - Yes
+
+    * - `STM32MP157C-EV1`_
+      - ``PLATFORM=stm32mp1-157C_EV1``
+      - Yes
+
     * - `Texas Instruments DRA7xx`_
       - ``PLATFORM=ti-dra7xx``
       - Yes
@@ -176,6 +188,8 @@ gits, then please refer to the next section instead.
 | QEMUv8         | ``qemu_v8.xml``   | :ref:`qemu_v8`       |
 +----------------+-------------------+----------------------+
 | Raspberry Pi 3 | ``rpi3.xml``      | :ref:`rpi3`          |
++----------------+-------------------+----------------------+
+| STM32MP1       | ``stm32mp1.xml``  | :ref:`stm32mp1`      |
 +----------------+-------------------+----------------------+
 
 Stable releases
@@ -471,6 +485,9 @@ don't have to think about anything.
 .. _QEMU: http://wiki.qemu.org/Main_Page
 .. _QEMUv8: http://wiki.qemu.org/Main_Page
 .. _Raspberry Pi 3: https://www.raspberrypi.org/products/raspberry-pi-3-model-b
+.. _STM32MP157A-DK1: https://www.st.com/en/evaluation-tools/stm32mp157a-dk1.html
+.. _STM32MP157C-DK2: https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
+.. _STM32MP157C-EV1: https://www.st.com/en/evaluation-tools/stm32mp157c-ev1.html
 .. _Texas Instruments DRA7xx: http://www.ti.com/product/DRA746
 .. _Texas Instruments AM57xx: http://www.ti.com/product/AM5728
 .. _Texas Instruments AM43xx: http://www.ti.com/product/AM4379
