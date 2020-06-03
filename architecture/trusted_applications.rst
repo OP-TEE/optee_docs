@@ -13,6 +13,11 @@ cases this is the preferred type of TA to write and use.
 
 Pseudo Trusted Applications
 ***************************
+A Pseudo Trusted Application is not a Trusted Application. A Pseudo TA is not a
+specific entity. A Pseudo TA is an interface. It is an interface exposed by the
+OP-TEE Core to its outer world: to secure client Trusted Applications and to
+non-secure client entities.
+
 These are implemented directly to the OP-TEE core tree in, e.g.,
 ``core/pta`` and are built along with and statically built into the
 OP-TEE core blob.
