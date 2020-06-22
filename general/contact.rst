@@ -45,12 +45,10 @@ limited, so it is probably **not** the best place to discuss OP-TEE.
 
 Vulnerability reporting
 ***********************
-Please send an email to the address mentioned above (**not** to TEE-dev). Don't
-include any details at this point, just mention that you'd like to report a
-security issue. An engineer from the core OP-TEE team will get back to you for
-further communication and discussions about your findings. Please also read the
-:ref:`disclosure_policy` page and especially the :ref:`reporting_issues`
-section, so you are aware of the rules we are following.
+The OP-TEE project as part of the TrustedFirmware.org organization is using the
+security incident process as described at the `TrustedFirmware.org security incident`_
+page. To report an issue, please follow the process as specified here. The email
+address to use can be found at the `Mailing Aliases`_ page.
 
 .. _core_team:
 
@@ -62,3 +60,5 @@ The core team consists of engineers from TrustedFirmware.org. Related, see the
 .. _core team: https://github.com/orgs/OP-TEE/teams/linaro/members
 .. _issues: https://help.github.com/articles/about-issues/
 .. _issues at optee_os: https://github.com/OP-TEE/optee_os/issues
+.. _Mailing Aliases: https://developer.trustedfirmware.org/w/collaboration/security_center/mailing_aliases
+.. _TrustedFirmware.org security incident: https://developer.trustedfirmware.org/w/collaboration/security_center
