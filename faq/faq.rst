@@ -359,7 +359,7 @@ Security vulnerabilities
 ************************
 Q: I have a found a security flaw in OP-TEE, how can I disclose it with you?
 ============================================================================
-    - Please see the :ref:`Contact` page and the :ref:`disclosure_policy` page.
+    - Please see the :ref:`Contact` page.
 
 ----
 

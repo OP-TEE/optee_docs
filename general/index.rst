@@ -11,7 +11,6 @@ new to OP-TEE.
    coding_standards
    contribute
    contact
-   disclosure
    license_headers
    platforms
    presentations
