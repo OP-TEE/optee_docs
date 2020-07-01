@@ -76,8 +76,9 @@ tl;dr
       - `commit example`_
 
     * - Release day
-      - Create release tag in optee_* + build.git
-      - git tag -a 3.x.y -m "3.x.y"
+      - Create release tag in optee_* + build.git + linux.git
+      - | git tag -a 3.x.y -m "3.x.y"
+        | git tag -a optee-3.x.y -m "optee-3.x.y" # (Linux)
 
     * - Release day
       - Create release branch in :ref:`manifest`
@@ -140,7 +141,10 @@ Long version
        the commit message, for an example see this `commit example`_.
 
     9. Create a release tag (annotated tag, i.e., ``git tag -a 3.x.y -m
-       "3.x.y"``) in the following gits ``optee_*`` and ``build.git``.
+       "3.x.y"``) in the following gits ``optee_*`` and ``build.git``. Tag the
+       tip of the ``optee`` branch in ``linux.git``, the name of the tag has
+       to be prefixed with ``optee-`` to avoid confusions. For instance:
+       ``git tag -a optee-3.x.y -m "optee-3.x.y"``.
 
        .. hint::
 
