@@ -9,6 +9,26 @@ Cadence
 *******
 New versions of OP-TEE are released four times a year, i.e., quarterly releases.
 
+.. _release_dates:
+
+Release dates
+=============
+Starting from version 3.10.0 we track the old and also show the releases being
+planned for the future in the table below. The dates will tell whether it is an
+old, upcoming or future release.
+
++---------------+--------------+
+| Version       | Release date |
++===============+==============+
+| OP-TEE 3.13.0 | 16/Apr/21    |
++---------------+--------------+
+| OP-TEE 3.12.0 | 15/Jan/21    |
++---------------+--------------+
+| OP-TEE 3.11.0 | 16/Oct/20    |
++---------------+--------------+
+| OP-TEE 3.10.0 | 21/Aug/20    |
++---------------+--------------+
+
 .. _releases_changelog:
 
 Changelog
