@@ -977,8 +977,8 @@ not their pool. Each shared memory is referenced with associated attributes:
 
 Shared memory buffer references manipulated must fit inside one of the
 shared memory areas known from the OP-TEE core. OP-TEE supports two kinds
-of shared memory areas: a mandatory area for contiguous buffers
-an optional extra memory areas for noncontiguous buffers.
+of shared memory areas: an area for contiguous buffers and an area for
+noncontiguous buffers. At least one has to be enabled.
 
 Contiguous shared buffers
 =========================
@@ -1011,6 +1011,10 @@ using the OP-TEE invocation API.
 
 Noncontiguous shared memory (also known as dynamic shared memory) is
 enabled with the configuration flag ``CFG_CORE_DYN_SHM=y``.
+
+For performance reasons, the TEE Client Library (``libteec``) uses
+noncontiguous shared memory when available since it avoids copies in some
+situations.
 
 Shared Memory Chunk Allocation
 ==============================
