@@ -434,17 +434,17 @@ Q: Where should I put my compiled Trusted Application on the device?
     - ``/lib/optee_armtz``, that is the default location where tee-supplicant
       will look for Trusted Applications.
 
-.. _what_is_a_psuedo_ta_and_how_do_i_write_one:
+.. _what_is_a_pseudo_ta_and_how_do_i_write_one:
 
-Q: What is a Psuedo TA and how do I write one?
+Q: What is a Pseudo TA and how do I write one?
 ==============================================
-    - A Psuedo TA is an OP-TEE firmware service offered through the generic API
+    - A Pseudo TA is an OP-TEE firmware service offered through the generic API
       used to invoke Trusted Applications. Pseudo TA interface and services all
       runs in TEE kernel / core context. I.e., it will have access to the same
       functions, memory and hardware etc as the TEE core itself. If we're
       talking ARMv8-A it is running in ``S-EL1``.
 
-Q: Are Psuedo **user space** TAs supported?
+Q: Are Pseudo **user space** TAs supported?
 ===========================================
     - No!
 
@@ -455,9 +455,9 @@ Q: Can a static TA Open/Invoke dynamic TA?
 
 Q: How can I extend the GlobalPlatform Internal Core API?
 =========================================================
-    - You may develop your own “Psuedo TA”, which is part of the core (see
-      :ref:`what_is_a_psuedo_ta_and_how_do_i_write_one` for more information
-      about the Psuedo TA).
+    - You may develop your own “Pseudo TA”, which is part of the core (see
+      :ref:`what_is_a_pseudo_ta_and_how_do_i_write_one` for more information
+      about the Pseudo TA).
 
 Q: How are Trusted Applications verified?
 =========================================
