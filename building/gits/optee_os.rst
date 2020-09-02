@@ -491,6 +491,31 @@ unchanged into `<generated/conf.h>`. For instance:
 
     #define CFG_TEE_CORE_LOG_LEVEL 4 /* '4' */
 
+The 'force' macro
+-----------------
+
+Some platforms may require specific values for some of their configuration
+variables. For instance, the number of CPU cores in a system is fixed so the
+value of ``CFG_TEE_CORE_NB_CORE`` should generally not be changed. Or some
+feature may not be supported by the hardware, in which case the corresponding
+configuration variable should always be disabled.
+
+In such cases, the ``force`` macro should be used. It sets the variable to the
+specified value while reporting about any conflicting value that may have been
+set previously, either via a previous assignment in the makefiles or via the
+command line or environment variables. For example:
+
+.. code-block:: make
+
+    $(call force,CFG_TEE_CORE_NB_CORE,8)
+    $(call force,CFG_ARM64_core,n)
+    $(call force,CFG_ARM_GICV3,y)
+
+.. code-block:: bash
+
+    $ make -j10 PLATFORM=hikey CFG_TEE_CORE_NB_CORE=4
+    core/arch/arm/plat-hikey/conf.mk:5: *** CFG_TEE_CORE_NB_CORE is set to '4' (from command line) but its value must be '8'.  Stop.
+
 Configuration dependencies
 --------------------------
 Some combinations of configuration variables may not be valid. This should be
