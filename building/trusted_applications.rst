@@ -362,7 +362,7 @@ signature of each TA will be verified against this key upon loading. Currently
 
     Currently only a single key for signing TAs is supported by :ref:`optee_os`.
 
-TAs are signed using the ``sign.py`` script referenced from
+TAs are signed using the ``sign_encrypt.py`` script referenced from
 ``ta/mk/ta_dev_kit.mk`` in :ref:`optee_os`. Its default behaviour is to sign a
 compiled TA binary and attach the signature to form a complete TA for
 deployment. For **offline** signing, a three-step process is required: In a
@@ -384,7 +384,7 @@ contains the statement
 
 To avoid build errors when signing offline, this make script needs to be
 adopted. The signing script can be found at
-``$(TA_DEV_KIT_DIR)/../scripts/sign.py``
+``$(TA_DEV_KIT_DIR)/../scripts/sign_encrypt.py``
 
 Overall, offline signing is done with the following sequence of steps:
 
@@ -399,7 +399,7 @@ binary using
 
 .. code-block:: sh
 
-    sign.py digest --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
+    sign_encrypt.py digest --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
 
 2. Sign this digest offline, e.g. with OpenSSL
 
@@ -407,7 +407,8 @@ binary using
 
    base64 --decode digestfile | \
    openssl pkeyutl -sign -inkey $TA_SIGN_KEY \
-     -pkeyopt digest:sha256 -pkeyopt rsa_padding_mode:pkcs1 | \
+       -pkeyopt digest:sha256 -pkeyopt rsa_padding_mode:pss \
+       -pkeyopt rsa_pss_saltlen:digest -pkeyopt rsa_mgf1_md:sha256 | \
    base64 > sigfile
 
 or with pkcs11-tool using a Nitrokey HSM
@@ -417,7 +418,7 @@ or with pkcs11-tool using a Nitrokey HSM
    echo "0000: 3031300D 06096086 48016503 04020105 000420" | \
      xxd -c 19 -r > /tmp/sighdr
    cat /tmp/sighdr $(base64 --decode digestfile) > /tmp/hashtosign
-   pkcs11-tool --id $key_id -s --login -m RSA-PKCS \
+   pkcs11-tool --id $key_id -s --login -m RSA-PKCS-PSS --hash-algorithm SHA256 --mgf MGF1-SHA256 \
      --input-file /tmp/hashtosign | \
      base64 > sigfile
 
@@ -425,8 +426,8 @@ or with pkcs11-tool using a Nitrokey HSM
 
 .. code-block:: sh
 
-    sign.py stitch --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
+    sign_encrypt.py stitch --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
 
 By default the UUID is taken as the base file name for all files. Different file
-names and paths can be set through additional options to ``sign.py``. Consult
-``sign.py --help`` for a full list of options and parameters.
+names and paths can be set through additional options to ``sign_encrypt.py``. Consult
+``sign_encrypt.py --help`` for a full list of options and parameters.
