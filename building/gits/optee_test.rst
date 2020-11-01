@@ -57,31 +57,34 @@ developer setup. Building purely standalone is **not** possible (*) because:
 
 Extended test (GlobalPlatform tests)
 ************************************
-One can purchase the `GlobalPlatform Compliance Test suite`_ which comes with
-.xml files describing the tests and the Trusted Applications. The standard tests
-(xtest + TA's) that are free and open source can be extended to also include the
-GlobalPlatform test suite. This is done by:
+One can purchase the `GlobalPlatform Compliance Test suite`_ which is
+GlobalPlatforms own test suite for testing TEE implementations adhering to the
+GlobalPlatforms interfaces.
 
-    - Install the GlobalPlatform ``xml`` files in ``$CFG_GP_PACKAGE_PATH``.
+.. hint::
+        Members of GlobalPlatform can download this for free at the
+        GlobalPlatform members pages. This something that the OP-TEE project
+        **cannot** help with. If you need help with that, please reach out to
+        the liason at GlobalPlatform.
 
-    - Run ``make patch`` (or call make ``xtest-patch`` from the ``build``
-      repository) before compiling xtest. This must be run a single time after the
-      installation of OP-TEE.
+xtest can be extended/patched to include the GlobalPlatform Compliance Test
+suite. This can be done by downloading the GlobalPlatform Compliance Test suite
+(a ``*.7z`` file) and add an additional compiler flag (``GP_PACKAGE``) to
+the ``make`` invocation line, example:
 
-This will:
+.. code-block:: bash
 
-    - Create new Trusted Applications, that can be found in ``ta/GP_xxx``
-    - Create new tests in ``host/xtest``, as for example ``xtest_9000.c``
-    - Patches ``xtest_7000.c``, adding new tests.
+	$ make GP_PACKAGE=/tmp/TEE_Initial_Configuration-Test_Suite_v2_0_0_2-2017_06_09.7z
 
-Then the tests must be compiled with ``CFG_GP_PACKAGE_PATH=<path>``.
+.. note::
+        Starting from OP-TEE v3.11.0, OP-TEE was updated to support the
+        ``TEE_Initial_Configuration-Test_Suite_v2_0_0_2-2017_06_09.7z`` version
+        from the GlobalPlatform Compliance Test suite. That is the only
+        supported version after OP-TEE v3.11.0. If you need to run an earlier
+        version of the GlobalPlatform Compliance Test suite then you need to
+        follow the instructions in the documentation for OP-TEE v3.9.0 and
+        earlier.
 
-It makes use of the following environment variable:
-
-    - ``COMPILE_NS_USER``: ``32`` or ``64`` if application shall be compiled in
-      32 bits mode on in 64 bits mode. If ``COMPILE_NS_USER`` is not specified,
-      build relies on ``CFG_ARM32_core=y`` from OP-TEE core build to assume
-      applications are in 32 bits mode, Otherwise, 64 bits mode is assumed.
 
 .. _optee_test_run_xtest:
 
@@ -203,5 +206,5 @@ be passed using the `OPTEE_OS_PATH` environment variable:
 In case `OPTEE_OS_PATH` is unset or empty, the dispatcher script will default to `../optee_os`.
 
 .. _BSD 2-Clause: http://opensource.org/licenses/BSD-2-Clause
-.. _GlobalPlatform Compliance Test suite: https://store.globalplatform.org/product/tee-initial-configuration-test-suite-with-excluded-tests-list-2/
+.. _GlobalPlatform Compliance Test suite: https://store.globalplatform.org/product/tee-initial-configuration-test-suite-with-excluded-tests-list-v2-0-0-2/
 .. _GPL-2.0: http://opensource.org/licenses/GPL-2.0
