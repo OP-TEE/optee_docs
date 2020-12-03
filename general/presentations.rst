@@ -12,39 +12,39 @@ end.
 
     - BKK19
         - BKK19-419 - Debugging with OP-TEE
-          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-419.pdf>`__,
-          `video <https://s3.amazonaws.com/connect.linaro.org/bkk19/videos/bkk19-419.mp4>`__)
+          (`slides <https://static.linaro.org/connect/bkk19/presentations/bkk19-419.pdf>`__,
+          `video <https://static.linaro.org/connect/bkk19/videos/bkk19-419.mp4>`__)
 
         - BKK19-415 - OP-TEE: Shared memory between TAs
-          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-415.pdf>`__,
+          (`slides <https://static.linaro.org/connect/bkk19/presentations/bkk19-415.pdf>`__,
           `video <https://youtu.be/L-AfhBzxWTU>`__)
 
         - BKK19-403 - Using DTB overlays in OP-TEE
-          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-403.pdf>`__,
+          (`slides <https://static.linaro.org/connect/bkk19/presentations/bkk19-403.pdf>`__,
           `video <https://youtu.be/WFH4KGoToHI>`__)
 
         - BKK19-215 - TPM in TEE
-          (`slides <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-215.pdf>`__,
+          (`slides <https://static.linaro.org/connect/bkk19/presentations/bkk19-215.pdf>`__,
           `video <https://youtu.be/-uR_oUp0wPE>`__)
 
         - BKK19-117 - Security WG Lightning talks
           (`slides
-          <https://s3.amazonaws.com/connect.linaro.org/bkk19/presentations/bkk19-117.pdf>`__,
+          <https://static.linaro.org/connect/bkk19/presentations/bkk19-117.pdf>`__,
           `video <https://youtu.be/k6bmQrBe7sc>`__)
 
     - YVR18
         - YVR18-414 - Keymaster and Gatekeeper
-          (`slides <https://s3.amazonaws.com/connect.linaro.org/yvr18/presentations/yvr18-414.pdf>`__, 
+          (`slides <https://static.linaro.org/connect/yvr18/presentations/yvr18-414.pdf>`__, 
           `video <https://youtu.be/UR3io1uCkdo>`__)
 
         - YVR18-117 - SWG updates since HKG18
-          (`slides <https://s3.amazonaws.com/connect.linaro.org/yvr18/presentations/yvr18-117.pdf>`__, 
+          (`slides <https://static.linaro.org/connect/yvr18/presentations/yvr18-117.pdf>`__, 
           `video <https://youtu.be/FN4J2gB2Kns>`__)
 
     - HKG18
         - HKG18-402 - Build secure key management services in OP-TEE
           (`slides <https://www.slideshare.net/linaroorg/hkg18402-build-secure-key-management-services-in-optee>`__, 
-          `video <http://connect.linaro.org.s3.amazonaws.com/hkg18/videos/hkg18-402.mp4>`__)
+          `video <http://static.linaro.org/connect/hkg18/videos/hkg18-402.mp4>`__)
 
     - SFO17
         - SFO17-309 - Secure storage updates
@@ -58,7 +58,7 @@ end.
 
     - BUD17
         - BUD17-416 - Benchmark and profiling in OP TEE
-          (`slides <http://s3.amazonaws.com/connect.linaro.org/bud17/Presentations/BUD17-416%20-%20Benchmark%20and%20Profiling%20in%20OP-TEE.pdf>`__, 
+          (`slides <http://static.linaro.org/connect/bud17/Presentations/BUD17-416%20-%20Benchmark%20and%20Profiling%20in%20OP-TEE.pdf>`__, 
           `video <https://youtu.be/gr6AxvqfDds>`__)
 
         - BUD17-400 - Secure Data Path with OPTEE
@@ -67,11 +67,11 @@ end.
 
     - LAS16
         - LAS16-504 - Secure Storage updates in OP-TEE
-          (`slides <http://s3.amazonaws.com/connect.linaro.org/las16/Presentations/Friday/LAS16-504%20-%20Secure%20Storage%20updates%20in%20OP-TEE.pdf>`__, 
+          (`slides <http://static.linaro.org/connect/las16/Presentations/Friday/LAS16-504%20-%20Secure%20Storage%20updates%20in%20OP-TEE.pdf>`__, 
           `video <https://youtu.be/9OEt4aG6V5w>`__)
 
         - LAS16-406 - Android Widevine on OP-TEE
-          (`slides <http://s3.amazonaws.com/connect.linaro.org/las16/Presentations/Thursday/LAS16-406%20-%20Android%20Widevine%20on%20OP-TEE.pdf>`__, 
+          (`slides <http://static.linaro.org/connect/las16/Presentations/Thursday/LAS16-406%20-%20Android%20Widevine%20on%20OP-TEE.pdf>`__, 
           `video <https://youtu.be/LEJqTXVs9N8>`__)
 
         - LAS16-111 - Easing Access to ARM TrustZone OP TEE and Raspberry Pi 3
