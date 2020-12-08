@@ -213,6 +213,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - No
      - Yes
 
+   * - `Renesas RZ/G <https://www.renesas.com/sg/en/products/microcontrollers-microprocessors/rz-cortex-a-mpus/rzg-linux-platform/rzg-marketplace/board-solutions>`_
+     - ``PLATFORM=rzg``
+     - Yes
+     - Yes
+
    * - `Rockchip PX30 <http://rock-chips.com/a/en/products/rkpower/2018/0709/913.html>`_
      - ``PLATFORM=rockchip-px30``
      - No
