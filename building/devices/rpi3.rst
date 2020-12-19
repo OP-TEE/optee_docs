@@ -673,6 +673,68 @@ In the UART console (RPi3/Linux), run xtest.
 And shortly thereafter you will see GDB stops on your breakpoint and from there
 you can debug using normal GDB commands.
 
+Network Settings Configuration Raspberry Pi
+*******************************************
+To resolve network connectivity issues inspect and edit the IP configuration settings of the Raspberry Pi board.
+
+To configure the board to use DHCP or static IP settings the below mentioned steps to be followed.
+
+1.  After logging on to the board , check whether the ip is assigned or not by entering the below command.
+   
+.. code-block:: bash
+
+   ifconfig 
+
+    If you find something as below, the rpi is not getting assigned an IP adress from dhcp.
+    lo Link encap:Local Loopback
+    inet addr:127.0.0.1 Mask:255.0.0.0
+    
+2.  In order to assign the IP temporarily enter the following 
+    open a Linux command line. Enter ifconfig, the device id, a valid IP address, netmask, and the appropriate network mask. 
+.. code-block:: bash   
+
+    For example:
+    #ifconfig eth0 192.168.45.12 netmask 255.255.255.0
+    
+3.  To assign an IP from DHCP the board needs to be configured. Make sure the followed packages are present in the common.mk file.
+    If not add and rebuild the rootfilesytem.
+
+.. code-block:: bash
+
+    BR2_PACKAGE_DHCPCD ?= y 
+    BR2_PACKAGE_ETHTOOL ?= y
+    BR2_PACKAGE_XINETD ?= y
+        
+4.  Then check the contents of the /etc/network/interfaces file. 
+    Enter.
+.. code-block:: bash
+
+    #cat /etc/network/interfaces 
+    
+5.  Add the below two lines and save it.
+    
+.. code-block:: bash  
+
+    auto etho
+    iface eth0 inet dhcp
+    
+6.  To test enter the below command. 
+
+.. code-block:: bash
+
+    #ifup eth0
+    
+7.  You see a log similar to the one below.
+
+.. code-block:: bash
+
+    udhcpc: started, v1.31.1
+    udhcpc: sending discover
+    udhcpc: sending select for 10.12.1.33
+    udhcpc: lease of 10.12.1.33 obtained, lease time 86400
+              
+8.  On the restart the ip will assigned automatically from dhcp.
+      
 
 .. _`Authentication Framework`: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/auth-framework.rst
 .. _Bus Blaster: http://dangerousprototypes.com/docs/Bus_Blaster
