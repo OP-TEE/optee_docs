@@ -673,35 +673,29 @@ In the UART console (RPi3/Linux), run xtest.
 And shortly thereafter you will see GDB stops on your breakpoint and from there
 you can debug using normal GDB commands.
 
-Network Settings Configuration Raspberry Pi
-*******************************************
-To resolve network connectivity issues inspect and edit the IP configuration settings of the Raspberry Pi board.
+Network Settings Configuration 
+******************************
+To be able to use networking (SSH etc) you need to make the changes as 
+outlined below.
 
-To configure the board to use DHCP or static IP settings the below mentioned steps to be followed.
-
-1.  After boot and logging into the device, first check for a static IP configuration.
+1.  After boot and logging into the device, first check the device is assigned 
+a valid IP or not by entering: 
    
 .. code-block:: bash
 
    $ ifconfig 
 
-If it looks like below, the RPi uses static IP configuration (i.e., not getting
-the IP from DHCP)
+2.  If it looks like below, the RPi is not getting assigned any valid IP
+from network with DHCP services, as an office LAN or a house network 
+connected to the Internet.
 
 .. code-block:: bash
 
 lo Link encap:Local Loopback
     inet addr:127.0.0.1 Mask:255.0.0.0
-    
-2.  In order to assign the IP temporarily enter the following 
-    open a Linux command line. Enter ifconfig, the device id, a valid IP address, netmask, and the appropriate network mask. 
-.. code-block:: bash   
-
-    For example:
-    #ifconfig eth0 192.168.45.12 netmask 255.255.255.0
-    
-3. To use DHCP with the RPi device, add the following packages to OP-TEE
-build.git/common.mk file (and do a re-build):
+        
+3. To assign IP dynamically using DHCP services, add the following packages to 
+OP-TEE build.git/rpi3.mk file (and do a re-build):
 
 .. code-block:: bash
 
@@ -709,9 +703,9 @@ build.git/common.mk file (and do a re-build):
     BR2_PACKAGE_ETHTOOL ?= y
     BR2_PACKAGE_XINETD ?= y
         
-4.  Do the necessary DHCP configuration and also remove the static configuration if 
-    you have been using that. You enable DHCP by making sure that the                                                                                                                                                                                                       
-    ``/etc/network/interfaces`` file on the RPi contains the following: 
+4.  Do the necessary DHCP configuration and also remove static-configuration 
+if you have been using that. You enable DHCP by making sure that the                                                                                                                                                                                                       
+``/etc/network/interfaces`` file on the RPi contains the following: 
     
 .. code-block:: bash  
 
@@ -733,6 +727,45 @@ build.git/common.mk file (and do a re-build):
     udhcpc: lease of 10.12.1.33 obtained, lease time 86400
               
 7.  On a reboot, the IP will assigned automatically from DHCP.
+
+
+8.  To assign the IP statically, make sure that the                                                                                                                                                                                                       
+    ``/etc/network/interfaces`` file on the RPi contains the following: 
+    
+.. code-block:: bash  
+
+    auto etho
+    iface eth0 inet static
+    
+9.  Also add the following lines for address, netmask, and gateway. Example
+
+.. code-block:: bash  
+    
+    iface eth0 inet static
+    address 192.168.1.12
+    netmask 255.255.255.0
+    gateway 192.168.1.1
+    
+10. Save the changes and exit the nano editor.
+Note: For static IP settings,the value of the subnet mask must be the same for 
+all devices on the network. The value of the IP address added in the previous 
+step must be unique and should be available ( Not being already assigend to 
+an other device) in the network.
+    
+11. To assign an IP temporarily:
+You can also use the ``ifconfig`` command to temporarily change the IP 
+settings. Rebooting the board removes the ifconfig settings and restores the 
+``/etc/network/interfaces`` settings. To change the IP settings temporarily,
+Open a raspberry-pi terminal. Enter ifconfig, the device id, a valid 
+IPaddress,netmask, and the appropriate network mask. For example:
+
+.. code-block:: bash   
+
+    $ifconfig eth0 192.168.45.12 netmask 255.255.255.0
+    
+
+    
+    
       
 
 .. _`Authentication Framework`: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/auth-framework.rst
