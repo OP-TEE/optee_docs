@@ -679,14 +679,18 @@ To resolve network connectivity issues inspect and edit the IP configuration set
 
 To configure the board to use DHCP or static IP settings the below mentioned steps to be followed.
 
-1.  After logging on to the board , check whether the ip is assigned or not by entering the below command.
+1.  After boot and logging into the device, first check for a static IP configuration.
    
 .. code-block:: bash
 
-   ifconfig 
+   $ ifconfig 
 
-    If you find something as below, the rpi is not getting assigned an IP adress from dhcp.
-    lo Link encap:Local Loopback
+If it looks like below, the RPi uses static IP configuration (i.e., not getting
+the IP from DHCP)
+
+.. code-block:: bash
+
+lo Link encap:Local Loopback
     inet addr:127.0.0.1 Mask:255.0.0.0
     
 2.  In order to assign the IP temporarily enter the following 
@@ -696,8 +700,8 @@ To configure the board to use DHCP or static IP settings the below mentioned ste
     For example:
     #ifconfig eth0 192.168.45.12 netmask 255.255.255.0
     
-3.  To assign an IP from DHCP the board needs to be configured. Make sure the followed packages are present in the common.mk file.
-    If not add and rebuild the rootfilesytem.
+3. To use DHCP with the RPi device, add the following packages to OP-TEE
+build.git/common.mk file (and do a re-build):
 
 .. code-block:: bash
 
@@ -705,26 +709,21 @@ To configure the board to use DHCP or static IP settings the below mentioned ste
     BR2_PACKAGE_ETHTOOL ?= y
     BR2_PACKAGE_XINETD ?= y
         
-4.  Then check the contents of the /etc/network/interfaces file. 
-    Enter.
-.. code-block:: bash
-
-    #cat /etc/network/interfaces 
-    
-5.  Add the below two lines and save it.
+4.  Do the necessary DHCP configuration and also remove the static configuration if 
+    you have been using that. You enable DHCP by making sure that the                                                                                                                                                                                                       
+    ``/etc/network/interfaces`` file on the RPi contains the following: 
     
 .. code-block:: bash  
 
     auto etho
     iface eth0 inet dhcp
-    
-6.  To test enter the below command. 
+5.  To try it out, enter this at the RPi console
 
 .. code-block:: bash
 
-    #ifup eth0
+    $ ifup eth0
     
-7.  You see a log similar to the one below.
+6.  You should see a log similar to the one below.
 
 .. code-block:: bash
 
@@ -733,7 +732,7 @@ To configure the board to use DHCP or static IP settings the below mentioned ste
     udhcpc: sending select for 10.12.1.33
     udhcpc: lease of 10.12.1.33 obtained, lease time 86400
               
-8.  On the restart the ip will assigned automatically from dhcp.
+7.  On a reboot, the IP will assigned automatically from DHCP.
       
 
 .. _`Authentication Framework`: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/auth-framework.rst
