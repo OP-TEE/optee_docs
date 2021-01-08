@@ -33,22 +33,9 @@ Just follow the instructions at ":ref:`get_and_build_the_solution`". If ``make
 flash`` doesn't work, try ``make recovery``.
 
 For the 4GB RAM board version (rev B), an update to the ``CFG_DRAM_SIZE_GB`` 
-setting in `conf.mk`_ is needed. See the following patch:
-
-.. code-block::
-
-  --- ../optee_os/core/arch/arm/plat-hikey/conf.mk.orig	2021-01-08 13:09:22.889289047 +0100
-  +++ ../optee_os/core/arch/arm/plat-hikey/conf.mk	2021-01-08 13:09:32.261380826 +0100
-  @@ -48,7 +48,7 @@
-   
-   ifeq ($(PLATFORM_FLAVOR),hikey960)
-   CFG_CONSOLE_UART ?= 6
-  -CFG_DRAM_SIZE_GB ?= 3
-  +CFG_DRAM_SIZE_GB ?= 4
-   CFG_CORE_BGET_BESTFIT ?= y
-   ifeq ($(CFG_ARM32_core),y)
-   CFG_ASAN_SHADOW_OFFSET ?= 0x372E38E0
-
+setting in `conf.mk`_ is needed. Either update the value from ``3`` to ``4`` in 
+`conf.mk`_ before building, or set the value on the command line when building, 
+i.e ``make PLATFORM=hikey-hikey960 CFG_DRAM_SIZE_GB=4``
 
 Recovery
 ********
