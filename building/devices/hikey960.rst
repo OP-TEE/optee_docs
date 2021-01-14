@@ -18,6 +18,16 @@ There are two different versions of the HiKey960 board.
 | HiKey960 | Archermind/LeMaker | 3GB    | 32GB  | v1 uses Jumpers (J2001)       |
 +----------+--------------------+--------+-------+-------------------------------+
 
+Hikey960 boards come with different DRAM sizes. It means that physical address
+ranges may differer between boards. By default OP-TEE is built for a board with 3GB
+of DRAM. To specify the amount of DRAM, you need to modify `CFG_DRAM_SIZE_GB`, either
+by editing ``core/arch/arm/plat-hikey/conf.mk`` or by specifying it on command line,
+like this ``CFG_DRAM_SIZE_GB=4 make``.
+
+Please notice that, in case you load OP-TEE build, which was build for 3GB DRAM
+board on a board with different amount of DRAM, you will run into problem described in
+this `ticket`_.
+
 UART adapter board
 ******************
 Everything is configured to use the 96Boards `UART Serial`_ adapter. The UART is
@@ -48,3 +58,4 @@ https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/plat/hikey
 .. _HiKey 960: https://www.96boards.org/product/hikey960/
 .. _hikey960.mk: https://github.com/OP-TEE/build/blob/master/hikey960.mk
 .. _UART Serial: https://www.96boards.org/product/uartserial/
+.. _ticket: https://github.com/OP-TEE/optee_os/issues/3068
