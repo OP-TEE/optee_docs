@@ -199,14 +199,22 @@ same manifests as for current version above, but with the difference that **you
 also need to specify a branch** where the name corresponds to the release
 version. I.e., when we are doing releases we are creating a branch with a name
 corresponding to the release version. So, let's for example say that you want to
-checkout a stable OP-TEE ``v3.4`` for Raspberry Pi 3, then you do like this
+checkout a stable OP-TEE ``v3.12`` for Raspberry Pi 3, then you do like this
 instead of what is mentioned further down in section
-":ref:`build_get_the_source`" (note the ``-b 3.4.0``):
+":ref:`build_get_the_source`" (note the ``-b 3.12.0``):
+
+.. hint::
+
+    If there is no strong need for an older version, then we always recommend to
+    use the most recent release. I.e., in the example here we do say ``3.12.0``,
+    but there may very well be more recent version when you are reading this. To
+    find out, please have a look at the ":ref:`release_dates`" page.
+
 
 .. code-block:: bash
 
     ...
-    $ repo init -u https://github.com/OP-TEE/manifest.git -m rpi3.xml -b 3.4.0
+    $ repo init -u https://github.com/OP-TEE/manifest.git -m rpi3.xml -b 3.12.0
     ...
 
 Stable releases prior to OP-TEE v3.1 (v1.0.0 to v3.0.0)
