@@ -10,6 +10,40 @@ with latest version to understand whether things have changed or not.
 The links are sorted in chronological order, newest first and oldest at the
 end.
 
+    - LVC20
+        - LVC20-112 - PSA Secure Partitions in OP-TEE
+          (`slides <https://static.linaro.org/connect/lvc20/presentations/LVC20-112-0.pdf>`__,
+          `video <https://static.linaro.org/connect/lvc20/videos/lvc20-112.mp4>`__)
+        - LVC20-118 - SCMI server in TEE
+          (`slides <https://static.linaro.org/connect/lvc20/presentations/LVC20-118-0.pdf>`__,
+          `video <https://static.linaro.org/connect/lvc20/videos/lvc20-118.mp4>`__)
+        - LVC20-204 - Encrypted firmwares and how to bake them right
+          (`slides <https://static.linaro.org/connect/lvc20/presentations/LVC20-204-0.pdf>`__,
+          `video <https://static.linaro.org/connect/lvc20/videos/lvc20-204.mp4>`__)
+
+    - SAN19
+        - SAN19-107 - Secure Data Path on Linux and NXP i.MX 8M
+          (`slides <https://static.linaro.org/connect/san19/presentations/san19-107.pdf>`__,
+          `video <https://static.linaro.org/connect/san19/videos/san19-107.mp4>`__)
+        - SAN19-207 - SCMI server in secure world
+          (`slides <https://static.linaro.org/connect/san19/presentations/san19-207.pdf>`__,
+          `video <https://static.linaro.org/connect/san19/videos/san19-207.mp4>`__)
+        - SAN19-225 - Fuzzing embedded (trusted) operating systems using AFL
+          (`slides <https://static.linaro.org/connect/san19/presentations/san19-225.pdf>`__,
+          `video <https://static.linaro.org/connect/san19/videos/san19-225.mp4>`__)
+        - SAN19-226 - Enabling AOSP FBE for OP-TEE Keymaster
+          (`slides <https://static.linaro.org/connect/san19/presentations/san19-226.pdf>`__,
+          `video <https://static.linaro.org/connect/san19/videos/san19-226.mp4>`__)
+        - SAN19-411 - Runtime Secure Keys in OP-TEE
+          (`slides <https://static.linaro.org/connect/san19/presentations/san19-411.pdf>`__,
+          `video <https://static.linaro.org/connect/san19/videos/san19-411.mp4>`__)
+        - SAN19-413 - TEE based Trusted Keys in Linux
+          (`slides <https://static.linaro.org/connect/san19/presentations/san19-413.pdf>`__,
+          `video <https://static.linaro.org/connect/san19/videos/san19-413.mp4>`__)
+        - SAN19-507 - HDCP and OP-TEE
+          (`slides <https://static.linaro.org/connect/san19/presentations/san19-507.pdf>`__,
+          `video <https://static.linaro.org/connect/san19/videos/san19-507.mp4>`__)
+
     - BKK19
         - BKK19-419 - Debugging with OP-TEE
           (`slides <https://static.linaro.org/connect/bkk19/presentations/bkk19-419.pdf>`__,
