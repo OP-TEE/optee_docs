@@ -11,7 +11,7 @@ Supported boards
 ****************
 
 +---------------------+--------------------+------------+-------------------------------+
-| Baord Name          | Manufacturer       | Boot media | Hardware Description          |
+| Board Name          | Manufacturer       | Boot media | Hardware Description          |
 +=====================+====================+============+===============================+
 | `STM32MP157A-DK1`_  | STMicroelectronics | SDcard     | `Wiki STM32MP157X-DKX`_       |
 +---------------------+--------------------+------------+-------------------------------+
