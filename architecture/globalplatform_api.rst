@@ -788,8 +788,88 @@ The following entries shall be added to **Table 6-11**:
         maximum 512.
 
 
+.. _loadable_plugins_framework:
+
+Loadable plugins framework
+==========================
+This framework makes the supplicant a bit more flexible in terms of providing
+services. It is possible to design any REE service for the TEE as
+a tee-supplicant plugin. It makes it easy to:
+
+    - add new features to the supplicant that aren't needed in upstream,
+      e.g. Rich OS-specific services
+    - sync an own fork of the supplicant with the upstream version
+
+To create a plugin, developers have to implement the following structure from
+the ``public/tee_plugin_method.h`` file from the optee_client_ git.:
+
+.. code-block:: c
+
+    struct plugin_method {
+      const char *name; /* short friendly name of the plugin */
+      TEEC_UUID uuid;
+      TEEC_Result (*init)(void);
+      TEEC_Result (*invoke)(unsigned int cmd, unsigned int sub_cmd,
+                            void *data, size_t in_len, size_t *out_len);
+    };
+
+The plugin framework is based on the RPC - ``OPTEE_MSG_RPC_CMD_PLUGIN``.
+This is a unified interface between TEE and plugins.
+TEE can only access the plugins by its UUID.
+
+After implementing this structure, a plugin has to be compiled as a shared
+object. The objects have to be placed into the directory defined
+by ``CFG_TEE_PLUGIN_LOAD_PATH``. This path can be set in the ``config.mk`` file
+in the optee_client_ git. By default it is set to
+**/usr/lib/tee-supplicant/plugins/**.
+
+The supplicant loads all of the plugins from the directory during the startup
+process using **libdl**. After this, any requests to plugins
+from TEE will be processed in the common RPC handler.
+
+On TEE side users can use any plugin by its UUID from TAs code and from
+the OP-TEE kernel code. The following function has been introduced like
+an extension of the TEE API to allow Trusted Applications to operate with
+plugins:
+
+.. code-block:: c
+
+    /*
+     * tee_invoke_supp_plugin() - invoke a tee-supplicant's plugin
+     * @uuid:       uuid of the plugin
+     * @cmd:        command for the plugin
+     * @sub_cmd:    subcommand for the plugin
+     * @buf:        data [to/from] the plugin [in/out]
+     * @len:        length of the input buf
+     * @outlen:     pointer to length of the output data (if they will be used)
+     *
+     * Return TEE_SUCCESS on success or TEE_ERRROR_* on failure.
+     */
+    TEE_Result tee_invoke_supp_plugin(const TEE_UUID *uuid, uint32_t cmd,
+                                      uint32_t sub_cmd, void *buf, size_t len,
+                                      size_t *outlen);
+
+This API calls the ``system-pta``, which uses the RPC to call a plugin.
+See ``OPTEE_RPC_CMD_SUPP_PLUGIN`` in the ``core/include/optee_rpc_cmd.h`` file
+from optee_os_ git. If there is a need to use plugins from the OP-TEE kernel,
+then the following function can be called directly:
+
+.. code-block:: c
+
+    TEE_Result tee_invoke_supp_plugin_rpc(const TEE_UUID *uuid, uint32_t cmd,
+                                          uint32_t sub_cmd, void *buf, size_t len,
+                                          size_t *outlen);
+
+.. NOTE::
+   One buffer is used for input data to a plugin and for output data
+   from a plugin. See an example of using this feature in the optee_examples_
+   git.
+
+
 .. _GlobalPlatform: https://globalplatform.org
 .. _optee_examples: https://github.com/linaro-swg/optee_examples
+.. _optee_client: https://github.com/OP-TEE/optee_client
+.. _optee_os: https://github.com/OP-TEE/optee_os
 .. _TZC-400: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0504c/index.html
 .. _RFC 2898: https://www.ietf.org/rfc/rfc2898.txt
 .. _RFC 3447: https://tools.ietf.org/html/rfc3447#section-8.2
