@@ -11,6 +11,7 @@ the entire TEE solution.
    :maxdepth: 1
 
    build
+   build_legacy
    manifest
    optee_benchmark
    optee_client
