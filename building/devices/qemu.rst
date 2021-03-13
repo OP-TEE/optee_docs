@@ -14,6 +14,16 @@ As long as you pick the v7 manifest, i.e.,  ``default.xml`` the
 ":ref:`get_and_build_the_solution`" tells all you need to know to build and boot
 up QEMU v7.
 
+A usual short shell sequence to fetch, build and run OP-TEE using QEMU
+for Armv7-A is like the one below:
+
+.. code-block:: bash
+
+  $ repo init -u https://github.com/OP-TEE/manifest.git
+  $ repo sync
+  $ cd build
+  $ make toolchains
+  $ make run
 
 Consoles
 ********
@@ -217,6 +227,17 @@ Build instructions
 As long as you pick the v8 manifest, i.e.,  ``qemu_v8.xml`` the
 ":ref:`get_and_build_the_solution`" tells all you need to know to build and boot
 up QEMU v8.
+
+A usual short shell sequence to fetch, build and run OP-TEE using QEMU
+for Armv8-A is like the one below:
+
+.. code-block:: bash
+
+  $ repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml
+  $ repo sync
+  $ cd build
+  $ make toolchains
+  $ make run
 
 All other things (networking, GDB etc) in the v7 section above is also
 applicable on QEMU v8 as long as you replace ``<qemu-v7-project>`` with
