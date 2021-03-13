@@ -15,10 +15,10 @@ You may also want to look at ":ref:`faq_try_optee`".
 .. toctree::
    :maxdepth: 2
 
-   aosp/aosp
+   prerequisites
    devices/index
+   aosp/aosp
    linux/tee_framework
    gits/index
-   prerequisites
    toolchains
    trusted_applications
