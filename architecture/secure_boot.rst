@@ -44,6 +44,9 @@ device manufacturers have their own way of doing secure boot. Please reach out
 directly to the manufacturer for the device you are working with to be able to
 understand how to do secure boot on their devices.
 
+Note however that TF-A supports Armv7-A with Trustzone extension and we
+strongly encourage one to look at TF-A and use its BL2 as secure boot loader.
+
 .. _auth-framework.rst : https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/design/auth-framework.rst
 .. _mbed TLS: https://github.com/ARMmbed/mbedtls.git
 .. _user-guide.rst: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/getting_started/user-guide.rst
