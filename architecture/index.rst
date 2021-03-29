@@ -15,3 +15,4 @@ Architecture
    secure_storage
    trusted_applications
    virtualization
+   spmc
