@@ -22,3 +22,4 @@ You may also want to look at ":ref:`faq_try_optee`".
    gits/index
    toolchains
    trusted_applications
+   efi_vars/stmm
