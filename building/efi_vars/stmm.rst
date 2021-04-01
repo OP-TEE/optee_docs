@@ -42,6 +42,10 @@ OP-TEE Build instructions
         CFG_REE_FS=n CFG_CORE_ARM64_PA_BITS=48  CFG_TEE_CORE_LOG_LEVEL=1 \
         CFG_TEE_TA_LOG_LEVEL=1 CFG_SCTLR_ALIGNMENT_CHECK=n
 
+.. warning::
+
+    Check `caveats`_ regarding ``CFG_RPMB_WRITE_KEY`` before enabling it
+
 U-Boot Build instructions
 *************************
 
@@ -68,3 +72,5 @@ Enable ``CONFIG_OPTEE``, ``CONFIG_CMD_OPTEE_RPMB`` and ``CONFIG_EFI_MM_COMM_TEE`
     
     - Your OP-TEE platform port must support Dynamic shared memory, since that's
       the only kind of memory U-Boot supports for now.
+
+.. _caveats: https://optee.readthedocs.io/en/latest/architecture/secure_storage.html#important-caveats
