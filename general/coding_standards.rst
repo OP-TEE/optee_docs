@@ -32,9 +32,9 @@ Variables are initialized according to these general guidelines:
     * Scalars (and types like ``time_t`` which are standardized as scalars)
       are initialized with ``0``, unless another value makes more sense.
 
-    * For optee_client we need maximum portability. So only initialize
-      struct types (and ``pthread_t``) with ``memset()`` unless there is a
-      good reason not to do so.
+    * For optee_client_ we need maximum portability. So use ``{ 0 }`` for
+      struct types where the first element is known to be a scalar and
+      ``memset()`` otherwise unless there is a good reason not to do so.
 
     * For the rest of the gits we assume that a recent version of GCC or
       Clang is used so we initialize structs with ``{ }`` in order to avoid
@@ -57,4 +57,5 @@ There are also targets for common use cases in the Makefiles:
 .. _checkpatch script: https://github.com/OP-TEE/optee_os/blob/master/scripts/checkpatch.sh
 .. _checkpatch: http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/scripts/checkpatch.pl
 .. _CodingStyle: https://www.kernel.org/doc/html/latest/process/coding-style.html
+.. _optee_client: https://github.com/OP-TEE/optee_client
 .. _repository-structure: fixme::after-sphinks-updates
