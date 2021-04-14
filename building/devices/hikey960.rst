@@ -8,15 +8,17 @@ The instructions here will tell how to run OP-TEE on `HiKey 960`_.
 
 Supported HiKey960 boards
 *************************
-There are two different versions of the HiKey960 board.
+There are three different versions of the HiKey960 board.
 
-+----------+--------------------+--------+-------+-------------------------------+
-| Name     | Manufacturer       | Memory | Flash | Comment                       |
-+==========+====================+========+=======+===============================+
-| HiKey960 | Archermind/LeMaker | 3GB    | 32GB  | v2 uses DIP Switches (SW2201) |
-+----------+--------------------+--------+-------+-------------------------------+
-| HiKey960 | Archermind/LeMaker | 3GB    | 32GB  | v1 uses Jumpers (J2001)       |
-+----------+--------------------+--------+-------+-------------------------------+
++----------+--------------------+--------+-------+--------------------------------------------------+
+| Name     | Manufacturer       | Memory | Flash | Comment                                          |
++==========+====================+========+=======+==================================================+
+| HiKey960 | Archermind/LeMaker | 4GB    | 32GB  | v2 uses DIP Switches (SW2201), rev B has 4GB RAM |
++----------+--------------------+--------+-------+--------------------------------------------------+
+| HiKey960 | Archermind/LeMaker | 3GB    | 32GB  | v2 uses DIP Switches (SW2201), rev A has 3GB RAM |
++----------+--------------------+--------+-------+--------------------------------------------------+
+| HiKey960 | Archermind/LeMaker | 3GB    | 32GB  | v1 uses Jumpers (J2001)                          |
++----------+--------------------+--------+-------+--------------------------------------------------+
 
 UART adapter board
 ******************
@@ -29,6 +31,11 @@ Build instructions
 ******************
 Just follow the instructions at ":ref:`get_and_build_the_solution`". If ``make
 flash`` doesn't work, try ``make recovery``.
+
+For the 4GB RAM board version (rev B), an update to the ``CFG_DRAM_SIZE_GB`` 
+setting in `conf.mk`_ is needed. Either update the value from ``3`` to ``4`` in 
+`conf.mk`_ before building, or set the value on the command line when building, 
+i.e ``make PLATFORM=hikey-hikey960 CFG_DRAM_SIZE_GB=4``
 
 Recovery
 ********
@@ -47,4 +54,5 @@ https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/plat/hikey
 
 .. _HiKey 960: https://www.96boards.org/product/hikey960/
 .. _hikey960.mk: https://github.com/OP-TEE/build/blob/master/hikey960.mk
+.. _conf.mk: https://github.com/OP-TEE/optee_os/blob/master/core/arch/arm/plat-hikey/conf.mk
 .. _UART Serial: https://www.96boards.org/product/uartserial/
