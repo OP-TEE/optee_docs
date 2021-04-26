@@ -303,6 +303,44 @@ Q: Which API’s have been implemented in OP-TEE?
 
     - `Android Verified Boot 2.0`_ (AVB 2.0)
 
+Q: Which Linux kernel version supports <some OP-TEE feature>?
+=============================================================
+    - The OP-TEE Linux driver is maintained in the official Linux tree at
+      `kernel.org`_ under `drivers/tee`. This is normally where you find the
+      latest code. That being said, some platforms need minor customizations,
+      such as device tree updates, in order to be used in the OP-TEE developer
+      builds (:ref:`manifest` files). That is why the `linaro-swg kernel`_
+      branch ``optee`` is used in the manifest files. It is rebased onto
+      upstream on a regular basis.
+    - Older kernels may lack support for newer OP-TEE features. In order to
+      assess in which kernel version some commit has been introduced, you may
+      use the following shell command:
+
+      .. code-block:: bash
+
+          $ cd linux
+          $ git log --no-merges --oneline drivers/tee | \
+            while read hash sub; do \
+              name=$(git name-rev --tags --name-only $hash | sed 's/\([^~]*\)~.*/[\1]/'); \
+              printf "%-20s %s %s\n" "$name" "$hash" "$sub"; \
+            done
+
+      The output looks like this:
+
+      .. code-block:: text
+
+          [v5.12-rc4]          6417f03132a6 module: remove never implemented MODULE_SUPPORTED_DEVICE
+          [v5.12-rc1-dontuse]  67bc80975279 optee: simplify i2c access
+          [v5.12-rc1-dontuse]  958567600517 tee: optee: remove need_resched() before cond_resched()
+          [v5.12-rc1-dontuse]  617d8e8b347e optee: sync OP-TEE headers
+          [v5.12-rc1-dontuse]  bed13b5fc4f3 tee: optee: fix 'physical' typos
+          [v5.12-rc1-dontuse]  fda90b29e271 drivers: optee: use flexible-array member instead of zero-length array
+          [v5.11-rc6]          dcb3b06d9c34 tee: optee: replace might_sleep with cond_resched
+          [v5.10-rc6]          853735e40424 optee: add writeback to valid memory type
+          [v5.11-rc1]          a24d22b225ce crypto: sha - split sha.h into sha1.h and sha2.h
+          [v5.10-rc5]          be353be27874 tee: amdtee: synchronize access to shm list
+          ...
+
 ----
 
 Hardware and peripherals
@@ -536,8 +574,10 @@ Q: I've heard that there is a Widevine and PlayReady TA, how do I get access?
 .. _IBART: https://optee.mooo.com:5000
 .. _Java Native Interface: http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html
 .. _Juno port: https://github.com/OP-TEE/optee_os/commit/90e7497e0480892e2c262cec64e6c47242d4db7f
+.. _kernel.org: https://kernel.org/
 .. _Keymaster: https://source.android.com/security/keystore
 .. _linaro-swg: https://github.com/linaro-swg
+.. _linaro-swg kernel: https://github.com/linaro-swg/linux
 .. _OP-TEE: https://github.com/OP-TEE
 .. _OP-TEE OS Bugs: https://github.com/OP-TEE/optee_os/labels/bug
 .. _OP-TEE OS Enhancements: https://github.com/OP-TEE/optee_os/labels/enhancement
