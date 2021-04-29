@@ -42,6 +42,17 @@ Variables are initialized according to these general guidelines:
       which can be a scalar or a composite type are initialized with
       ``memset()`` in order to minimize the amount of future headache.
 
+Unsigned integer constants are defined using the ``U()``, ``UL()`` or
+``ULL()`` macros, depending on the required width. ``U()`` is a good choice
+for 32-bit values.  Any of the minimum width cousins
+``UINT{8,16,32,64}_C()`` are also accepted for compatibility. This makes
+the sign and size of the integer well defined instead of depend on how
+large the value is or which compiler is used. For example:
+
+.. code-block:: c
+
+    #define MY_UNSIGNED_CONSTANT U(123)
+
 Regarding the checkpatch tool, it is not included directly into this project.
 Please use checkpatch.pl from the Linux kernel git in combination with the local
 `checkpatch script`_.
