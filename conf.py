@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'OP-TEE documentation'
-copyright = '2019 - 2020 TrustedFirmware.org'
+copyright = '2019 - 2021 TrustedFirmware.org'
 author = 'TrustedFirmware.org'
 
 # The short X.Y version
@@ -41,7 +41,8 @@ release = ''
 extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-    'sphinx.ext.graphviz'
+    'sphinx.ext.graphviz',
+    'sphinxcontrib.plantuml'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
