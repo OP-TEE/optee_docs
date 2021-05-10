@@ -2,7 +2,7 @@
 .PHONY: all
 all:
 
-MSC_SRCS = tee_invoke.msc irq.msc fiq.msc irq_fiq.msc
+MSC_SRCS = irq.msc fiq.msc irq_fiq.msc
 
 PNGS += $(MSC_SRCS:.msc=.png)
 

@@ -146,10 +146,31 @@ with IRQ and FIQ blocked. SMCs are categorised in two flavors: **fast** and
       and optee_os invokes the Monitor through a SMC to return to the normal
       world.
 
-.. figure:: ../images/core/interrupt_handling/tee_invoke.png
-    :figclass: align-center
-    
-    SMC entry to secure world
+
+.. uml::
+    :align: center
+    :caption: SMC entry to secure world
+
+    participant "Normal World" as nwd
+    participant "Secure Monitor" as smon
+    participant "OP-TEE OS entry" as entry
+    participant "OP-TEE OS" as optee
+    == IRQ and FIQ unmasked ==
+    nwd -> smon : smc: TEE_FUNC_INVOKE
+    smon -> smon : Save non-secure context
+    smon -> smon : Restore secure context
+    smon --> entry : eret: TEE_FUNC_INVOKE
+    entry -> entry : assign thread
+    entry -> optee : TEE_FUNC_INVOKE
+    == IRQ and FIQ unmasked ==
+    optee -> optee : process
+    == IRQ and FIQ masked ==
+    optee --> entry : SMC_CALL_RETURN
+    entry -> smon : smc: SMC_CALL_RETURN
+    smon -> smon : Save secure context
+    smon -> smon : Restore non-secure context
+    == IRQ and FIQ unmasked ==
+    smon --> nwd : eret: return
 
 Deliver non-secure interrupts to Normal World
 =============================================
