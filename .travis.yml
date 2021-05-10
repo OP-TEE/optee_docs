@@ -8,9 +8,13 @@ python:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y graphviz
+  - sudo apt-get install -y graphviz plantuml
 
-install: pip install sphinx sphinx_rtd_theme
+# TODO make this "pip install sphinx sphinx_rtd_theme sphinxcontrib-plantuml"
+# once the fix in https://github.com/sphinx-contrib/plantuml/issues/56 has
+# been included in a release.
+install:
+  - pip install sphinx==1.8.5 sphinx_rtd_theme sphinxcontrib-plantuml Pillow
 
 notifications:
   - email: false
