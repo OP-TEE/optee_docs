@@ -16,26 +16,26 @@ world.
 
 Use cases of world context switch
 =================================
-This section lists all the cases where optee_os is involved in world context
+This section lists all the cases where OP-TEE OS is involved in world context
 switches. Optee_os executes in the secure world. World switch is done by the
 core's secure monitor level/mode, referred below as the Monitor.
 
 When the normal world invokes the secure world, the normal world executes a SMC
 instruction. The SMC exception is always trapped by the Monitor. If the related
-service targets the trusted OS, the Monitor will switch to optee_os world
-execution. When the secure world returns to the normal world, optee_os executes
+service targets the trusted OS, the Monitor will switch to OP-TEE OS world
+execution. When the secure world returns to the normal world, OP-TEE OS executes
 a SMC that is caught by the Monitor which switches back to the normal world.
 
-When a secure interrupt is signaled by the Arm GIC, it shall reach the optee_os
-interrupt exception vector. If the secure world is executing, optee_os will
-handle straight the interrupt from its exception vector. If the normal world is
+When a secure interrupt is signaled by the Arm GIC, it shall reach the OP-TEE OS
+interrupt exception vector. If the secure world is executing, OP-TEE OS will
+handle interrupt straight from its exception vector. If the normal world is
 executing when the secure interrupt raises, the Monitor vector must handle the
-exception and invoke the optee_os to serve the interrupt.
+exception and invoke OP-TEE OS to serve the interrupt.
 
 When a non-secure interrupt is signaled by the Arm GIC, it shall reach the
 normal world interrupt exception vector. If the normal world is executing, it
 will handle straight the exception from its exception vector. If the secure
-world is executing when the non-secure interrupt raises, optee_os will
+world is executing when the non-secure interrupt raises, OP-TEE OS will
 temporarily return back to normal world via the Monitor to let normal world
 serve the interrupt.
 
@@ -49,9 +49,9 @@ Monitor can be reached from a SMC exception, an IRQ or FIQ exception (so-called
 interrupts) and from asynchronous aborts. Obviously monitor aborts (data,
 prefetch, undef) are local to the Monitor execution.
 
-The Monitor can be external to optee_os (case ``CFG_WITH_ARM_TRUSTED_FW=y``).
+The Monitor can be external to OP-TEE OS (case ``CFG_WITH_ARM_TRUSTED_FW=y``).
 If not, provides a local secure monitor ``core/arch/arm/sm``. Armv7-A platforms
-should use the optee_os secure monitor. Armv8-A platforms are likely to rely on
+should use the OP-TEE OS secure monitor. Armv8-A platforms are likely to rely on
 an `Trusted Firmware A`_.
 
 When executing outside the Monitor, the system is executing either in the
@@ -69,13 +69,13 @@ world.
 
 When the normal world is executing, the system is configured to route:
 
-    - secure interrupts to the Monitor that will forward to optee_os
+    - secure interrupts to the Monitor that will forward to OP-TEE OS
     - non-secure interrupts to the executing world exception vector.
 
 When the secure world is executing, the system is configured to route:
 
-    - secure and non-secure interrupts to the executing optee_os exception
-      vector. optee_os shall forward the non-secure interrupts to the normal
+    - secure and non-secure interrupts to the executing OP-TEE OS exception
+      vector. OP-TEE OS shall forward the non-secure interrupts to the normal
       world.
 
 Optee_os non-secure interrupts are always trapped in the state vector of the
@@ -85,25 +85,28 @@ executing world. This is reflected by a static value of ``SCR_(IRQ|FIQ)``.
 
 Native and foreign interrupts
 =============================
-Two types of interrupt are defined in optee_os:
+Two types of interrupt are defined from OP-TEE OS point of view.
 
-    - **Native interrupt** - The interrupt handled by optee_os (for example:
-      secure interrupt)
-    - **Foreign interrupt** - The interrupt not handled by optee_os (for
-      example: non-secure interrupt which is handled by normal world)
+    - **Native interrupt** - The interrupt handled by OP-TEE OS, secure
+      interrupts targetting S-EL1 or secure privileged mode
+    - **Foreign interrupt** - The interrupt not handled by OP-TEE OS, non-secure
+      interrupts targetting normal world or secure interrupts targetting EL3.
 
-For Arm **GICv2** mode, native interrupt is sent as FIQ and foreign interrupt
-is sent as IRQ. For Arm **GICv3** mode, foreign interrupt is sent as FIQ which
-could be handled by either secure world (aarch32 Monitor mode or aarch64 EL3)
-or normal world. Arm GICv3 mode can be enabled by setting ``CFG_ARM_GICV3=y``.
-For clarity, this document mainly chooses the GICv2 convention and refers the
-IRQ as optee_os foreign interrupts, and FIQ as optee_os native interrupts.
-Native interrupts must be securely routed to optee_os. Foreign interrupts, when
+For Arm **GICv2** mode, a native interrupt is signalled with a FIQ and a
+foreign interrupt is signalled with an IRQ. For Arm **GICv3** mode, a
+foreign interrupts is signalled as a FIQ which could be handled by either
+secure world (aarch32 Monitor mode or aarch64 EL3) or normal world.
+
+Arm GICv3 mode can be enabled by setting ``CFG_ARM_GICV3=y``.
+Native interrupts must be securely routed to OP-TEE OS. Foreign interrupts, when
 trapped during secure world execution might need to be efficiently routed to
 the normal world.
 
-Normal World invokes optee_os using SMC
-=======================================
+IRQ and FIQ keeps their meaning in normal world so for clarity we will keep
+using those names in the normal world context.
+
+Normal World invokes OP-TEE OS using SMC
+========================================
 
 **Entering the Secure Monitor**
 
@@ -121,31 +124,30 @@ ARM_DEN0028A_SMC_Calling_Convention_ for details).
 **Entry and exit of Trusted OS**
 
 On entry and exit of Trusted OS each CPU is uses a separate entry stack and runs
-with IRQ and FIQ blocked. SMCs are categorised in two flavors: **fast** and
-**standard**.
+with IRQ and FIQ masked. SMCs are categorised in two flavors: **fast** and
+**yielding**.
 
-    - For **fast** SMCs, optee_os will execute on the entry stack with IRQ/FIQ
-      blocked until the execution returns to normal world.
+    - For **fast** SMCs, OP-TEE OS will execute on the entry stack with IRQ/FIQ
+      masked until the execution returns to normal world.
 
-    - For **standard** SMCs, optee_os will at some point execute the requested
-      service with interrupts unblocked. In order to handle interrupts, mainly
-      forwarding of foreign interrupts, optee_os assigns a trusted thread
+    - For **yielding** SMCs, OP-TEE OS will at some point execute the requested
+      service with interrupts unmasked. In order to handle interrupts, mainly
+      forwarding of foreign interrupts, OP-TEE OS assigns a trusted thread
       (`core/arch/arm/kernel/thread.c`_) to the SMC request. The trusted thread
       stores the execution context of the requested service. This context can be
       suspended and resumed as the requested service executes and is
       interrupted. The trusted thread is released only once the service
       execution returns with a completion status.
 
-      For **standard** SMCs, optee_os allocates or resumes a trusted thread then
-      unblock the IRQ/FIQ lines. When the optee_os needs to invoke the normal
-      world from a foreign interrupt or a remote service call, optee_os blocks
-      IRQ/FIQ and suspends the trusted thread. When suspending, optee_os gets
-      back to the entry stack.
+      For **yielding** SMCs, OP-TEE OS allocates or resumes a trusted thread
+      then unmasks the IRQ and FIQ lines. When the OP-TEE OS needs to invoke the
+      normal world from a foreign interrupt or a remote service call, OP-TEE OS
+      masks IRQ and FIQ and suspends the trusted thread. When suspending,
+      OP-TEE OS gets back to the entry stack.
 
-    - **Both** fast and standard SMC end on the entry stack with IRQ/FIQ blocked
-      and optee_os invokes the Monitor through a SMC to return to the normal
-      world.
-
+    - **Both** fast and yielding SMCs end on the entry stack with IRQ and
+      FIQ masked and OP-TEE OS invokes the Monitor through a SMC to return
+      to the normal world.
 
 .. uml::
     :align: center
@@ -174,98 +176,173 @@ with IRQ and FIQ blocked. SMCs are categorised in two flavors: **fast** and
 
 Deliver non-secure interrupts to Normal World
 =============================================
-This section uses the Arm GICv1/v2 conventions: IRQ signals non-secure
-interrupts while FIQ signals secure interrupts. On a GICv3 configuration, one
-should exchange IRQ and FIQ in this section.
 
 **Forward a Foreign Interrupt from Secure World to Normal World**
 
-When an IRQ is received in secure world as an IRQ exception then secure world:
+When a foreign interrupt is received in secure world as an IRQ or FIQ
+exception then secure world:
 
     1. Saves trusted thread context (entire state of all processor modes for
        Armv7-A)
 
-    2. Blocks (masks) all interrupts (IRQ and FIQ)
+    2. Masks all interrupts (IRQ and FIQ)
 
     3. Switches to entry stack
 
     4. Issues an SMC with a value to indicates to normal world that an IRQ has
-       been delivered and last SMC call should be continued
+       been detected and last SMC call should be continued
 
 The monitor restores normal world context with a return code indicating that an
 IRQ is about to be delivered. Normal world issues a new SMC indicating that it
 should continue last SMC.
 
-The monitor restores secure world context which locates the previously saved
-context and checks that it is a return from IRQ that is requested before
-restoring the context and lets the secure world IRQ handler return from
-exception where the execution would be resumed.
+The monitor restores secure world context which locates the previously
+saved context and checks that it is a return from a foreign interrupt that
+is requested before restoring the context and lets the secure world foreign
+interrupt handler return from exception where the execution would be
+resumed.
 
-Note that the monitor itself does not know/care that it has just forwarded an
-IRQ to normal world. The bookkeeping is done in the trusted thread handling in
-Trusted OS. Normal world is responsible to decide when the secure world thread
-should resume execution (for details, see :ref:`thread_handling`).
+Note that the monitor itself does not know or care that it has just forwarded
+a foreign interrupt to normal world. The bookkeeping is done in the trusted
+thread handling in OP-TEE OS. Normal world is responsible to decide when
+the secure world thread should resume execution (for details, see
+:ref:`thread_handling`).
 
-.. figure:: ../images/core/interrupt_handling/irq.png
-    :figclass: align-center
-    
-    IRQ received in secure world and forwarded to normal world
+.. uml::
+    :align: center
+    :caption: Foreign interrupt received in secure world and forwarded to
+              normal world
 
-**Deliver a non-secure interrupt to normal world when ``SCR_NS`` is set**
+    participant "Normal World" as nwd
+    participant "Secure Monitor" as smon
+    participant "OP-TEE OS entry" as entry
+    participant "OP-TEE OS" as optee
+    == IRQ and FIQ unmasked ==
+    optee -> optee : process
+    == IRQ and FIQ unmasked,\nForeign interrupt received ==
+    optee -> optee : suspend thread
+    optee -> entry : forward foreign interrupt
+    entry -> smon : smc: forward foreign interrupt
+    smon -> smon: Save secure context
+    smon -> smon: Restore non-secure context
+    == IRQ and FIQ unmasked ==
+    smon --> nwd : eret: IRQ forwarded
+    == FIQ unmasked, IRQ received ==
+    nwd -> nwd : process IRQ
+    == IRQ and FIQ unmasked ==
+    nwd -> smon : smc: return from IRQ
+    == IRQ and FIQ masked ==
+    smon -> smon : Save non-secure context
+    smon -> smon : Restore secure context
+    smon --> entry : eret: return from foreign interrupt
+    entry -> entry : find thread
+    entry --> optee : resume execution
+    == IRQ and FIQ unmasked ==
+    optee -> optee : process
 
-Since ``SCR_IRQ`` is cleared, an IRQ will be delivered using the state vector
-(``VBAR``) in the normal world. The IRQ is received as any other exception by
-normal world, the monitor and the Trusted OS are not involved at all.
+**Deliver a foreign interrupt to normal world when ``SCR_NS`` is set**
+
+Since ``SCR_IRQ`` is cleared, an IRQ will be delivered using the exception
+vector (``VBAR``) in the normal world. The IRQ is received as any other
+exception by normal world, the monitor and the OP-TEE OS are not involved
+at all.
 
 Deliver secure interrupts to Secure World
 =========================================
-This section uses the Arm GICv1/v2 conventions: FIQ signals secure interrupts
-while IRQ signals non-secure interrupts. On a GICv3 configuration, one should
-exchange IRQ and FIQ in this section. A FIQ can be received during two different
-states, either in normal world (``SCR_NS`` is set) or in secure world
-(``SCR_NS`` is cleared). When the secure monitor is active (Armv8-A EL3 or
-Armv7-A Monitor mode) FIQ is masked. FIQ reception in the two different states
-is described below.
+A secure (foreign) interrupt can be received during two different states,
+either in normal world (``SCR_NS`` is set) or in secure world (``SCR_NS``
+is cleared). When the secure monitor is active (Armv8-A EL3 or Armv7-A
+Monitor mode) FIQ and IRQ are masked. FIQ reception in the two different
+states is described below.
 
-**Deliver FIQ to secure world when SCR_NS is set**
+**Deliver secure interrupt to secure world when SCR_NS is set**
 
-When the monitor gets an FIQ exception it:
+When the monitor traps a secure interrupt it:
 
     1. Saves normal world context and restores secure world context from last
        secure world exit (which will have IRQ and FIQ blocked)
     2. Clears ``SCR_FIQ`` when clearing ``SCR_NS``
-    3. Sets “FIQ” as parameter to secure world entry
-    4. Does a return from exception into secure context
-    5. Secure world unmasks FIQs because of the “FIQ” parameter
-    6. FIQ is received as in exception using the state vector
-    7. The state vector handle returns from exception in secure world
-    8. Secure world issues an SMC to return to normal world
-    9. Monitor saves secure world context and restores normal world context
-    10. Does a return from exception into restored context
+    3. Does a return from exception into OP-TEE OS via the secure interrupt
+       entry point
+    4. OP-TEE OS handles the native interrupt directly in the entry point
+    5. OP-TEE OS issues an SMC to return to normal world
+    6. The monitor saves the secure world context and restores the normal world context
+    7. Does a return from exception into the restored context
 
-.. figure:: ../images/core/interrupt_handling/fiq.png
-    :figclass: align-center
+.. uml::
+    :align: center
+    :caption: Secure interrupt received when SCR_NS is set
 
-    FIQ received when SCR_NS is set
-
-.. figure:: ../images/core/interrupt_handling/irq_fiq.png
-    :figclass: align-center
-
-    FIQ received while processing an IRQ forwarded from secure world
+    participant "Normal World" as nwd
+    participant "Secure Monitor" as smon
+    participant "OP-TEE OS entry" as entry
+    participant "OP-TEE OS" as optee
+    == IRQ and FIQ unmasked ==
+    == Running in non-secure world (SCR_NS set) ==
+    nwd -> nwd : process
+    == IRQ and FIQ masked,\nSecure interrupt received ==
+    smon -> smon : Save non-secure context
+    smon -> smon : Restore secure context
+    smon --> entry : eret: native interrupt entry point
+    entry -> entry: process received native interrupt
+    entry -> smon: smc: return
+    smon -> smon : Save secure context
+    smon -> smon : Restore non-secure context
+    smon --> nwd : eret: return to Normal world
+    == IRQ and FIQ unmasked ==
+    nwd -> nwd : process
 
 **Deliver FIQ to secure world when SCR_NS is cleared**
 
-Since ``SCR_FIQ`` is cleared when ``SCR_NS`` is cleared a FIQ will be delivered
-using the state vector (``VBAR``) in secure world. The FIQ is received as any
-other exception by Trusted OS, the monitor is not involved at all.
+.. uml::
+    :align: center
+    :caption: FIQ received while processing an IRQ forwarded from secure world
+
+    participant "Normal World" as nwd
+    participant "Secure Monitor" as smon
+    participant "OP-TEE OS entry" as entry
+    participant "OP-TEE OS" as optee
+    == IRQ and FIQ unmasked ==
+    optee -> optee : process
+    == IRQ and FIQ unmasked,\nForeign interrupt received ==
+    optee -> optee : suspend thread
+    optee -> entry : forward foreign interrupt
+    entry -> smon : smc: forward foreign interrupt
+    smon -> smon: Save secure context
+    smon -> smon: Restore non-secure context
+    == IRQ and FIQ unmasked ==
+    smon --> nwd : eret: IRQ forwarded
+    == FIQ unmasked, IRQ received ==
+    nwd -> nwd : process IRQ
+    == IRQ and FIQ masked,\nSecure interrupt received ==
+    smon -> smon : Save non-secure context
+    smon -> smon : Restore secure context
+    smon --> entry : eret: native interrupt entry point
+    entry -> entry : process received native interrupt
+    entry -> smon: smc: return
+    smon -> smon : Save secure context
+    smon -> smon : Restore non-secure context
+    smon --> nwd : eret: return to Normal world
+    == FIQ unmasked\nIRQ still being processed ==
+    nwd -> nwd : process IRQ
+    == IRQ and FIQ unmasked ==
+    nwd -> smon : smc: return from IRQ
+    == IRQ and FIQ masked ==
+    smon -> smon : Save non-secure context
+    smon -> smon : Restore secure context
+    smon --> entry : eret: return from foreign interrupt
+    entry -> entry : find thread
+    entry --> optee : resume execution
+    == IRQ and FIQ unmasked ==
+    optee -> optee : process
 
 Trusted thread scheduling
 =========================
 **Trusted thread for standard services**
 
-OP-TEE standard services are carried through standard SMC. Execution of these
+OP-TEE yielding services are carried through standard SMC. Execution of these
 services can be interrupted by foreign interrupts. To suspend and restore the
-service execution, optee_os assigns a trusted thread at standard SMCs entry.
+service execution, optee_os assigns a trusted thread at yielding SMC entry.
 
 The trusted thread terminates when optee_os returns to the normal world with a
 service completion status.
@@ -281,7 +358,7 @@ only once normal world invokes the optee_os with the RPC service status.
 
 A trusted thread execution can lead optee_os to invoke a service in normal
 world: access a file, get the REE current time, etc. The trusted thread is
-suspended/resumed during remote service execution.
+first suspended then resumed during remote service execution.
 
 **Scheduling considerations**
 
@@ -305,8 +382,8 @@ decision. This means trusted threads are scheduled by the Linux kernel.
 
 TEE core handles a static number of trusted threads, see ``CFG_NUM_THREADS``.
 
-Trusted threads are only expensive on memory constrained system, mainly
-regarding the execution stack size.
+Trusted threads are expensive on memory constrained system, mainly
+because of the execution stack size.
 
 On SMP systems, optee_os can execute several trusted threads in parallel if the
 normal world supports scheduling of processes. Even on UP systems, supporting
