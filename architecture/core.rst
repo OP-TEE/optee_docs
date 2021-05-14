@@ -392,6 +392,121 @@ efficient.
 
 ----
 
+.. _notifications:
+
+Notifications
+*************
+
+There are two kinds of notifications that secure world can use to make
+normal world aware of some event.
+
+1. Synchronous notifications delivered with ``OPTEE_RPC_CMD_NOTIFICATION``
+   using the ``OPTEE_RPC_NOTIFICATION_SEND`` parameter.
+2. Asynchronous notifications delivered with a combination of a non-secure
+   interrupt and a fast call from the non-secure interrupt handler.
+
+Secure world can wait in normal for a notification to arrive. This allows
+the calling thread to sleep instead of spinning when waiting for something.
+This happens for instance when a thread waits for a mutex to become
+available.
+
+Synchronous notifications are limited by depending on RPC for delivery, this
+is only usable from a normal thread context. Secure interrupt handler or
+other atomic context cannot use synchronous notifications due to this.
+
+Asynchrononous notifications uses a platform specific way of triggering a
+non-secure interrupt. This is done with ``itr_raise_pi()`` in a way
+suitable for a secure interrupt handler or another atomic context. This is
+useful when using a top half and bottom half kind of design in a device
+driver. The top half is done in the secure interrupt handler which then
+triggers normal world to make a yielding call into secure world to do the
+bottom half processing.
+
+.. uml::
+    :align: center
+    :caption: Top half, bottom half example
+
+    participant "OP-TEE OS\ninterrupt handler" as sec_itr
+    participant "OP-TEE OS\nfastcall handler" as fastcall
+    participant "Interrupt\ncontroller" as itc
+    participant "Normal World\ninterrupt handler" as ns_itr
+    participant "Normal World\nthread" as ns_thr
+    participant "OP-TEE OS\nyielding do bottom half" as bottom
+
+    itc --> sec_itr : Secure interrupt
+    activate sec_itr
+    sec_itr -> sec_itr : Top half processing
+    sec_itr --> itc : Trigger NS interrupt
+    itc --> ns_itr : Non-secure interrupt
+    activate ns_itr
+    sec_itr --> itc: End of interrupt
+    deactivate sec_itr
+    ns_itr -> fastcall ++: Get notification
+    fastcall -> ns_itr --: Return notification
+    alt Do bottom half notifcation
+        ns_itr --> ns_thr : Wake thread
+        activate ns_thr
+        ns_itr --> itc: End of interrupt
+        deactivate ns_itr
+        ns_thr -> bottom ++: Do bottom half
+        bottom -> bottom : Process bottom half
+        bottom -> ns_thr --: Done
+        deactivate ns_thr
+    else Some other notification
+    end
+
+.. uml::
+    :align: center
+    :caption: Synchronous example
+
+    participant "OP-TEE OS\nthread 1" as sec_thr1
+    participant "Normal World\nthread 1" as ns_thr1
+    participant "OP-TEE OS\nthread 2" as sec_thr2
+    participant "Normal World\nthread 2" as ns_thr2
+
+    activate ns_thr1
+    ns_thr1 -> sec_thr1 ++ : Invoke
+    sec_thr1 -> sec_thr1 : Lock mutex
+    sec_thr1 -> sec_thr1 : Process
+    activate ns_thr2
+    ns_thr2 -> sec_thr2  ++: Invoke
+    sec_thr2 -> ns_thr2 -- : RPC: Wait for mutex
+    ns_thr2 -> ns_thr2 : Wait for notifcation
+    deactivate ns_thr2
+    sec_thr1 -> sec_thr1 : Unlock mutex
+    sec_thr1 -> ns_thr1 -- : RPC: Notify mutex unlocked
+    ns_thr1 --> ns_thr2 : Notify mutex unlocked
+    activate ns_thr2
+    ns_thr1 -> sec_thr1 ++ : Return from RPC
+    sec_thr1 -> sec_thr1 : Process
+    sec_thr1 -> ns_thr1 -- : Return from Invoke
+    deactivate ns_thr1
+    ns_thr2 -> sec_thr2 ++ : Return from RPC
+    sec_thr2 -> sec_thr2 : Lock mutex
+    sec_thr2 -> sec_thr2 : Process
+    sec_thr2 -> sec_thr2 : Unlock mutex
+    sec_thr2 -> sec_thr2 : Process
+    sec_thr2 -> ns_thr2 -- : Return from Invoke
+    deactivate ns_thr2
+
+Notifications are identified with a value, allocated as:
+
+0 - 63
+    Mixed asynchronous and synchronous range
+64 - Max
+    Synchronous only range
+
+If the **Max** value is smaller than 63, then there's only the mixed range.
+
+If asynchronous notifications are enabled then is the value 0 reserved for
+signalling the a driver need a bootom half call, that is the yielding call
+``OPTEE_MSG_CMD_DO_BOTTOM_HALF``.
+
+The rest of the asynchronous notification values are managed with two
+functions ``notif_alloc_async_value()`` and ``notif_free_async_value()``.
+
+----
+
 .. _memory_objects:
 
 Memory objects
