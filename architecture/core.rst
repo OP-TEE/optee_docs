@@ -428,7 +428,31 @@ MMU
 ***
 Translation tables
 ==================
-OP-TEE uses several L1 translation tables, one large spanning 4 GiB and two or
+
+OP-TEE supports two translation table formats:
+
+1. Short-descriptor translation table format, available on ARMv7-A and
+   ARMv8-A AArch32
+2. Long-descriptor translation format, available on ARMv7-A with LPAE and
+   ARMv8-A
+
+ARMv7-A without LPAE (Large Physical Address Extension) must use the
+short-descriptor translation table format only. ARMv8-A AArch64 must use
+the long-descriptor translation format only.
+
+Translation table format is a static build time configuration option,
+``CFG_WITH_LPAE``. The design around the translation table handling has
+been centered around these factors:
+
+1. Share translation tables between CPUs when possible to save memory
+   and simplify paging
+2. Support non-global CPU specific mappings to allow executing different
+   TAs in parallel.
+
+Short-descriptor translation table format
+-----------------------------------------
+
+Several L1 translation tables are used, one large spanning 4 GiB and two or
 more small tables spanning 32 MiB. The large translation table handles kernel
 mode mapping and matches all addresses not covered by the small translation
 tables. The small translation tables are assigned per thread and covers the
@@ -452,13 +476,13 @@ is used to initialize the thread specific L1 translation table when the TA
 context is activated.
 
 .. graphviz::
+    :align: center
 
     digraph xlat_table {
         graph [
             rankdir = "LR"
         ];
         node [
-            fontsize = "16"
             shape = "ellipse"
         ];
         edge [
@@ -482,6 +506,63 @@ context is activated.
         "node_ttb":f0 -> "node_large_l1" [ label="No active ctx" ];
         "node_ttb":f1 -> "node_large_l1";
     }
+
+Long-descriptor translation table format
+----------------------------------------
+
+Each CPU is assigned a L1 translation table which is programmed into
+Translation Table Base Register 0 (``TTBR0`` or ``TTBR0_EL1`` as
+appropriate).
+
+L1 and L2 translation tables are statically allocated and initialized at
+boot. Normally there is only one shared L2 table, but with ASLR enabled the
+virtual address space used for the shared mapping may need to use two
+tables. An unused entry in the L1 table is selected to point to the per
+thread L2 table. With ASLR configured this means that different per thread
+entry may be selected each time the system boots. Note that this entry will
+only point to a table when the per thread mapping is activated.
+
+The L2 translation tables in their turn point to L3 tables which use the
+small page granularity of 4 KiB. The shared mappings has the L3 tables
+initialized too at boot, but the per thread L3 tables are dynamic and are
+only assigned when the mapping is activated.
+
+.. graphviz::
+    :align: center
+    :caption: Example translation table setup with 4GiB virtual address space
+              with L3 tables excluded
+
+    digraph xlat_table {
+        graph [ rankdir = "LR" ];
+        node [ ];
+        edge [ ];
+
+        "ttbr0" [
+            label = "TTBR0"
+            shape = "record"
+        ];
+        "node_l1" [
+            label = "<h> Per CPU L1 table | <f0> 0 | <f1> 1 | <f2> 2 | <f3> 3"
+            shape = "record"
+        ];
+        "shared_l2_n" [
+            label = "<h> Shared L2 table n | 0 | ... | 512"
+            shape = "record"
+        ]
+        "shared_l2_m" [
+            label = "<h> Shared L2 table m | 0 | ... | 512"
+            shape = "record"
+        ]
+        "per_thread_l2" [
+            label = "<h> Per thread L2 table | 0 | ... | 512"
+            shape = "record"
+        ]
+        "ttbr0" -> "node_l1":h;
+        "node_l1":f2 -> "shared_l2_n":h;
+        "node_l1":f3 -> "shared_l2_m":h;
+        "node_l1":f0 -> "per_thread_l2":h;
+    }
+
 
 Page table cache
 ================
