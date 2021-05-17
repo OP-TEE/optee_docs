@@ -2,180 +2,286 @@
 
 File structure
 ##############
-This page describes what different folders in :ref:`optee_os` contains.
+This page describes organization of the tree structure in :ref:`optee_os`.
+
+The description is dived into different tables. First the flat top directory
+followed by the ``core/`` directory tree with the ``core/arch/arm/`` tree
+in separate table. There are two more tables covering the ``lib/`` and
+``ta/`` trees.
 
 Top level directories
 *********************
-.. list-table:: Top level directories
+.. list-table::
     :header-rows: 1
     :widths: 1 5
 
     * - Directory
       - Description
 
-    * - /core
-      - Files that are only used building TEE Core
+    * - core/
+      - Files that are only used building OP-TEE core, the privileged mode part
 
-    * - /lib
-      - Files that are used both when building TEE Core and TAs
+    * - keys/
+      - Secure keys or not so secure example keys
 
-    * - /ta
-      - Files that are only used when building TAs
+    * - ldelf/
+      - Ldelf the user mode ELF loader, for instance used to load TAs
 
-    * - /mk
+    * - lib/
+      - Libraries that are used both when building more than one component,
+        for instance, OP-TEE core, ldelf, or TAs
+
+    * - mk/
       - Makefiles supporting the build system
 
-    * - /tmp-stuff
-      - Temporary stuff that will be removed before the final commit is made
-
-    * - /scripts
+    * - scripts/
       - Helper scripts for miscellaneous tasks
 
-    * - /out
+    * - ta/
+      - Files that are only used when building TAs
+
+    * - out/
       - Created when building unless a different out directory is specified with
         ``O=...`` on the command line
 
-/core
+core/
 *****
-.. list-table:: Structure of /core
+.. list-table::
     :header-rows: 1
     :widths: 1 5
 
     * - Directory
       - Description
 
-    * - /arch
+    * - arch/
       - Architecture and platform specific files
 
-    * - /include
-      - Header files of resources exported by the core
+    * - arch/arm/
+      - Arm specific architecture and platform files
 
-    * - /lib
-      - Generic libraries that are likely to be replaced in a final product
+    * - crypto/
+      - Crypto infrastructure including software implementations of certain
+        algorithms.
 
-    * - /mm
-      - Generic memory management, currently empty
+    * - drivers/
+      - Various device drivers
 
-    * - /tee
-      - Generic TEE files
+    * - include/
+      - Header files of resources exported to the rest of the core
 
-/core/arch
-**********
-.. list-table:: Structure of /core/arch
-    :header-rows: 1
-    :widths: 1 5
+    * - include/crypto/
+      - Include files related to files in /core/crypto
 
-    * - Directory
-      - Description
+    * - include/drivers/
+      - Include files related to device drivers
 
-    * - /arm
-      - ARMv7 and Aarch32 specific architecture and platform specific files
-
-/core/arch/arm
-**************
-.. list-table:: Structure of /core/arch/arm
-    :header-rows: 1
-    :widths: 1 5
-
-    * - Directory
-      - Description
-
-    * - /dts
-      - Device tree source files
-
-    * - /include
-      - Include files used in rest of TEE core but not in any supporting
-        libraries
-
-    * - /kern
-      - Low level and core parts of TEE Core
-
-    * - /mm
-      - Memory management
-
-    * - /tee
-      - TEE files
-
-    * - /sm
-      - Secure Monitor
-
-    * - /plat-foo
-      - Specific files for the ``foo`` platform
-
-/core/arch/arm/include
-**********************
-.. list-table:: Structure of /core/arch/arm/include
-    :header-rows: 1
-    :widths: 1 5
-
-    * - Directory
-      - Description
-
-    * - /kern
-      - Include files exposing API for /core/arch/arm/kern files
-
-    * - /kta
-      - Include files exposing the KTA API that is mainly used by kernel TAs
-
-    * - /mm
-      - Include files exposing API for /core/arch/arm/mm files
-
-    * - /rom
-      - Old ROM files that should be removed before going public
-
-    * - /sm
-      - Include files exposing API for Secure Monitor
-
-/core/include
-*************************
-.. list-table:: Structure of /core/include
-    :header-rows: 1
-    :widths: 1 5
-
-    * - Directory
-      - Description
-
-    * - /drivers
-      - Include files exposing API for /core/drivers files
-
-    * - /dt-bindings
+    * - include/dt-bindings/
       - Include files for the device tree bindings
 
-/core/lib/lib{crypto,sla}
-*************************
-.. list-table:: Structure of /core/lib/lib{crypto,sla}
+    * - include/kernel/
+      - Include files related to files in /core/kernel
+
+    * - include/mm/
+      - Include files related to memory management and files in /core/mm
+
+    * - include/tee/
+      - Include files related to files in /core/tee
+
+    * - kernel/
+      - Miscellaneous architecture neutral files
+
+    * - lib/
+      - Libraries that are used by core only
+
+    * - lib/libfdt/
+      - Flat Device Trees manipulation library
+
+    * - lib/libfdt/include/
+      - Include files related to libfdt
+
+    * - lib/libtomcrypt/
+      - Libtomcrypt crypto library
+
+    * - lib/libtomcrypt/include/
+      - Include files related to libtomcrypt
+
+    * - lib/libtomcrypt/src/
+      - Source files of libtomcrypt
+
+    * - lib/zlib/
+      - Zlib compression library
+
+    * - mm/
+      - Architecture neutral memory management
+
+    * - pta/
+      - Various pseudo TAs
+
+    * - tee/
+      - Architecture neutral TEE files
+
+core/arch/arm/
+**************
+.. list-table::
     :header-rows: 1
     :widths: 1 5
 
     * - Directory
       - Description
 
-    * - /
-      - Source files for the library
+    * - cpu/
+      - CPU specific settings
 
-    * - /include  
-      - Include files exposing the API of the library
+    * - crypto/
+      - Architecture specific software implementations of crypto algorithms
 
-/lib/libutils
+    * - dts/
+      - Device tree source files
+
+    * - include/
+      - Header files of resources exported to the rest of the core
+
+    * - include/crypto/
+      - Architecture specific include files related to /core/crypto or
+        /core/arch/arm/crypto files
+
+    * - include/kernel/
+      - Architecture specific include files related to /core/kernel or
+        /core/arch/arm/kernel files
+
+    * - include/mm/
+      - Architecture specific include files related to /core/mm or
+        /core/arch/arm/mm files
+
+    * - include/sm/
+      - Include files related to the secure monitor
+
+    * - include/tee/
+      - Architecture specific include files related to /core/tee or
+        /core/arch/arm/tee files
+
+    * - kernel/
+      - Miscellaneous low level architecure specific files
+
+    * - plat-\*/
+      - Specific files for the different supported platform
+
+    * - mm/
+      - Memory management
+
+    * - tee/
+      - TEE files
+
+    * - sm/
+      - Secure Monitor, ARMv7-A only
+
+lib/
 *************
-.. list-table:: Structure of /lib/libutils
+.. list-table::
     :header-rows: 1
     :widths: 1 5
 
     * - Directory
       - Description
 
-    * - /
-      - Source file for the library
+    * - libdl/
+      - Implementation of dlopen(), dlsym() and dlclose() used by TAs and ldelf
 
-    * - /arch	  
-      - Architecture specific source files
+    * - libdl/include/
+      - Include files for libdl
 
-    * - /arch/arm 
-      - ARMv7 and Aarch32 specific source files
+    * - libmbedtls/
+      - Mbed TLS crypto library
 
-    * - /arch/arm/include 
-      - ARMv7 and Aarch32 specific include files
+    * - libmbedtls/core/
+      - Glue code only compiled with core to connect with the core internal
+        <crypto/crypto.h> API.
 
-    * - /include  
-      - Include files exposing the API of the library
+    * - libmbedtls/include/
+      - Include files with configuration of Mbed TLS
+
+    * - libmbedtls/mbedtls/
+      - Top directory of the imported Mbed TLS source tree
+
+    * - libmbedtls/mbedtls/include/
+      - Mbed TLS include files
+
+    * - libmbedtls/mbedtls/library/
+      - Mbed TLS implementation
+
+    * - libunw/
+      - Unwind library 
+
+    * - libunw/include/
+      - Include files for libunwnd
+
+    * - libutee/
+      - Libutee which provide the implementation of TEE Internal Core API.
+
+    * - libutee/arch/
+      - Architecture specific implementation
+
+    * - libutee/include/
+      - Include files related to libutee and the header files for
+        TEE Internal Core API
+
+    * - libutils/
+      - The reduced "libc" of OP-TEE
+
+    * - libutils/ext/
+      - Extensions to a standard libc
+
+    * - libutils/ext/arch/
+      - Architecture specific implmementation of the extensions
+
+    * - libutils/ext/include/
+      - Include files related to the extensions
+
+    * - libutils/isoc/
+      - A subset of ISOC
+
+    * - libutils/isoc/arch/
+      - Architecture specific
+
+    * - libutils/isoc/include/
+      - Header files related to the provided subset of ISOC
+
+    * - libutils/isoc/newlib/
+      - Routines imported from newlib
+
+
+ta/
+*************
+.. list-table::
+    :header-rows: 1
+    :widths: 1 5
+
+    * - Directory
+      - Description
+
+    * - trusted_keys
+      - Trusted key TA
+
+    * - trusted_keys/include
+      - Header file of the ABI provided by the trusted key TA
+
+    * - arch
+      - Architecture specific files needed to compile a TA
+
+    * - mk
+      - Makefile includes needed to build TAs and the TA dev kit
+
+    * - avb
+      - TA to support AVB (Android Verified Boot)
+
+    * - avb/include
+      - Header file of the ABI provided by the AVB TA
+
+    * - pkcs11
+      - TA to support PKCS#11 
+
+    * - pkcs11/src
+      - Source code for the PKCS#11 TA
+
+    * - pkcs11/include
+      - Header file for the ABI provided by the PKCS#11 TA
