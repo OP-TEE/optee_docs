@@ -1,8 +1,3 @@
-.. todo::
-
-    Joakim: Question is whether this should be moved under the "optee_os"
-    specific page instead?
-
 .. _file_structure:
 
 File structure
