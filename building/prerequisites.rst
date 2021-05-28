@@ -24,7 +24,7 @@ Install the following packages regardless of what target you will use in the end
             expect flex ftp-upload gdisk iasl libattr1-dev libcap-dev \
             libfdt-dev libftdi-dev libglib2.0-dev libgmp-dev libhidapi-dev \
             libmpc-dev libncurses5-dev libpixman-1-dev libssl-dev libtool make \
-            mtools netcat python-crypto python3-crypto python-pyelftools \
+            mtools netcat ninja-build python-crypto python3-crypto python-pyelftools \
             python3-pycryptodome python3-pyelftools python-serial python3-serial \
             rsync unzip uuid-dev xdg-utils xterm xz-utils zlib1g-dev
 
