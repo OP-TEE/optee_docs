@@ -70,6 +70,8 @@ analysis of such issues. It is located in the OP-TEE OS source tree in
 ``scripts/symbolize.py`` and is also copied to the TA development kit.
 Whenever you are confronted with an error message reporting a serious error and
 containing a ``"Call stack:"`` line, you may use the symbolize script.
+It is meant to be run on the host system (build environment), not on the
+target.
 
 ``symbolize.py`` reads its input from ``stdin`` and writes extended debug
 information to ``stdout``. The ``-d`` (directories) option tells the script
