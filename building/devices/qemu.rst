@@ -23,6 +23,8 @@ for Armv7-A is like the one below:
   $ repo sync
   $ cd build
   $ make toolchains
+  # Note that if you wish to debug optee-os or a TA, you should disable ASLR
+  # with flag "CFG_CORE_ASLR=n"
   $ make run
 
 Consoles
@@ -129,9 +131,10 @@ GDB - Secure world
 ******************
 TEE core debugging
 ==================
-To debug TEE core running QEMU with GDB, you don't have to enable any special
-flags as such, but it's easier to debug if you have optimization disabled. Other
-than that you will have four consoles that you are working with.
+To debug TEE core running QEMU with GDB, you need to disable TEE ASLR with
+``CFG_CORE_ASLR=n`` flag. Furthermore, note that it's easier to debug if you
+have optimization disabled. Other than that you will have four consoles that
+you are working with.
 
     - Qemu console
     - NW UART console
@@ -145,7 +148,7 @@ running OP-TEE/xtest using QEMU. The first thing is to start QEMU, i.e.,
 
     $ cd <qemu-v7-project>/build
     # make run-only also works if you don't want to rebuild things
-    $ make run
+    $ make run CFG_CORE_ASLR=n
 
 Next launch another console for GDB and do this
 
@@ -237,6 +240,8 @@ for Armv8-A is like the one below:
   $ repo sync
   $ cd build
   $ make toolchains
+  # Note that if you wish to debug optee-os or a TA, you should disable ASLR
+  # with flag "CFG_CORE_ASLR=n"
   $ make run
 
 All other things (networking, GDB etc) in the v7 section above is also
