@@ -1319,6 +1319,124 @@ of shared memory physical chunks. OP-TEE linux kernel driver relies on linux
 kernel dma-buf support (``CONFIG_DMA_SHARED_BUFFER``) to track shared memory
 buffers references.
 
+Registering shared memory
+=========================
+
+Only dynamic or physically non-contiguous shared memory needs to be
+registered. Static or physically contiguous shared memory is already known
+to OP-TEE OS.
+
+SMC based OP-TEE MSG ABI
+------------------------
+
+With the SMC based OP-TEE MSG ABI there are a few exceptions where memory
+doesn't need to be shared before it can be accessed from OP-TEE OS. These
+are:
+
+1. When issuing the SMC ``OPTEE_SMC_CALL_WITH_ARG`` where the physical
+   address of the supplied ``struct optee_msg_arg`` is passed in one of the
+   registers.
+2. When issuing the SMC ``OPTEE_SMC_CALL_RETURN_FROM_RPC`` as a return from
+   the request ``OPTEE_SMC_RETURN_RPC_ALLOC`` to allocate memory. This RPC
+   return is combined with an implicit registration of shared memory. The
+   registration is ended with a ``OPTEE_SMC_RETURN_RPC_FREE`` request.
+
+.. uml::
+    :align: center
+    :caption: Register shared memory example
+
+    participant "Normal World\nOS Kernel" as ns
+    participant "Secure World\nOP-TEE OS" as sec
+
+    ns -> sec : OPTEE_MSG_CMD_REGISTER_SHM(Cookie, memory)
+    sec -> sec : Register shared memory passed
+    sec -> ns : Return
+
+.. uml::
+    :align: center
+    :caption: Unregister shared memory example
+
+    participant "Normal World\nOS Kernel" as ns
+    participant "Secure World\nOP-TEE OS" as sec
+
+    ns -> sec : OPTEE_MSG_CMD_UNREGISTER_SHM(Cookie)
+    sec -> sec : Unregister shared memory
+    sec -> ns : Return
+
+FF-A based OP-TEE MSG ABI
+-------------------------
+
+With the FF-A based OP-TEE MSG ABI memory must always be registered before
+it can be used by OP-TEE OS. This case can potentially also involve another
+component in secure world, SPMC at ``S-EL2`` a secure hypervisor which
+controls which memory OP-TEE OS can see or use.
+
+In the case where there are no SPMC at ``S-EL2`` OP-TEE OS will take care
+of that part of the communication with normal world. This means that for
+normal world communication with OP-TEE OS is the same regardless of the
+presence of a secure hypervisor.
+
+Registration of shared memory is a two step procedure. It's first
+registered with a call to the SPMC which returns a cookie or global memory
+handle. This cookie is later used when calling OP-TEE OS, if the cookie
+isn't already known to OP-TEE OS it will ask the SPMC to make the memory
+available. This lazy second step is a way of saving an extra round trip to
+secure world.
+
+.. uml::
+    :align: center
+    :caption: Register shared memory example
+
+    participant "Normal World\nOS Kernel" as ns
+    participant "Secure World\nSPMC" as spmc
+    participant "Secure World\nOP-TEE OS" as sec
+
+    ns -> spmc : FFA_MEM_SHARE(memory)
+    spmc -> spmc : Register shared memory passed
+    spmc -> ns : Return cookie
+
+.. uml::
+    :align: center
+    :caption: Calling OP-TEE OS with shared memory
+
+    participant "Normal World\nOS Kernel" as ns
+    participant "Secure World\nSPMC" as spmc
+    participant "Secure World\nOP-TEE OS" as sec
+
+    ns -> sec: OPTEE_FFA_YIELDING_CALL_WITH_ARG(cookie)
+    alt cookie not known
+        sec -> spmc : FFA_MEM_RETRIEVE_REQ(cookie)
+        spmc -> sec : Return memory description
+        sec -> sec : Register shared memory
+    end
+    sec -> sec : Process the yielding call
+    sec -> ns : Return
+
+Unregistration of shared memory is also done in two steps. First with a
+call to OP-TEE and then with a call to the SPMC. If the lazy second
+step of shared memory has not been done, then OP-TEE OS doesn't need
+to interact with the SPMC.
+
+.. uml::
+    :align: center
+    :caption: Unregister shared memroy
+
+    participant "Normal World\nOS Kernel" as ns
+    participant "Secure World\nSPMC" as spmc
+    participant "Secure World\nOP-TEE OS" as sec
+
+    ns -> sec: OPTEE_FFA_UNREGISTER_SHM(cookie)
+    alt cookie known
+        sec -> sec  : Unregister shared memory
+        sec -> spmc : FFA_MEM_RELINQUISH(cookie)
+        spmc -> sec : Return
+    end
+    sec -> ns : Return
+
+    ns -> spmc : FFA_MEM_RECLAIM(cookie)
+    spmc -> spmc : Unregister shared memory
+    spmc -> ns : Return
+
 Using shared memory
 ===================
 From the Client Application
