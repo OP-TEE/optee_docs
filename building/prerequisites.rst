@@ -19,14 +19,16 @@ Install the following packages regardless of what target you will use in the end
 
 .. code-block:: bash
 
-    $ sudo apt-get install android-tools-adb android-tools-fastboot autoconf \
-            automake bc bison build-essential ccache cscope curl device-tree-compiler \
-            expect flex ftp-upload gdisk iasl libattr1-dev libcap-dev \
-            libfdt-dev libftdi-dev libglib2.0-dev libgmp-dev libhidapi-dev \
-            libmpc-dev libncurses5-dev libpixman-1-dev libssl-dev libtool make \
-            mtools netcat ninja-build python-crypto python3-crypto python-pyelftools \
-            python3-pycryptodome python3-pyelftools python-serial python3-serial \
-            rsync unzip uuid-dev xdg-utils xterm xz-utils zlib1g-dev
+    $ sudo apt-get install android-sdk-ext4-utils android-tools-adb \
+            android-tools-fastboot autoconf automake bc bison build-essential \
+            ccache cscope curl device-tree-compiler expect flex ftp-upload \
+            gdisk iasl libattr1-dev libcap-dev libfdt-dev libftdi-dev \
+            libglib2.0-dev libgmp-dev libhidapi-dev libmpc-dev libncurses5-dev \
+            libpixman-1-dev libssl-dev libtool make mtools netcat ninja-build \
+            python-crypto python3-crypto python-pyelftools \
+            python3-pycryptodome python3-pyelftools python-serial \
+            python3-serial rsync unzip uuid-dev xdg-utils xterm xz-utils \
+            zlib1g-dev
 
 For older versions, you might need to pull `pycryptodome` as a pip package:
 
