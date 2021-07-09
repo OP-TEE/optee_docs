@@ -52,7 +52,7 @@ A usual short fecth/build/load shell sequence is like the one below:
   $ cd build
   $ make toolchains
   $ make PLATFORM=stm32mp1-157C_DK2 all
-  $ sudo dd if=../out/bin/sdcard.img of=/dev/sdX conv=fdatasync status=progress
+  $ dd if=../out/bin/sdcard.img of=/dev/sdX conv=fdatasync status=progress
 
 .. _STM32MP157A-DK1: https://www.st.com/en/evaluation-tools/stm32mp157a-dk1.html
 .. _STM32MP157C-DK2: https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
