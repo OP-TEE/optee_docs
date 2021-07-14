@@ -33,3 +33,9 @@ For older versions, you might need to pull `pycryptodome` as a pip package:
 .. code-block:: bash
 
     $ python3 -m pip install --user pycryptodome
+
+For <= ubuntu 18.04 distribution, you might need to remove python3-pycryptodome:
+
+.. code-block:: bash
+
+    $ sudo apt-get remove python3-pycryptodome
