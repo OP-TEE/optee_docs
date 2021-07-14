@@ -373,35 +373,53 @@ third step the binary and its signature are stitched together into the full TA.
 Offline Signing of TAs
 ======================
 
-The TA dev kit does sign an application as last step of the linking process. For
-example, the file ``ta/arch/arm/link.mk`` in the :ref:`optee_os` source tree
-contains the statement
+There are two types of TAs that can be signed offline. The in-tree TAs, which come with the OP-TEE
+OS (for example the ``pkcs11`` TA) and are generated during the compilation of the TA DEV KIT. The
+second type are any external TAs coming from the user. In both cases however, the signing process
+is the same.
+
+Offline signing is done with the following sequence of steps:
+
+0. (Preparation) Generate a 2048 or 4096 bit RSA key for signing in a secure environment and extract 
+the public key. For example
 
 .. code-block:: sh
 
-    $(q)$(SIGN) --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid) \
-	    --in $$< --out $$@
+    openssl genrsa -out rsa2048.pem 2048
+    openssl rsa -in rsa2048.pem -pubout -out rsa2048_pub.pem 
 
-To avoid build errors when signing offline, this make script needs to be
-adopted. The signing script can be found at
-``$(TA_DEV_KIT_DIR)/../scripts/sign_encrypt.py``
+1. Build the OP-TEE OS with the variable ``TA_PUBLIC_KEY`` set to the public
+key generated above
 
-Overall, offline signing is done with the following sequence of steps:
+.. code-block:: sh
 
-0. (Preparation) Generate a 2048 bit RSA key for signing in a secure, offline
-environment. Extract the public key and copy it to the ``keys`` directory in the
-:ref:`optee_os` source tree. Adjust ``TA_SIGN_KEY`` for different file/path
-names. (Copy and) modify the ``link.mk`` file for the default linking step to
-produce a digest of the TA binary instead of the full TA.
+    TA_PUBLIC_KEY=/path/to/public_key.pem make all
 
-1. Manually (or with the modified linking script) generate a digest of the TA
-binary using
+The build script will do two things:
+
+* | It will embed the ``TA_PUBLIC_KEY`` key into the OP-TEE core image, which will be used to
+  | authenticate the TAs.
+
+* | It will generate `.stripped.elf` files of the in-tree TAs and sign them with the dummy key
+  | pointed to by ``TA_SIGN_KEY``, thus creating `.ta` files. Note that the generated `.ta` files are
+  | not to be used as they are not compatible with the public key embedded into the OP-TEE core image.
+
+2. Build any external TA. Same as with the in-tree TAs, the building procedure can use the dummy key 
+pointed to by ``TA_SIGN_KEY``, however they are not to be used due to the incompatibility reasons 
+mentioned in the paragraph above.
+
+There are now two ways to generate the final `.ta` files. Either re-sign the `.ta` files with a 
+customized `sign_encrypt.py` script (left to the user to implement) or stitch the `.stripped.elf` 
+files and their signatures together (explained in steps 3-5). In both cases however, note that the 
+private key used must be the one generated in step 0.
+
+3. Manually generate a digest of the generated `.stripped.elf` files using
 
 .. code-block:: sh
 
     sign_encrypt.py digest --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
 
-2. Sign this digest offline, e.g. with OpenSSL
+4. Sign this digest offline, for example with OpenSSL
 
 .. code-block:: sh
 
@@ -422,12 +440,12 @@ or with pkcs11-tool using a Nitrokey HSM
      --input-file /tmp/hashtosign | \
      base64 > sigfile
 
-3. Manually (or with an extra make target) stitch the TA together using
+5. Manually stitch the TA and signature together
 
 .. code-block:: sh
 
     sign_encrypt.py stitch --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
 
-By default the UUID is taken as the base file name for all files. Different file
+By default, the UUID is taken as the base file name for all files. Different file
 names and paths can be set through additional options to ``sign_encrypt.py``. Consult
 ``sign_encrypt.py --help`` for a full list of options and parameters.
