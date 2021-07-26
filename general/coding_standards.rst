@@ -41,6 +41,7 @@ Variables are initialized according to these general guidelines:
       the more clumsy ``memset()`` procedure. Types like ``pthread_t``
       which can be a scalar or a composite type are initialized with
       ``memset()`` in order to minimize the amount of future headache.
+      Arrays are initialized with ``{ }``, too.
 
 Unsigned integer constants are defined using the ``U()``, ``UL()`` or
 ``ULL()`` macros, depending on the required width. ``U()`` is a good choice
