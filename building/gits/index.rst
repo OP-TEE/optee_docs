@@ -12,6 +12,7 @@ the entire TEE solution.
 
    build
    build_legacy
+   build_legacy_3_1_0-3_8_0
    manifest
    optee_benchmark
    optee_client
