@@ -223,6 +223,12 @@ Before OP-TEE ``v3.1`` we used to have separate xml-manifest files for the
 stable builds. If you for some reason need an older stable release, please
 refer to ":ref:`build_legacy`".
 
+Stable releases prior to OP-TEE v3.9 (3.1.0 to 3.8.0)
+=====================================================
+Due to a change in the Google repo tool, you might get an error when cloning
+OP-TEE repositories before version ``3.9.0``. In this case please refer to
+":ref:`build_legacy_3_1_0-3_8_0`".
+
 .. _get_and_build_the_solution:
 
 
