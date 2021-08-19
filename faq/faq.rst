@@ -539,6 +539,9 @@ Q: How can I use or call OP-TEE from native Android (apk) applications?
       create/write SELinux domains/rules to allow any required access, but since
       this is not a TEE-related issue, it is left as an exercise for the users.
 
+    - For a reference implementation contributed by one of our community users,
+      see `optee_android_hello_world_example`_.
+
 Q: I've heard that there is a Widevine and PlayReady TA, how do I get access?
 =============================================================================
     - TrustedFirmware have no such implementation, but Linaro do have reference
@@ -583,6 +586,7 @@ Q: I've heard that there is a Widevine and PlayReady TA, how do I get access?
 .. _OP-TEE OS Enhancements: https://github.com/OP-TEE/optee_os/labels/enhancement
 .. _OP-TEE OS Issues: https://github.com/OP-TEE/optee_os/issues
 .. _OP-TEE OS Pull Requests: https://github.com/OP-TEE/optee_os/pulls
+.. _optee_android_hello_world_example: https://github.com/rafagameiro/optee_android_hello_world_example
 .. _Raspberry Pi3 port: https://github.com/OP-TEE/optee_os/commit/66d9cacf37e6bd4b0d86e7b32e4e5edefe8decfd
 .. _Riscure: https://www.riscure.com
 .. _sample_hellojni.html: https://developer.android.com/ndk/samples/sample_hellojni.html
