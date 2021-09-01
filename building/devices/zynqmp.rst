@@ -1,150 +1,102 @@
 .. _zynqmp:
 
-#########################
-ZynqMP zcu10x and Ultra96
-#########################
-Instructions below show how to run OP-TEE on ZynqMP zcu10x and Ultra96 board.
+##########
+Zynq MPSoC
+##########
+Instructions below show how to run OP-TEE on Zynq MPSoC based boards.
 
 Supported boards
-****************
-This makefile supports the following ZynqMP boards:
-	
-	* zcu102
-	* zcu104
-	* zcu106
-	* Ultra96v1
-
-Setting up the toolchain
-************************
-This build chain heavily relies on Petalinux 2018.2 therefore the first step is 
-to download and install the Petalinux 2018.2 toolchain from the Xilinx website 
-(`Downloads`_). Then, you have to download the needed BSP file from the Xilinx 
-website (`Downloads`_). You may have to create a free Xilinx account to proceed 
-with the two previous steps.
-
-Configuring and building for zcu102 board
 *****************************************
-First, create a new directory which will be used as root directory:
++------------+--------------+----------------------+
+| Board Name | Manufacturer | Hardware Description |
++============+==============+======================+
+| ZCU102     | Xilinx/AMD   | `ZCU102 Website`_    |
++------------+--------------+----------------------+
+| ZCU104     | Xilinx/AMD   | `ZCU104 Website`_    |
++------------+--------------+----------------------+
+| ZCU106     | Xilinx/AMD   | `ZCU106 Website`_    |
++------------+--------------+----------------------+
+| Ultra96    | Avnet        | `Ultra96 Website`_   |
++------------+--------------+----------------------+
 
-.. code-block:: bash
-
-	$ mkdir -p ~/petalinux-optee
-	$ cd ~/petalinux-optee
-
-Then, copy the zcu102 BSP file into the newly created directory:
-
-.. code-block:: bash
-
-	$ cp ~/Downloads/xilinx-zcu102-v2018.2-final.bsp .
-
-Git clone the ``build`` repository of the OP-TEE project and source the 
-Petalinux settings:
-
-.. code-block:: bash
-
-	$ git clone https://github.com/OP-TEE/build
-	$ cd ./build
-	$ source /path/to/petalinux/settings.sh
-
-Finally, use the following commands to create, patch, configure and build the 
-Petalinux project. Petalinux is a powerful but very slow tool, each command may 
-take a while according to the capabilities of your computer.
-
-.. code-block:: bash
-	
-	$ make -f zynqmp.mk
-
-Once the last command ends up you are ready to run QEMU tool or to make a 
-bootable SD card. To run QEMU:
-
-.. code-block:: bash
-
-	$ make -f zynqmp.mk qemu
-
-QEMU will start and launch Petalinux distribution. At the end of the boot 
-process, log in using username ``root`` and password ``root``. Start the OP-TEE 
-Normal World service and run xtest:
-
-.. code-block:: bash
-	
-	$ tee-supplicant -d
-	$ xtest
-	
-You can close QEMU session at any time by typing ``Ctrl-A+C`` and entering the 
-``quit`` command.
-
-Configuring and building for other ZynqMP boards
-*************************************************
-To use this makefile with other supported boards, you have to download the 
-corresponding BSP and add option ``PLATFORM`` to each make command.
-
-.. code-block:: bash
-	 
-	$ make -f zynqmp.mk PLATFORM=zcu106
-	$ make -f zynqmp.mk PLATFORM=zcu106 qemu
-
-Hereafter the list of available ``PLATFORM``:
-
-	* ``zcu102``
-	* ``zcu104``
-	* ``zcu106``
-	* ``ultra96-reva``
-
-.. warning::
-
-	On Ultra96 board, UART is not directly available. You have to connect
-	through WIFI Access Point using the procedure detailed here 
-	`Getting started`_.
-
-SD card creation
-****************
-After completion of building process, you can create a bootable SD card. Here,
-we consider that SD card corresponds to ``/dev/sdb``. We will use ``gparted``
-and ``e2image`` tools.
-
-Using ``gparted`` or any other partition manager tool create two partitions on 
-the card:
-
-	* 1GB FAT32 bootable partition (``/dev/sdb1`` hereafter).
-	* EXT4 partition on the remaining memory space (``/dev/sdb2``
-	  hereafter).
-
-Once SD card is partitioned, use the following commands:
-
-.. code-block:: bash
-	 
-	$ cp /path/to/project/images/linux/BOOT.BIN /dev/sdb1
-	$ cp /path/to/project/images/linux/image.ub /dev/sdb1
-	$ sudo e2image -rap /path/to/project/images/linux/rootfs.ext4 /dev/sdb2
-
-Now you can use the newly created SD card to boot your board.
+Boot Firmware
+*****************************************
+Xilinx Zynq MPSoC device requires two firmware images, one to configure the
+device (First Stage Bootloader) and one for runtime platform management (PMU
+Firmware). The scope of OP-TEE build Makefile does not cover buildling these two
+firmware images therefore pre built binaries are required to generate a valid
+boot image. The pre built images can be found in the following `Xilinx wiki
+<https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842316/Linux+Prebuilt+Images>`_
+page.
 
 .. note::
+	For Ultra96 board, the firmware binaries can be found in the Avnet website.
 
-	Check that your board is actually configured to boot on the SD card.
+Build instructions
+*****************************************
+Follow the instructions at ":ref:`get_and_build_the_solution`" page.
 
-Building a given version of OP-TEE
-**********************************
-By default, the lastest version of OP-TEE is built. If you wish you can build a 
-given version of OP-TEE instead of the last one by using variable ``OPTEE_VER`` 
-with target ``petalinux-config``. See below an example where OP-TEE v3.4.0 is 
-built.
+Configuration switch ``PLATFORM`` can be used to specify the target device
+as listed in table below:
+
++------------+-------------------------------+
+| Board Name | Build configuration directive |
++============+===============================+
+| ZCU102     | ``PLATFORM=zynqmp-zcu102``    |
++------------+-------------------------------+
+| ZCU104     | ``PLATFORM=zynqmp-zcu104``    |
++------------+-------------------------------+
+| ZCU106     | ``PLATFORM=zynqmp-zcu106``    |
++------------+-------------------------------+
+| Ultra96    | ``PLATFORM=zynqmp-ultra96``   |
++------------+-------------------------------+
+
+An example of fetch and build commands is:
 
 .. code-block:: bash
-	 
-	$ make -f zynqmp.mk petalinux-create
-	$ make -f zynqmp.mk OPTEE_VER=3.4.0 petalinux-config
-	$ make -f zynqmp.mk petalinux-build
 
-Customizing the Petalinux distribution
-**************************************
-You can customize the Petalinux project (i.e. kernel, rootfs, ...) as any 
-standard Petalinux project. Just enter the project directory and type your 
-commands. For additional information, refer to Petalinux Tool Documentation 
-(`UG1144`_).
+  $ repo init -u https://github.com/OP-TEE/manifest.git -m zynqmp.xml
+  $ repo sync
+  $ cd build
+  $ make toolchains
+  $ make PLATFORM=zynqmp-zcu102 all
 
-.. _UG1144: https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug1144-petalinux-tools-reference-guide.pdf
-.. _Downloads: https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/embedded-design-tools/2018-2.html
-.. _pyelftools: https://pypi.org/project/pyelftools/
-.. _pycrypto: https://pypi.org/project/pycrypto/
-.. _Getting started: https://ultra96-pynq.readthedocs.io/en/latest/getting_started.html
+After completion of the buildling process, two new files will be generated
+within the ``zynqmp/`` folder, ``BOOT.bin`` and ``<platform-name>.ub``. The
+first one is the boot image composed of the FSBL, PMU Firmware, ARM Trusted
+Firmware, OP-TEE and U-Boot. The second one is a FIT image containing the Linux
+kernel, the device-tree blob and the initramfs root file system.
+
+.. note::
+	If the firmware image is not provided to the build script the boot image
+	will not be generated.
+
+Petalinux build instructions
+*****************************************
+OP-TEE build can be additionally integrated within Xilinx Petalinux tool for
+Embedded Linux development. As Petalinux is built on top of Yocto, the
+integration is performed through adding some exisiting recipes and few
+customizations. Use the previous build `Makefile
+<https://github.com/OP-TEE/build/blob/3.14.0/zynqmp.mk>`_ based on Petalinux
+2020.2 release as reference.
+
+Booting the device
+*****************************************
+SD Card boot
+=============
+Place both generated images in a single partition within the SD card. Boot the
+board in SD boot mode and stop the U-Boot autoboot process once the prompt is
+displayed in the serial port.
+
+Use the bellow commands to load the FIT image to RAM and boot.
+
+.. code-block:: none
+
+	ZynqMP> fatload mmc 0 0x30000000 zynqmp-zcu102.ub
+	27803872 bytes read in 1827 ms (14.5 MiB/s)
+	ZynqMP> bootm 0x30000000
+
+.. _ZCU102 Website: https://www.xilinx.com/products/boards-and-kits/ek-u1-zcu102-g.html
+.. _ZCU104 Website: https://www.xilinx.com/products/boards-and-kits/zcu104.html
+.. _ZCU106 Website: https://www.xilinx.com/products/boards-and-kits/zcu106.html
+.. _Ultra96 Website: https://www.96boards.org/product/ultra96/
