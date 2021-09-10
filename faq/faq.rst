@@ -440,10 +440,10 @@ Q: How are you testing OP-TEE?
       cases, and is also extendable to include the official GlobalPlatform test
       suite (see :ref:`globalplatform_tests`).
 
-    - Every pull request in OP-TEE are built for a multitude of different platforms
-      automatically using Travis_, Shippable_ and IBART_. Please have a look
-      there to see whether it failed building on the platform you're using
-      before submitting any issue about build errors.
+    - Every pull request in OP-TEE are built for a multitude of different
+      platforms automatically using `Azure DevOps pipelines`_ and IBART_.
+      Please have a look there to see whether it failed building on the platform
+      you're using before submitting any issue about build errors.
 
     - For more information see :ref:`optee_test`.
 
@@ -569,6 +569,7 @@ Q: I've heard that there is a Widevine and PlayReady TA, how do I get access?
 
 .. _Android Verified Boot 2.0: https://android.googlesource.com/platform/external/avb/+/master/README.md
 .. _Applus Laboratories: http://www.appluslaboratories.com/en/
+.. _Azure DevOps pipelines: https://dev.azure.com/OPTEE/optee_os
 .. _BSD 2-Clause: http://opensource.org/licenses/BSD-2-Clause
 .. _CHANGELOG.md: https://github.com/OP-TEE/optee_os/blob/master/CHANGELOG.md
 .. _Freescale ls1021a port: https://github.com/OP-TEE/optee_os/commit/85278139a8f914dddb36808861c86a472ecb0271
@@ -591,7 +592,5 @@ Q: I've heard that there is a Widevine and PlayReady TA, how do I get access?
 .. _Riscure: https://www.riscure.com
 .. _sample_hellojni.html: https://developer.android.com/ndk/samples/sample_hellojni.html
 .. _Security Advisories: https://www.op-tee.org/security-advisories/
-.. _Shippable: https://app.shippable.com/github/OP-TEE/optee_os/dashboard
 .. _TI DRA7xx port: https://github.com/OP-TEE/optee_os/commit/9b5060cd92a19b4d114a1ce8a338b18424974037
-.. _Travis: https://travis-ci.org/OP-TEE
 .. _ZynqMP port: https://github.com/OP-TEE/optee_os/commit/dc57f5a0e8f3b502fc958bc64a5ec0b0f46ef11a
