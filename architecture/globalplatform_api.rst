@@ -115,7 +115,7 @@ Extensions
 In addition to what is stated in :ref:`tee_internal_core_api`, there are some
 non-official extensions in OP-TEE.
 
-Trusted Applications should include header file ``tee_api_defines_extensions.h``
+Trusted Applications should include header file ``tee_internal_api_extensions.h``
 to import the definitions of the extensions. For each extension, a configuration
 directive prefixed ``CFG_`` allows one to disable support for the extension when
 building the OP-TEE packages.
@@ -420,8 +420,7 @@ HKDF
 OP-TEE implements the *HMAC-based Extract-and-Expand Key Derivation Function
 (HKDF)* as specified in `RFC 5869`_. This file documents the extensions to the
 :ref:`tee_internal_core_api` v1.1 that were implemented to support this
-algorithm. Trusted Applications should include
-``<tee_api_defines_extensions.h>`` to import the definitions.
+algorithm.
 
 Note that the implementation follows the recommendations of version 1.1 of the
 specification for adding new algorithms. It should make it compatible with
