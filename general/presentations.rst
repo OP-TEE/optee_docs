@@ -10,6 +10,26 @@ with latest version to understand whether things have changed or not.
 The links are sorted in chronological order, newest first and oldest at the
 end.
 
+    - LVC21F
+        - Demo - PKCS#11 in OP-TEE
+          (`video <https://static.linaro.org/connect/lvc21f/videos/LVC21F-demo-pkcs11-demo-v2.mp4>`__)
+
+    - LVC21
+        - LVC21-118 - ASLR in OP-TEE
+          (`slides <https://static.linaro.org/connect/lvc21/presentations/lvc21-118.pdf>`__,
+          `video <https://static.linaro.org/connect/lvc21/videos/lvc21-118.mp4>`__)
+        - LVC21-201 - Security Working Group (SWG) Lightning Talk
+          (`slides <https://static.linaro.org/connect/lvc21/presentations/lvc21-201.pdf>`__)
+        - LVC21-215 - PKCS#11 in OP-TEE
+          (`slides <https://static.linaro.org/connect/lvc21/presentations/lvc21-215.pdf>`__,
+          `video <https://static.linaro.org/connect/lvc21/videos/lvc21-215.mp4>`__)
+        - LVC21-305 - OP-TEE as a Secure Partition running on SPM using ARMv8.4-A SEL2 feature
+          (`slides <https://static.linaro.org/connect/lvc21/presentations/lvc21-305.pdf>`__,
+          `video <https://static.linaro.org/connect/lvc21/videos/lvc21-305.mp4>`__)
+        - LVC21-311 - Virtualization for OP-TEE
+          (`slides <https://static.linaro.org/connect/lvc21/presentations/lvc21-311.pdf>`__,
+          `video <https://static.linaro.org/connect/lvc21/videos/lvc21-311.mp4>`__)
+
     - LVC20
         - LVC20-112 - PSA Secure Partitions in OP-TEE
           (`slides <https://static.linaro.org/connect/lvc20/presentations/LVC20-112-0.pdf>`__,
