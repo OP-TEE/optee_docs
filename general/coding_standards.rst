@@ -54,14 +54,25 @@ large the value is or which compiler is used. For example:
 
     #define MY_UNSIGNED_CONSTANT U(123)
 
+Running checkpatch
+******************
+
 Regarding the checkpatch tool, it is not included directly into this project.
 Please use checkpatch.pl from the Linux kernel git in combination with the local
-`checkpatch script`_.
+`checkpatch script`_. Environment variable CHECKPATCH is expected to provide
+the path to the Linux checkpatch script path, i.e.:
+
+.. code-block:: none
+
+    export CHECKPATCH=/path/to/linux/scripts/checkpatch.pl
+    ./scripts/checkpatch.sh HEAD
+    ./scripts/checkpatch.sh --diff github/master HEAD
 
 There are also targets for common use cases in the Makefiles:
 
 .. code-block:: none
 
+    export CHECKPATCH=/path/to/linux/scripts/checkpatch.pl
     make checkpatch         #check staging and working area
     make checkpatch-staging #check staging area (added, but not committed files)
     make checkpatch-working #check working area (modified, but not added files)
