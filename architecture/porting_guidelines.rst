@@ -392,6 +392,28 @@ limited since we only support a single key which is used for all TA's. We have
 plans on extending this to make it a bit more flexible. Exactly when that will
 happen has not been decided yet.
 
+.. _platform_ports:
+
+Platform ports
+**************
+OP-TEE is a reference implementation for developers and device manufacturers.
+This also implies that there are certain configurations and settings that cannot
+be done in OP-TEE reference code. In short, there are cases when the default
+configuration hasn't enabled all necessary security features for the end
+product. There are a couple of reasons for that.
+
+- Chipmakers and Semiconductors might only share specifications telling how to
+  securely configure their devices with partners who have signed an NDA with
+  them.
+- In some cases a setting might be perfectly fine when OP-TEE is used in one
+  particular environment, but the same setting might be insecure in another
+  environment.
+
+Because of this we always urge companies and device manufacturers making the end
+product to follow the security guidelines from the chipmaker they are basing
+their products on.
+
+
 .. _core/arch/arm/plat-hikey/conf.mk: https://github.com/OP-TEE/optee_os/blob/master/core/arch/arm/plat-hikey/conf.mk
 .. _core/include/crypto/crypto.h: https://github.com/OP-TEE/optee_os/blob/master/core/include/crypto/crypto.h
 .. _core/include/kernel/tee_common_otp.h: https://github.com/OP-TEE/optee_os/blob/master/core/include/kernel/tee_common_otp.h

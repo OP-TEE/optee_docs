@@ -50,6 +50,22 @@ security incident process as described at the `TrustedFirmware.org security inci
 page. To report an issue, please follow the process as specified here. The email
 address to use can be found at the `Mailing Aliases`_ page.
 
+Note that OP-TEE is a reference implementation for developers and device
+manufacturers and by being a reference implementation it is not always running a
+secure device configuration by default (see :ref:`platform_ports` for more
+information). Therefore we ask people to think twice whether the security
+incident report should go to:
+
+ a) The OP-TEE project? Is it an issue in the generic code?
+ b) The chipmaker? Does it only affect a certain platform? Is it a configuration described only under NDA?
+ c) The ones making the end product? Is the issue only present on a certain device?
+
+The OP-TEE team are in some cases are working directly with chipmakers. But it's
+not uncommon that products are made using OP-TEE that the OP-TEE project is
+unaware of. In those cases we would recommend sending the security issue report
+to the company making the end product and that they in turn and if needed reach
+out to the OP-TEE project and/or the chipmaker.
+
 .. _core_team:
 
 Core Team
