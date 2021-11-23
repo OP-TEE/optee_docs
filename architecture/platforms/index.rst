@@ -6,3 +6,5 @@ Platform documentation
 
 .. toctree::
     :maxdepth: 1
+
+    nxp
