@@ -411,7 +411,7 @@ product. There are a couple of reasons for that.
 
 Because of this we always urge companies and device manufacturers making the end
 product to follow the security guidelines from the chipmaker they are basing
-their products on.
+their products on. Refer also to :ref:`platform_documentation`
 
 
 .. _core/arch/arm/plat-hikey/conf.mk: https://github.com/OP-TEE/optee_os/blob/master/core/arch/arm/plat-hikey/conf.mk
