@@ -16,3 +16,4 @@ Architecture
    trusted_applications
    virtualization
    spmc
+   platforms/index
