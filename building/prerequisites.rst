@@ -21,8 +21,8 @@ Install the following packages regardless of what target you will use in the end
 
     $ sudo apt-get install android-tools-adb android-tools-fastboot autoconf \
             automake bc bison build-essential ccache codespell \
-            cscope curl device-tree-compiler \
-            expect flex ftp-upload gdisk iasl libattr1-dev libcap-dev \
+            cscope curl device-tree-compiler expect flex ftp-upload gdisk iasl \
+            libattr1-dev libcap-dev libcap-ng-dev \
             libfdt-dev libftdi-dev libglib2.0-dev libgmp-dev libhidapi-dev \
             libmpc-dev libncurses5-dev libpixman-1-dev libssl-dev libtool make \
             mtools netcat ninja-build python-crypto python3-crypto python-pyelftools \
