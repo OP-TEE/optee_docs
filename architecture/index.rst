@@ -16,4 +16,5 @@ Architecture
    trusted_applications
    virtualization
    spmc
+   arm_security_extensions
    platforms/index
