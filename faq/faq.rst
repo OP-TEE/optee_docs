@@ -178,6 +178,62 @@ Q: When running `make` from build.git it fails to download the toolchains?
   such an issue, please send the fix as pull request and we will be happy to
   merge it.
 
+Q: How can I build LLVM compiler-rt with BTI enabled ?
+======================================================
+     - Download the llvm-12 sources either from the releases page or you can
+       checkout the "release/12.x" from llvm's github. (12 to match your
+       chosen clang version).
+     - Make a build directory and cd into that.
+     - Run this cmake command to configure a standalone build of compiler-rt.
+
+       .. code-block:: bash
+
+           cmake -G Ninja <llvm sources>/compiler-rt/ -DCMAKE_BUILD_TYPE=Release \
+               -DLLVM_CONFIG_PATH=<path to>/llvm-config" \
+               -DCMAKE_CXX_FLAGS="-mbranch-protection=bti" \
+               -DCMAKE_C_FLAGS="-mbranch-protection=bti" \
+               -DCMAKE_ASM_FLAGS="-mbranch-protection=bti" \
+               -DCOMPILER_RT_BUILD_SANITIZERS=OFF \
+               -DCOMPILER_RT_BUILD_XRAY=OFF \
+               -DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
+               -DCOMPILER_RT_BUILD_PROFILE=OFF \
+               -DCOMPILER_RT_BUILD_MEMPROF=OFF
+
+       Replace the path to llvm-config with the path to the clang install you
+       want to use to compile. What this does is enable BTI protection for
+       c/cxx/assembly files (all the types in compiler-rt) and disable some
+       parts of the build that you wouldn't need. If you
+       need more components you can find cmake options for them in
+       ``compiler-rt/CMakeLists.txt``.
+
+       Once you've built that you will find the libraries in ``<build
+       folder>/lib/linux``. You can verify that each object in the builtins has
+       the BTI marker by doing the following:
+       
+       .. code-block:: bash
+       
+           /build-llvm-aarch64/lib/linux$ mkdir tmp && cd tmp
+           /build-llvm-aarch64/lib/linux/tmp$ cp ../libclang_rt.builtins-aarch64.a .
+           /build-llvm-aarch64/lib/linux/tmp$ ar x libclang_rt.builtins-aarch64.a
+           /build-llvm-aarch64/lib/linux/tmp$ rm libclang_rt.builtins-aarch64.a
+           /build-llvm-aarch64/lib/linux/tmp$ for i in *.o; do echo "$i:" &&
+           readelf -a $i | grep -i bti ; done
+
+       This should find a BTI line for every file.
+
+       .. code-block:: bash
+
+           $ for i in *.o; do echo "$i:" && readelf -a $i | grep -i bti ; done | wc -l
+             502
+           $ ls | wc -l
+             251
+
+       251 * 2 = 502 so all objects in the archive are bti compatible.
+
+       How you take this set of libraries and integrate it into your overall
+       build system is up to you. The major thing to note is that the name of
+       the library does not change when you enable BTI protection
+
 .. _faq_try_optee:
 
 Q: What is the quickest and easiest way to try OP-TEE?
