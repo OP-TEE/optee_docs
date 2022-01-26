@@ -178,6 +178,8 @@ Q: When running `make` from build.git it fails to download the toolchains?
   such an issue, please send the fix as pull request and we will be happy to
   merge it.
 
+.. _faq_llvm_bti:
+
 Q: How can I build LLVM compiler-rt with BTI enabled ?
 ======================================================
      - Download the llvm-12 sources either from the releases page or you can
@@ -233,6 +235,35 @@ Q: How can I build LLVM compiler-rt with BTI enabled ?
        How you take this set of libraries and integrate it into your overall
        build system is up to you. The major thing to note is that the name of
        the library does not change when you enable BTI protection
+
+.. _faq_gcc_bti:
+
+Q: How can I build GCC with BTI enabled?
+========================================
+     - A GCC toolchain with BTI enabled can easily be built using Crosstool-NG:
+
+       .. code-block:: bash
+
+           $ git clone https://github.com/crosstool-ng/crosstool-ng
+           $ cd crosstool-ng
+           $ ./bootstrap && ./configure --enable-local && make
+           $ ./ct-ng aarch64-unknown-linux-gnu
+           $ cat >>.config <<_EOF_
+           CT_CC_GCC_EXTRA_CONFIG_ARRAY="--enable-standard-branch-protection"
+           CT_CC_GCC_CORE_EXTRA_CONFIG_ARRAY="--enable-standard-branch-protection"
+           _EOF_
+           $ ./ct-ng build.$(nproc)
+
+       The above commands will install the new toolchain in
+       ``~/x-tools/aarch64-unknown-linux-gnu``. You can then use this toolchain
+       to build and run OP-TEE for :ref:`qemu_v8` with full BTI support by adding
+       a few arguments to the ``make run`` command:
+
+       .. code-block:: bash
+
+           $ make CFG_CORE_BTI=y CFG_TA_BTI=y CFG_USER_TA_TARGETS=ta_arm64 \
+             AARCH64_CROSS_COMPILE=~/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-linux-gnu- \
+             run
 
 .. _faq_try_optee:
 
