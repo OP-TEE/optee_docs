@@ -34,12 +34,14 @@ is looking for ways of providing users easy access to BTI-enabled libraries.
 In the short-term, they plan to create documentation to make it easier for users to
 build BTI-enabled libraries themselves. Longer-term, they will begin discussions
 on how to ensure BTI-enabled libraries are available automatically to users.
-Please contact GCC team for more information on same.
+Please contact GCC team for more information on same. In the meantime, building a
+BTI-enabled GCC toolchain is possible as decribed in :ref:`faq_gcc_bti`.
 
 The same problem is also there with clang toolchain. So, when using clang to build
 OP-TEE with ``CFG_CORE_BTI=y``, builtins (found in llvm's "compiler-rt"
 project) must be built with BTI protection enabled. We have some instructions on
-how to build the compiler-rt with BTI enabled. These are available in FAQ.
+how to build the compiler-rt with BTI enabled. These are available in
+:ref:`faq_llvm_bti`.
 
 
 How to enable BTI for TA's
