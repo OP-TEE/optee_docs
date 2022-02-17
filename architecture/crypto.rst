@@ -151,11 +151,12 @@ disabled. This means, for instance, that the functions ``TEE_CipherInit()``,
 ``libutee.a`` even if all symmetric ciphers are disabled (they would simply
 return ``TEE_ERROR_NOT_IMPLEMENTED``).
 
-Add a new crypto implementation
-*******************************
-To add a new implementation, the default one in `core/lib/libtomcrypt`_ in
-combination with what is in `core/crypto`_ should be used as a reference. Here
-are the main things to consider when adding a new crypto provider:
+Add a new software based crypto implementation
+**********************************************
+To add a new software based implementation, the default one in
+`core/lib/libtomcrypt`_ in combination with what is in `core/crypto`_ should be
+used as a reference. Here are the main things to consider when adding a new
+crypto provider:
 
     - Put all the new code in its own directory under ``core/lib`` unless it is
       code that will be used regardless of which crypto provider is in use. How
@@ -169,12 +170,36 @@ are the main things to consider when adding a new crypto provider:
     - If you intend to make some algorithms optional, please try to re-use the
       same names for configuration variables as the default implementation.
 
+[5] Support for crypto IC
+*************************
+Some cryptographic co-processors and secure elements are supported under a
+Generic Cryptographic Driver interface, connecting the TEE Crypto generic APIs
+to the HW driver interface. This interface is in
+`core/drivers/crypto/crypto_api`_ and should be followed when adding support for
+new devices.
+
+At the time of writing, OP-TEE does not support the `GP TEE Secure Element API`_
+and therefore the access to the secure element - the NXP EdgeLock® SE05x -
+follows the Cryptographic Operations API presenting a single session to the
+device. This session is shared with the normal world through the PKCS#11
+interface but also through a more generic interface (`libseetec`_) which allows
+clients to send Application Protocol Data Units (APDUs) directly to the device.
+
+Notice that cryptographic co-processors do not necessarily comply with all the
+GP requirements tested and covered by the OP-TEE sanity test suite
+(`optee_test`_). In those cases where the cryptographic operations are not
+supported - i.e: the SE05x does not implement all RSA key sizes - we opted for
+disabling those particular tests at build time rather than letting them fail.
+
 .. Source files
 .. _core/crypto: https://github.com/OP-TEE/optee_os/blob/master/core/crypto
+.. _core/drivers/crypto/crypto_api: https://github.com/OP-TEE/optee_os/blob/master/core/drivers/crypto/crypto_api
 .. _crypto.c: https://github.com/OP-TEE/optee_os/blob/master/core/crypto/crypto.c
 .. _crypto.h: https://github.com/OP-TEE/optee_os/blob/master/core/include/crypto/crypto.h
 .. _core/lib/libtomcrypt: https://github.com/OP-TEE/optee_os/blob/master/core/lib/libtomcrypt
 .. _core/lib/libtomcrypt/sub.mk: https://github.com/OP-TEE/optee_os/blob/master/core/lib/libtomcrypt/sub.mk
+.. _libseetec: https://github.com/OP-TEE/optee_client/commit/f4f54e5a76641fda22a49f00294771f948cd4c92
+.. _optee_test: https://github.com/OP-TEE/optee_test
 .. _tee_api_operations.c: https://github.com/OP-TEE/optee_os/blob/master/lib/libutee/tee_api_operations.c
 .. _tee_svc_cryp.c: https://github.com/OP-TEE/optee_os/blob/master/core/tee/tee_svc_cryp.c
 .. _tee_svc_cryp.h: https://github.com/OP-TEE/optee_os/blob/master/core/include/tee/tee_svc_cryp.h
@@ -183,3 +208,4 @@ are the main things to consider when adding a new crypto provider:
 
 .. Other links:
 .. _LibTomCrypt: https://github.com/libtom/libtomcrypt
+.. _GP TEE Secure Element API: https://globalplatform.org/specs-library/tee-secure-element-api/
