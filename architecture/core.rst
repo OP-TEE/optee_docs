@@ -573,7 +573,7 @@ mode mapping and matches all addresses not covered by the small translation
 tables. The small translation tables are assigned per thread and covers the
 mapping of the virtual memory space for one TA context.
 
-Memory space between small and large translation table is configured by TTBRC.
+Memory space between small and large translation table is configured by TTBCR.
 TTBR1 always points to the large translation table. TTBR0 points to the a small
 translation table when user mapping is active and to the large translation table
 when no user mapping is currently active. For details about registers etc,
