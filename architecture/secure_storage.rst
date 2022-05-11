@@ -334,6 +334,53 @@ a ``TEE_RPC_RPMB_CMD`` message, thanks to the ``thread_rpc_cmd()`` function.
 Most RPMB requests and responses use the data frame format defined by the JEDEC
 eMMC specification. HMAC authentication is implemented here also.
 
+Security considerations
+=======================
+The RPMB partition in eMMC can not be accessed until a key has been programmed
+on the device: this is a one time action for the lifetime of the device. Once
+the key has been written on the eMMC controller, the controller uses it to
+authenticate requests.
+
+This key can be programmed in a number of ways. If you want OP-TEE to do it,
+OP-TEE must be configured with ``CFG_RPMB_WRITE_KEY=y``.
+
+.. warning::
+   Be aware that this configuration will send the RPMB key in clear to the
+   non-secure side that relays the RPMB key programming request to the eMMC
+   hardware device.
+
+OP-TEE can either embed a built-in RPMB key (``CFG_RPMB_TESTKEY=y``) or derive
+it from platform specific secrets (``CFG_RPMB_TESTKEY=n``). The former case
+might be useful during development while the later is recommended for production
+devices.
+
+Deriving the key from secrets avoids OP-TEE from having to store it in memory
+therefore reducing the attack surface; OP-TEE derives the RPMB key from an
+internal set that includes the eMMC serial number and more importantly the
+Hardware Unique Key (HUK).
+
+For this configuration to be effective, the `Hardware Unique Key`_ - a unique
+identifier for the particular instantiation of the SoC - must not be publicly
+accessible (please notice that not all platforms might be enforcing this
+requirement).
+
+The need to keep the HUK secret is the reason why on security aware systems, the
+hardware will generate different HUK values depending on the security state of
+the platform: said differently, the SoC will generate different HUK depending if
+the BOOT ROM it is configured to boot signed images or not.
+
+However notice that, since the RPMB key can only be written once on the
+controller, it follows that accessing RPMB before securing the board will cause
+future RPMB accesses to be denied once the board has been secured.
+To prevent this situation from happening, OP-TEE provides a software hook which
+platforms shall use to implement its security logic
+``plat_rpmb_key_is_ready()``.
+
+.. warning::
+   For OP-TEE to be able to write the RPMB key, ``CFG_RPMB_WRITE_KEY=y`` must be
+   configured and ``plat_rpmb_key_is_ready()`` must allow it at runtime.
+
+
 Encryption
 ==========
 The FS encryption routines are in `core/tee/tee_fs_key_manager.c`_. Block
@@ -407,6 +454,7 @@ SFO17-309 at :ref:`presentations` and the :ref:`tee_internal_core_api`
 specification.
 
 .. _CBC-ESSIV: https://en.wikipedia.org/wiki/Disk_encryption_theory#Cipher-block_chaining_(CBC)
+.. _Hardware Unique Key: https://optee.readthedocs.io/en/latest/architecture/porting_guidelines.html#hardware-unique-key
 .. _linux/mmc/core.h: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/include/linux/mmc/core.h
 .. _mmc-utils: http://git.kernel.org/cgit/linux/kernel/git/cjb/mmc-utils.git
 
