@@ -20,7 +20,7 @@ Install the following packages regardless of what target you will use in the end
 .. code-block:: bash
 
     $ sudo apt-get install android-tools-adb android-tools-fastboot autoconf \
-            automake bc bison build-essential ccache codespell \
+            automake bc bison build-essential ccache codespell cpio \
             cscope curl device-tree-compiler expect flex ftp-upload gdisk iasl \
             libattr1-dev libcap-dev libcap-ng-dev \
             libfdt-dev libftdi-dev libglib2.0-dev libgmp-dev libhidapi-dev \
