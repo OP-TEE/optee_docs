@@ -1,5 +1,32 @@
 .. _benchmark_framework:
 
+.. note::
+   The feature described in this section depends on a Linux
+   `kernel patch`_ that is not available upstream and has been maintained in
+   the `linaro-swg kernel`_ repository up to OP-TEE version 3.15.0. The latest
+   kernel source with this patch can be found in the `optee-3.15.0`_ branch
+   based on Linux 5.14.
+
+   The benchmark framework should still work as described here with OP-TEE
+   3.16.0 or later provided that either: (a) a Linux kernel built from branch
+   `optee-3.15.0`_ is used, or (b) the benchmark `kernel patch`_ is forward
+   ported.
+
+   If the kernel patch is missing the following errors are printed:
+
+   .. code::
+
+      $ benchmark optee_example_hello_world
+      [Benchmark] INFO: 1. Opening Benchmark Static TA...
+      [Benchmark] INFO: 2. Allocating per-core buffers, cores detected = 2
+      [Benchmark] ERROR: TEEC_InvokeCommand: 0xffff000c
+
+      E/TC:? 0 alloc_benchmark_buffer:72 Benchmark: can't create mobj for timestamp buffer
+
+.. _kernel patch: https://github.com/linaro-swg/linux/commit/d9b0331b46540fa67c0f16e391940f12fde1288b
+.. _linaro-swg kernel: https://github.com/linaro-swg/Linux
+.. _optee-3.15.0: https://github.com/linaro-swg/linux/commits/optee-3.15.0
+
 Benchmark framework
 ###################
 Due to its nature, OP-TEE is being a solution spanning over several
