@@ -424,16 +424,12 @@ representing the state of REE FS.
 Important caveats
 *****************
 .. warning::
-    Currently **no OP-TEE platform** is able to support retrieval of the
-    Hardware Unique Key or Chip ID required for secure operation. For all
+    Currently some OP-TEE platform are not able to support retrieval of the
+    Hardware Unique Key or Chip ID required for secure operation. For those
     platforms, a constant key is used, resulting in no protection against
     decryption, or Secure Storage duplication to other devices. This is because
     information about how to retrieve key data from the SoC is considered
-    sensitive by the vendors and it is not publicly available.
-
-    In OP-TEE, there are APIs for reading keys generically from
-    One-Time-Programmable (OTP) memory. But there are no existing platform
-    implementations.
+    sensitive by some vendors and it is not publicly available.
 
 To allow Secure Storage to operate securely on your platform, you must define
 implementations in your platform code for:
