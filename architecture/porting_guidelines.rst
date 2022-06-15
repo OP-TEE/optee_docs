@@ -329,10 +329,16 @@ different depending on what kind of crypto IP you have, we have not written
 how that should be done. It might be that we do that in the future when get hold
 of a device where we can use the crypto block.
 
+Random Number Generator
+***********************
 By default OP-TEE is configured with a software PRNG. The entropy is added to
 software PRNG at various places, but unfortunately it is still quite easy to
 predict the data added as entropy. As a consequence, unless the RNG is based on
 hardware the generated random will be quite weak.
+
+If your platform has a hardware entropy source, you should set
+``CFG_WITH_SOFTWARE_PRNG`` to ``n``, and provide an implementation for
+``hw_get_random_bytes()``, which returns multiple bytes of entropy.
 
 Power Management / PSCI
 ***********************
