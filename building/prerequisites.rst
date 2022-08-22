@@ -5,38 +5,123 @@ Prerequisites
 #############
 We believe that you can use any Linux distribution to build OP-TEE, but as
 maintainers of OP-TEE we are mainly using Ubuntu-based distributions and to be
-able to build and run OP-TEE there are a few packages that needs to be available.
+able to build and run OP-TEE there are a few packages that needs to be
+available.
 
-First enable installation of i386 architecture packages and update the package
-managers database.
+.. tabs::
 
-.. code-block:: bash
+    .. tab:: Ubuntu 22.04
 
-    $ sudo dpkg --add-architecture i386
-    $ sudo apt-get update
+        .. code-block:: bash
 
-Install the following packages regardless of what target you will use in the end.
+            $ sudo apt install \
+              adb \
+              acpica-tools \
+              autoconf \
+              automake \
+              bc \
+              bison \
+              build-essential \
+              ccache \
+              cscope \
+              curl \
+              device-tree-compiler \
+              expect \
+              fastboot \
+              flex \
+              ftp-upload \
+              gdisk \
+              libattr1-dev \
+              libcap-dev \
+              libfdt-dev \
+              libftdi-dev \
+              libglib2.0-dev \
+              libgmp3-dev \
+              libhidapi-dev \
+              libmpc-dev \
+              libncurses5-dev \
+              libpixman-1-dev \
+              libssl-dev \
+              libtool \
+              make \
+              mtools \
+              netcat \
+              ninja-build \
+              python3-cryptography \
+              python3-pip \
+              python3-pyelftools \
+              python3-serial \
+              python-is-python3 \
+              rsync \
+              unzip \
+              uuid-dev \
+              xdg-utils \
+              xterm \
+              xz-utils \
+              zlib1g-dev
 
-.. code-block:: bash
 
-    $ sudo apt-get install android-tools-adb android-tools-fastboot autoconf \
-            automake bc bison build-essential ccache codespell cpio \
-            cscope curl device-tree-compiler expect flex ftp-upload gdisk iasl \
-            libattr1-dev libcap-dev libcap-ng-dev \
-            libfdt-dev libftdi-dev libglib2.0-dev libgmp-dev libhidapi-dev \
-            libmpc-dev libncurses5-dev libpixman-1-dev libssl-dev libtool make \
-            mtools netcat ninja-build python-crypto python3-crypto python-pyelftools \
-            python3-pycryptodome python3-pyelftools python-serial python3-serial \
-            rsync unzip uuid-dev xdg-utils xterm xz-utils zlib1g-dev
+    .. tab:: Ubuntu 20.04
 
-For older versions, you might need to pull `pycryptodome` as a pip package:
+        .. code-block:: bash
 
-.. code-block:: bash
+            $ sudo apt install \
+              android-tools-adb \
+              android-tools-fastboot \
+              autoconf \
+              automake \
+              bc \
+              bison \
+              build-essential \
+              ccache \
+              cscope \
+              curl \
+              device-tree-compiler \
+              expect \
+              flex \
+              ftp-upload \
+              gdisk \
+              iasl \
+              libattr1-dev \
+              libcap-dev \
+              libfdt-dev \
+              libftdi-dev \
+              libglib2.0-dev \
+              libgmp3-dev \
+              libhidapi-dev \
+              libmpc-dev \
+              libncurses5-dev \
+              libpixman-1-dev \
+              libssl-dev \
+              libtool \
+              make \
+              mtools \
+              netcat \
+              ninja-build \
+              python3-crypto \
+              python3-cryptography \
+              python3-pip \
+              python3-pyelftools \
+              python3-serial \
+              rsync \
+              unzip \
+              uuid-dev \
+              xdg-utils \
+              xterm \
+              xz-utils \
+              zlib1g-dev
 
-    $ python3 -m pip install --user pycryptodome
 
-For <= ubuntu 18.04 distribution, you might need to remove python3-pycryptodome:
+    .. tab:: Older
 
-.. code-block:: bash
+        .. note::
 
-    $ sudo apt-get remove python3-pycryptodome
+            No longer supported by the OP-TEE community!
+
+        Due to all changes over the years with different names of Python
+        packages and different requirement in time for Python2 and/or Python3
+        packages, it's not really possible to build more recent versions of
+        OP-TEE with something that is older than Ubuntu 18.04. If you for some
+        reason need to rebuild OP-TEE using a very old distro, then the best
+        strategy for doing is is to check an earlier version of this
+        documentation and start with the build instructions from there.
