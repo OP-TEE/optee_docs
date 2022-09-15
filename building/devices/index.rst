@@ -7,6 +7,7 @@ Device specific information
 .. toctree::
     :maxdepth: 1
 
+    versal
     devbox
     fvp
     hikey620

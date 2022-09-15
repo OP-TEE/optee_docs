@@ -82,6 +82,10 @@ questions etc. Please see the MAINTAINERS_ file for contact information.
       - Composite flag
       - Publicly available?
 
+    * - `AMD/Xilinx Versal ACAP VCK190`_
+      - ``PLATFORM=versal``
+      - Yes
+
     * - `ARM Juno Board`_
       - ``PLATFORM=vexpress-juno``
       - Yes
@@ -190,6 +194,8 @@ gits, then please refer to the next section instead.
 | Raspberry Pi 3 | ``rpi3.xml``      | :ref:`rpi3`          |
 +----------------+-------------------+----------------------+
 | STM32MP1       | ``stm32mp1.xml``  | :ref:`stm32mp1`      |
++----------------+-------------------+----------------------+
+| VCK190         | ``versal.xml``    | :ref:`versal`        |
 +----------------+-------------------+----------------------+
 
 Stable releases
@@ -444,6 +450,7 @@ don't have to think about anything.
 .. _repo: https://source.android.com/source/downloading.html
 
 .. Links to devices etc:
+.. _AMD/Xilinx Versal ACAP VCK190: https://www.xilinx.com/products/boards-and-kits/vck190.html
 .. _ARM Juno Board: http://www.arm.com/products/tools/development-boards/versatile-express/juno-arm-development-platform.php
 .. _ARM Foundation FVP: http://www.arm.com/fvp
 .. _DeveloperBox: https://www.96boards.org/product/developerbox
