@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'OP-TEE documentation'
-copyright = '2019 - 2021 TrustedFirmware.org'
+copyright = '2019 - 2022 TrustedFirmware.org'
 author = 'TrustedFirmware.org'
 
 # The short X.Y version
