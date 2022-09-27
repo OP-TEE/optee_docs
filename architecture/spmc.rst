@@ -55,10 +55,9 @@ a S-EL0 SP. It also includes many examples of how to create and implement a SP.
 
 SPMC Program Flow
 =================
-SP images are stored in the OP-TEE image as early TAs are: the binary images are
-embedded in OP-TEE Core in a read-only data section.
-This makes it possible to load SPs during boot and no rich-os is needed in the
-normal world. ``ldelf`` is used to load and initialise the SPs.
+SP images are either embedded into the OP-TEE image or loaded from the FIP by
+BL2. This makes it possible to start SPs during boot, before the rich OS is
+available in the normal world. ``ldelf`` is used to load and initialise the SPs.
 
 Starting SPs
 ------------
@@ -254,17 +253,105 @@ access to the Normal World buffers.
 Configuration
 =============
 
-Adding SPs to the Image
------------------------
+SPMC config options
+---------------------------
 
-The following flags have to be enabled to enable the SPMC. The SP images
-themself are loaded by using the ``SP_PATHS`` flag.
-These should be added to the OP-TEE configuration inside the OP-TEE/build.git 
-directory.
+To configure OP-TEE as a S-EL1 SPMC with Secure Partition support, the following
+flags should be set for optee_os:
 
-.. code-block:: Make
+- ``CFG_CORE_SEL1_SPMC=y``
+- ``CFG_SECURE_PARTITION=y``
+- ``CFG_DT=y``
+- ``CFG_MAP_EXT_DT_SECURE=y``
 
-	OPTEE_OS_COMMON_FLAGS += CFG_CORE_FFA=y         # Enable the FF-A transport layer
-	OPTEE_OS_COMMON_FLAGS += SP_PATHS="path/to/sp-xxx.elf path/to/sp-yyy.elf" # Add the SPs to the OP-TEE image
-	TF_A_FLAGS += SPD=spmd SPMD_SPM_AT_SEL2=0       # Build TF-A with the SPMD enabled and without S-EL2
+Furthermore TF-A should be configured as the SPMD, expecting a S-EL1 SPMC:
 
+- ``SPD=spmd``
+- ``SPMD_SPM_AT_SEL2=0``
+- ``ARM_SPMC_MANIFEST_DTS=<path to SPMC manifest dts>``
+
+SP loading mechanism
+---------------------
+
+OP-TEE SPMC supports two methods for finding and loading the SP executable
+images. Currently only ELF executables are supported. In the build repo the
+loading method can be selected with the SP_PACKAGING_METHOD option.
+
+Embedded SP
+^^^^^^^^^^^
+
+In this case the early TA mechanism of optee_os is reused: the SP ELF files are
+embedded into the main OP-TEE binary. Each ELF should start with a specific
+section (.sp_head) containing a struct which describes the SP (UUID, stack size,
+etc.). The images can be added to optee_os using the ``SP_PATHS`` config option,
+the build repo will set this up automatically when
+``SP_PACKAGING_METHOD=embedded`` is selected. The images passed in ``SP_PATHS``
+are processed by ``ts_bin_to_c.py`` in optee_os and linked into the main binary.
+At runtime the ``for_each_secure_partition()`` macro can iterate through these
+images, so a particular SP can be found by UUID and then loaded by ldelf.
+
+The SP manifest file `[1]`_ used by the SPMC to setup SPs is also handled by
+``ts_bin_to_c.py``, it will be concatenated to the end of the SP ELF.
+
+FIP SP
+^^^^^^
+
+In this case the SP ELF files and the corresponding SP manifest DTs are
+encapsulated into SP packages and packed into the FIP. The goal of providing
+this alternative flow is to make updating SPs easier (independent of the main
+OP-TEE binary) and to get aligned with Hafnium (S-EL2 SPMC). For more
+information about the FIP, please refer to the TF-A documentation `[2]`_. The SP
+packaging process and the package format is provided by TF-A, detailed
+description is available at `[3]`_. In the build repo this method can be
+selected by ``SP_PACKAGING_METHOD=fip``, it covers all the necessary setup
+automatically. In case of using another buildsystem, the following steps should
+be implemented:
+
+- TF-A config ``SP_LAYOUT_FILE``: provide a JSON file which describes the SPs
+  (path to SP executable and corresponding DT, example `[4]`_). The TF-A
+  buildsystem will create the SP packages (using sptool) based on this and pack
+  them into the FIP.
+
+- TF-A config ``ARM_BL2_SP_LIST_DTS``: provide a DT snippet which describes the
+  SPs' UUIDs and load addresses (example: `[5]`_). This will be injected into
+  the SP list in ``TB_FW_CONFIG`` DT of TF-A, and BL2 will load the SP packages
+  based on this. Note that BL2 doesn't automatically load all images from the
+  FIP: it's necessary to explicitly define them in ``TB_FW_CONFIG`` (using this
+  injected snippet or manually editing the DT).
+
+- TF-A config ``ARM_SPMC_MANIFEST_DTS``: provide the SPMC manifest (example:
+  `[6]`_). This DT is passed to the SPMC as a boot argument (in the TF-A naming
+  convention this is the ``TOS_FW_CONFIG``). It should contain the list of SP
+  packages and their load addresses in the ``compatible = "arm,sp_pkg"`` node.
+
+At boot optee_os will parse the SP package load addresses from the SPMC manifest
+and find the SP packages already loaded by BL2. Iterating through the SP
+packages, based on the SP package header in each package it will map the SP
+executable image and the corresponding manifest DT and collect these to the
+``fip_sp_list`` list. Later when initialising the SPs, the ``for_each_fip_sp``
+macro is used to iterate this list and load the executables using ldelf, just
+like for the embedded SP case.
+
+.. _[1]:
+
+[1] https://trustedfirmware-a.readthedocs.io/en/v2.6/components/ffa-manifest-binding.html
+
+.. _[2]:
+
+[2] https://trustedfirmware-a.readthedocs.io/en/v2.6/design/firmware-design.html#firmware-image-package-fip
+
+.. _[3]:
+
+[3] https://trustedfirmware-a.readthedocs.io/en/v2.6/components/secure-partition-manager.html#secure-partition-packages
+
+.. _[4]:
+
+[4] https://trustedfirmware-a.readthedocs.io/en/v2.6/components/secure-partition-manager.html#describing-secure-partitions
+
+.. _[5]:
+
+[5] https://github.com/OP-TEE/build/blob/master/fvp/bl2_sp_list.dtsi
+
+.. _[6]:
+
+[6] https://github.com/OP-TEE/build/blob/master/fvp/spmc_manifest.dts
