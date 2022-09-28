@@ -1,25 +1,29 @@
 .. _versal:
 
 #############################
-AMD/Xilinx Versal ACAP VCK190
+AMD-Xilinx Versal ACAP VCK190
 #############################
-Instructions below show how to run OP-TEE on VCK190.
+Instructions below show how to run OP-TEE on the `VCK190`_ development board.
+Details of the Versal ACAP can be found in the Versal Technical Reference Manual
+(`Versal_TRM`_).
 
 Supported boards
 ****************
-This makefile supports the VCK190 but can be extended to support VCK180 as well.
+This makefile supports the VCK190 but also supports the `VMK180`_ development
+board as well.
 
 Setting up the toolchain
 ************************
 This build chain relies on Petalinux 2022.1, therefore the first step will be to
-download and install it from the Xilinx website (`Downloads`_).
+download and `install`_ it from the AMD-Xilinx website (`Downloads`_).
 
 Then, you will also need to download the board support package (BSP) from the
-Xilinx website (`Downloads`_). It contains prebuilt firmwares and hardware
+AMD-Xilinx website (`Downloads`_). It contains prebuilt firmwares and hardware
 definition files required to assemble a bootable image.
 
 .. note::
-   You may have to create a free Xilinx account to proceed with the two previous steps.
+   You will need a free AMD-Xilinx account to proceed with the two previous
+   steps.
 
 Configuring and building for VCK190
 ***********************************
@@ -37,8 +41,8 @@ Lets summarize the steps taken so far; these are common to all boards.
 
 At this point we have a working directory ``~/optee-project`` with all the
 repositories required with the exception of the Versal ACAP board support
-package. A pre-requisite to unpacking the BSP file is an installed Petalinux
-release as previously mentioned.
+package. A pre-requisite to unpacking the BSP file is installing Petalinux
+(`install`_) as previously mentioned.
 
 Having done that, now is the time to unpack the BSP:
 
@@ -51,9 +55,29 @@ Having done that, now is the time to unpack the BSP:
 	$ ls
 	   xilinx-vck190-2022.1
 
+.. note::
+   Replace the VCK190 BSP with the VMK180 BSP if you want to build this project
+   for the VMK180 development board.
 
-Before building the release you will need to edit the file
-``build/versal/bootImage-versal-vck190.bif`` to point to the BSP folder.
+Before building the release, you will need to edit the Boot Image File (BIF)
+``build/versal/bootImage-versal-vck190.bif`` to point to the required BSP files.
+The paths for the following files in the BIF will need to be updated *before*
+proceeding:
+
+- vpl_gen_fixed.pdi
+- plm.elf
+- psmfw.elf
+
+.. note::
+   The default PLM **only** contains the xilsecure library. If you would like to
+   take advantage of all of hardware cryptographic features implemented for
+   Versal, you **must** enable the xilpuf and xilnvm libraries by following the
+   steps for customizing the PLM found here (`PLM_Customization`_).
+
+The xilpuf library enables support of the physically unclonable function (PUF)
+and the xilnvm library enables support of reading and writing to eFUSEs. Once
+these libraries are enabled, be sure to point to the updated PLM firmware in the
+previously mentioned BIF file.
 
 After you have done that you can build the images as follows:
 
@@ -79,7 +103,7 @@ seen below and then power up the board.
 Then run the boot_jtag.sh script.
 
 This script will first ask for the path of the Petalinux installation; once
-entered, if will download and execute the image on the Versal ACAP platform.
+entered, it will download and execute the image on the Versal ACAP platform.
 
 .. code-block:: bash
 
@@ -90,11 +114,11 @@ entered, if will download and execute the image on the Versal ACAP platform.
 
 SD card creation and boot
 *************************
-Prepare a SD card with a single **bootable** partition large enough to hold both of
-the built files.
+Prepare a SD card with a single **bootable** partition large enough to hold both
+of the built files.
 
-Using ``gparted`` or any other partition manager tool create a single partition on
-the card (remember to flag it as bootable)
+Using ``gparted`` or any other partition manager tool create a single partition
+on the card (remember to flag it as bootable)
 
 	* 1GB FAT32 bootable partition (i.e: ``/dev/sdc1``).
 
@@ -126,3 +150,13 @@ boot to Linux:
 
 
 .. _Downloads: https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/embedded-design-tools/2022-1.html
+
+.. _VCK190: https://www.xilinx.com/products/boards-and-kits/vck190.html
+
+.. _VMK180: https://www.xilinx.com/products/boards-and-kits/vmk180.html
+
+.. _install: https://docs.xilinx.com/r/en-US/ug1144-petalinux-tools-reference-guide/Installing-the-PetaLinux-Tool
+
+.. _Versal_TRM: https://docs.xilinx.com/r/en-US/am011-versal-acap-trm
+
+.. _PLM_Customization: https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2037088327/Versal+Platform+Loader+and+Manager#PLM-Feature-Configuration-for-PetaLinux
