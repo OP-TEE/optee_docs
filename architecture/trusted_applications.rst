@@ -279,6 +279,23 @@ Encrypted TA binary is formatted as:
                        <struct shdr_encrypted_ta> || <nonce> || <tag> ||
                        <ciphertext>
 
+Verifying with Subkeys
+----------------------
+A TA can be verified using a subkey or a chain of subkeys. This allows
+delegation of TA signing without distributing the root key. TAs signed with
+a subkey are confined to the UUID-V5 namespace of the subkey to avoid TA
+UUID clashes with different subkeys.
+
+SHDR_SUBKEY is a type of header which enables chains of public keys.  The
+public root key is used to verify the first public subkey, which then is
+used to verify the next public subkey and so on.
+
+The TA is finally verified using the last subkey. All these headers are
+added in front of the TA binary so everything needed to verify the TA is
+available when it's loaded into memory.
+
+For details on subkeys see also :ref:`_subkeys`
+
 Loading REE-FS TA
 -----------------
 A REE TA is loaded into shared memory using a series or RPC in
