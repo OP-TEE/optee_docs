@@ -13,6 +13,7 @@ Architecture
    porting_guidelines
    secure_boot
    secure_storage
+   subkeys
    trusted_applications
    virtualization
    spmc
