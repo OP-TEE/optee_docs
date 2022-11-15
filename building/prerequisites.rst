@@ -41,6 +41,7 @@ available.
               libmpc-dev \
               libncurses5-dev \
               libpixman-1-dev \
+              libslirp-dev \
               libssl-dev \
               libtool \
               make \
