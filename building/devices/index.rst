@@ -14,6 +14,7 @@ Device specific information
     hikey960
     juno
     qemu
+    rockpi4
     rpi3
     stm32mp1
     ti

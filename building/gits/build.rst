@@ -126,6 +126,10 @@ questions etc. Please see the MAINTAINERS_ file for contact information.
       - ``PLATFORM=rpi3``
       - Yes
 
+    * - `ROCK Pi 4`_
+      - ``PLATFORM=rockchip-rk3399``
+      - Yes
+
     * - `STM32MP157A-DK1`_
       - ``PLATFORM=stm32mp1-157A_DK1``
       - Yes
@@ -461,6 +465,7 @@ don't have to think about anything.
 .. _QEMU: http://wiki.qemu.org/Main_Page
 .. _QEMUv8: http://wiki.qemu.org/Main_Page
 .. _Raspberry Pi 3: https://www.raspberrypi.org/products/raspberry-pi-3-model-b
+.. _ROCK Pi 4: https://wiki.radxa.com/Rockpi4
 .. _STM32MP157A-DK1: https://www.st.com/en/evaluation-tools/stm32mp157a-dk1.html
 .. _STM32MP157C-DK2: https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
 .. _STM32MP157C-EV1: https://www.st.com/en/evaluation-tools/stm32mp157c-ev1.html
