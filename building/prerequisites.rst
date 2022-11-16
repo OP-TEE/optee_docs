@@ -26,6 +26,7 @@ available.
               cscope \
               curl \
               device-tree-compiler \
+              e2tools \
               expect \
               fastboot \
               flex \
@@ -44,6 +45,7 @@ available.
               libslirp-dev \
               libssl-dev \
               libtool \
+              libusb-1.0-0-dev \
               make \
               mtools \
               netcat \
