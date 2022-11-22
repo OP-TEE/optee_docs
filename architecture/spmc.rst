@@ -53,11 +53,37 @@ The
 repository includes the libsp libary which export all needed functions to build
 a S-EL0 SP. It also includes many examples of how to create and implement a SP.
 
+Secure Partition formats
+========================
+
+OP-TEE specific ELF format
+--------------------------
+
+OP-TEE uses an ELF format for its :ref:`trusted_applications`. It has an OP-TEE
+specific section which contains a header structure for describing the Trusted
+Application. A very similar format can be used for Secure Partitions. The same
+ELF format allows OP-TEE to use the built-in ELF loader (``ldelf``) with all its
+features like handling relocations or ASLR. In this case a different section is
+used for the header structure to distinguish between Trusted Applications and
+Secure Partitions.
+
+SPMC agnostic flat binary format
+--------------------------------
+
+This simple binary format aims for maximum portability between SPMC
+implementations by removing the dependency on an ELF loader and implementation
+specific metadata in the SP image. The SPMC can simply copy the binary into the
+memory and start running it. The relocations, the stack setup and any further
+initialization steps should be handled by the startup code of the secure
+partition. The access rights for different sections of the binary can be
+configured either by adding load relative memory regions to the SP manifest or
+by using the ``FFA_MEM_PERM_SET`` interface in the startup code.
+
 SPMC Program Flow
 =================
 SP images are either embedded into the OP-TEE image or loaded from the FIP by
 BL2. This makes it possible to start SPs during boot, before the rich OS is
-available in the normal world. ``ldelf`` is used to load and initialise the SPs.
+available in the normal world.
 
 Starting SPs
 ------------
@@ -89,8 +115,10 @@ This is done by adding ``sp_init_all()`` to the ``boot_final`` initcall level.
 				World.
 
 
-Each SP is loaded into the system using ``ldelf`` and started. This is based
-around the same process as loading the early TAs.
+Each ELF format SP is loaded into the system using ``ldelf`` and started. This
+is based around the same process as loading the early TAs.
+For each binary format SP a simpler method is used to copy the binary into a
+suitable memory area.
 All SPs are run after they are loaded and run until a ``FFA_MSG_WAIT`` is sent
 by the SP.
 
@@ -104,10 +132,15 @@ by the SP.
         return
         secure_partition.c -> secure_partition.c:	sp_create_session()
         return
-        secure_partition.c -> secure_partition.c:	ldelf_load_ldelf()
-        return
-        secure_partition.c -> secure_partition.c:	ldlelf_init_with_ldelf()
-        return
+        alt OP-TEE specific ELF format
+                secure_partition.c -> secure_partition.c:ldelf_load_ldelf()
+                return
+                secure_partition.c -> secure_partition.c:ldlelf_init_with_ldelf()
+                return
+        else SPMC agnostic flat binary format
+                secure_partition.c -> secure_partition.c:load_binary_sp()
+                return
+        end
         secure_partition.c -> secure_partition.c:	sp_init_set_registers()
         return
         return
@@ -117,7 +150,8 @@ by the SP.
         return
         return
 
-:``init_with_ldelf()``:		Load the SP
+:``init_with_ldelf()``:		Load the OP-TEE specific ELF format SP
+:``load_binary_sp()``:		Load the SPMC agnostic flat binary format SP
 :``sp_init_info()``:		Initialise the ``struct ffa_init_info``. The
 				``struct ffa_init_info`` is passed to the SP
 				during it first run.
@@ -288,7 +322,7 @@ the build repo will set this up automatically when
 ``SP_PACKAGING_METHOD=embedded`` is selected. The images passed in ``SP_PATHS``
 are processed by ``ts_bin_to_c.py`` in optee_os and linked into the main binary.
 At runtime the ``for_each_secure_partition()`` macro can iterate through these
-images, so a particular SP can be found by UUID and then loaded by ldelf.
+images, so a particular SP can be found by UUID and then loaded.
 
 The SP manifest file `[1]`_ used by the SPMC to setup SPs is also handled by
 ``ts_bin_to_c.py``, it will be concatenated to the end of the SP ELF.
@@ -329,8 +363,8 @@ and find the SP packages already loaded by BL2. Iterating through the SP
 packages, based on the SP package header in each package it will map the SP
 executable image and the corresponding manifest DT and collect these to the
 ``fip_sp_list`` list. Later when initialising the SPs, the ``for_each_fip_sp``
-macro is used to iterate this list and load the executables using ldelf, just
-like for the embedded SP case.
+macro is used to iterate this list and load the executables, just like for the
+embedded SP case.
 
 .. _[1]:
 
