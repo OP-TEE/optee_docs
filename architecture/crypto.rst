@@ -191,9 +191,51 @@ GP requirements tested and covered by the OP-TEE sanity test suite
 supported - i.e: the SE05x does not implement all RSA key sizes - we opted for
 disabling those particular tests at build time rather than letting them fail.
 
+NXP SE05X Family of Secure Elements
+***********************************
+
+This family of I2C bus devices are supported through the se050 cryptographic driver
+located at `core/drivers/crypto/se050`_. Before the REE boots, the session with
+the device is established using one of the OP-TEE supported I2C platform device
+drivers. Once the REE is up, the cryptographic driver can be configured to use
+the I2C driver in the REE (via RPC service) or continue using the one in OP-TEE.
+
+Unless the Secure Element owns the I2C bus (no other elements on the bus, no
+runtime-PM and so forth), it is recommended to route all traffic via the Normal
+World. Initial communication with the device is not data intensive and therefore
+slow I2C drivers - perhaps those not using DMA channels - do not represent much
+of a performance drag; the situation changes once clients start hammering the
+device.
+
+If using the REE for I2C transfers, it is also **imperative** to configure the
+driver so that the `GP Secure Channel Protocol 03`_ is enabled prior to exiting the
+Secure World; this way all communication between the processor and the secure
+element is encrypted and MAC authenticated. Please check the usage of the
+``CFG_CORE_SE05X_SCP03_EARLY`` configuration option.
+
+Aside of the secure element integration as an OP-TEE cryptographic driver,
+OP-TEE  also presents an Application Protocol Data Units (APDU) interface to
+users via its  OP-TEE client.
+
+.. figure:: ../images/crypto/drivers/se050_apdu_pta_interface.png
+    :figclass: align-center
+
+    Access to the Secure Element from libseetec and the APDU PTA.
+
+Using this interface, priviledged applications can control the Secure Element to
+inject or delete keys or certificates, encrypt, decrypt, sign and verify data
+and so forth. An application implementing a subset of those functions can be
+seen in this Foundries.io repository: `fio-se05x-cli`_
+
+This reference code is not fully functional in mainline as it's not yet possible
+to import keys and certificates from the Secure Element into OP-TEE's PKCS#11
+implementation. However, a user could still clear the Secure Element NVM memory
+and read certificates stored in it.
+
 .. Source files
 .. _core/crypto: https://github.com/OP-TEE/optee_os/blob/master/core/crypto
 .. _core/drivers/crypto/crypto_api: https://github.com/OP-TEE/optee_os/blob/master/core/drivers/crypto/crypto_api
+.. _core/drivers/crypto/se050: https://github.com/OP-TEE/optee_os/blob/master/core/drivers/crypto/se050
 .. _crypto.c: https://github.com/OP-TEE/optee_os/blob/master/core/crypto/crypto.c
 .. _crypto.h: https://github.com/OP-TEE/optee_os/blob/master/core/include/crypto/crypto.h
 .. _core/lib/libtomcrypt: https://github.com/OP-TEE/optee_os/blob/master/core/lib/libtomcrypt
@@ -207,5 +249,7 @@ disabling those particular tests at build time rather than letting them fail.
 .. _utee_syscalls_asm.S: https://github.com/OP-TEE/optee_os/blob/master/lib/libutee/arch/arm/utee_syscalls_asm.S
 
 .. Other links:
+.. _fio-se05x-cli: https://github.com/foundriesio/fio-se05x-cli
 .. _LibTomCrypt: https://github.com/libtom/libtomcrypt
 .. _GP TEE Secure Element API: https://globalplatform.org/specs-library/tee-secure-element-api/
+.. _GP Secure Channel Protocol 03: https://globalplatform.org/wp-content/uploads/2019/03/GPC_2.2_D_SCP03_v1.0.pdf
