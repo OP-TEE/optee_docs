@@ -56,6 +56,7 @@ available.
               python3-serial \
               python-is-python3 \
               rsync \
+              swig \
               unzip \
               uuid-dev \
               xdg-utils \
