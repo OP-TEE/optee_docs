@@ -340,6 +340,14 @@ If your platform has a hardware entropy source, you should set
 ``CFG_WITH_SOFTWARE_PRNG`` to ``n``, and provide an implementation for
 ``hw_get_random_bytes()``, which returns multiple bytes of entropy.
 
+When ``CFG_WITH_SOFTWARE_PRNG=n``, the platform can enable a PTA service for
+normal world to retrieve good quality random bytes. See configuration
+switches ``CFG_HWRNG_PTA`` and ``CFG_HWRNG_QUALITY``, from 0 to 1024.
+
+When ``CFG_WITH_SOFTWARE_PRNG=n``, the random number generator is made
+available to OP-TEE drivers and frameworks, including Trusted Applications
+(thoguh GP TEE Internal Core API) and normal world (when ``CFG_HWRNG_PTA=y``).
+
 Power Management / PSCI
 ***********************
 In the :ref:`add_a_new_platform` section where we talked about the file
