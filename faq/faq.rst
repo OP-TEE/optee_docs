@@ -315,9 +315,12 @@ Q: Has any test lab been testing OP-TEE?
       optee.org.
 
     - Riscure_ did a mini-audit of OP-TEE which generated a couple of patches
-      (see `PR#2745`). The `Security Advisories`_ page at optee.org will be
+      (see `PR#2745`). The `OP-TEE OS Security Advisories`_ page on Github will be
       updated with more information regarding that in the future.
 
+    Q: Where are listed security vulnerabilities addressed in OP-TEE
+================================================================
+    - Please see :ref:`OP-TEE OS Security Advisories` page.
 
 Q: Have there been any code audit / code review done?
 =====================================================
@@ -679,5 +682,6 @@ Q: I've heard that there is a Widevine and PlayReady TA, how do I get access?
 .. _Riscure: https://www.riscure.com
 .. _sample_hellojni.html: https://developer.android.com/ndk/samples/sample_hellojni.html
 .. _Security Advisories: https://www.op-tee.org/security-advisories/
+.. _OP-TEE OS Security Advisories: https://github.com/OP-TEE/optee_os/security/advisories
 .. _TI DRA7xx port: https://github.com/OP-TEE/optee_os/commit/9b5060cd92a19b4d114a1ce8a338b18424974037
 .. _ZynqMP port: https://github.com/OP-TEE/optee_os/commit/dc57f5a0e8f3b502fc958bc64a5ec0b0f46ef11a
