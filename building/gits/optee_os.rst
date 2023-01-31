@@ -428,8 +428,9 @@ non-boolean, which affects how they are translated into ``conf.h``.
 Boolean configuration variables
 -------------------------------
 When a configuration variable controls the presence or absence of a feature,
-``y`` means **enabled**, while ``n``, empty value or an undefined variable means
-**disabled**. For instance, the following commands are equivalent and would
+``y`` means **enabled**, while anything else means **disabled**. In particular,
+a variable that is undefined or is defined but has an empty value is also
+disabled. For example, the following commands are equivalent and would
 disable feature ``CFG_CRYPTO_GCM``:
 
 .. code-block:: bash
@@ -449,14 +450,53 @@ disable feature ``CFG_CRYPTO_GCM``:
     $ export CFG_CRYPTO_GCM=n
     $ make
 
-Configuration variables may then be used directly in ``sub.mk`` to trigger
-conditional compilation:
+When a configuration variable is introduced, the proper way to enable it by
+default is to write ``CFG_XXX ?= y``. If it should be default disabled
+instead, use ``CFG_XXX ?= n`` rather than leaving the variable undefined,
+and add a description in a comment.
+
+In general, common settings belong in ``mk/config.mk`` while platform-specific
+ones should go in ``core/arch/$(arch)/plat-$(platform)/conf.mk`` (there are
+exceptions, for instance crypto settings have their own ``crypto.mk`` files).
+Both places may be used in case a platform needs to set a default value that
+is different from the one that is set in the global configuration file. For
+example:
+
+.. code-block:: text
+
+   # CFG_FOO is enabled by default except for PLATFORM=xyz
+   # Override with "make CFG_FOO=y" is allowed
+
+   # In core/arch/$(arch)/plat-xyz/conf.mk
+   CFG_FOO ?= n
+
+   # In mk/config.mk
+   CFG_FOO ?= y
+
+.. code-block:: text
+
+   # CFG_FOO is enabled by default except for PLATFORM=xyz that requires
+   # CFG_FOO disabled
+   # Override with "make CFG_FOO=y" is NOT allowed
+
+   # In core/arch/$(arch)/plat-xyz/conf.mk
+   $(call force,CFG_FOO,n)
+
+   # In mk/config.mk
+   CFG_FOO ?= y
+
+``y`` and ``n`` can be swapped to achieve the opposite scenario.
+
+Configuration variables can easily be used in ``sub.mk`` to trigger conditional
+compilation:
 
 .. code-block:: make
 
     # core/lib/libtomcrypt/src/encauth/sub.mk
     subdirs-$(CFG_CRYPTO_CCM) += ccm
     subdirs-$(CFG_CRYPTO_GCM) += gcm
+
+It is not recommended to set ``CFG_`` values in ``sub.mk``.
 
 When a configuration variable is **enabled** (``y``), ``<generated/conf.h>``
 contains a macro with the same name as the variable and the value ``1``. If it
@@ -515,6 +555,15 @@ command line or environment variables. For example:
 
     $ make -j10 PLATFORM=hikey CFG_TEE_CORE_NB_CORE=4
     core/arch/arm/plat-hikey/conf.mk:5: *** CFG_TEE_CORE_NB_CORE is set to '4' (from command line) but its value must be '8'.  Stop.
+
+There are only two ways...
+--------------------------
+Given what has been explained above, there are only two valid ways to set a ``CFG_``
+variable in a ``.mk`` file:  either with ``?=`` if the value is a default that
+may be changed at build time, or with ``$(call force,...)`` if there is only
+one acceptable value. Using ``=`` or ``:=`` in particular is **not** correct
+because they allow overrides on the command line (``make CFG_FOO=foo``) but
+not from the environment (``CFG_FOO=foo make``).
 
 Configuration dependencies
 --------------------------
