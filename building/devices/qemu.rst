@@ -27,6 +27,21 @@ for Armv7-A is like the one below:
   # with flag "CFG_CORE_ASLR=n"
   $ make run
 
+.. hint::
+
+    If you do not want to check out the latest version of OP-TEE, but rather a
+    specific tagged version, you can use ``repo init -u
+    https://github.com/OP-TEE/manifest.git -b <branchname>``. e.g., ``repo init
+    -u https://github.com/OP-TEE/manifest.git -b 3.16.0``. You can see valid
+    branch names by inspecting the OP-TEE/manifest git repository on
+    https://github.com/OP-TEE/manifest/branches.
+
+    To speed up your build, you can make use of the parallel make feature. For
+    example, use ``make -j32 run`` to have 32 build processes running
+    concurrently. Note that this will make it much more difficult to spot
+    errors if something fails; therefore fall back to sequential builds to view
+    build errors and produce logs for bug reports.
+
 Consoles
 ********
 After running ``make run`` you will end up in the QEMU console and it will also
