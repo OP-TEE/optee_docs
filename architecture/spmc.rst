@@ -283,6 +283,223 @@ needs access to the rxtx buffer.
 A separate ``struct rxtx_buf`` is defined for the Normal World, which gives
 access to the Normal World buffers.
 
+FF-A compliance
+===============
+
+.. |ffa_fs| replace:: :opticon:`check-circle-fill`
+.. |ffa_ps| replace:: :opticon:`check-circle`
+.. |ffa_ns| replace:: :opticon:`x`
+.. |ffa_na| replace:: :opticon:`horizontal-rule`
+
+Legend
+------
+
+* |ffa_fs| Fully supported
+* |ffa_ps| Partially implemented
+* |ffa_ns| Not supported
+* |ffa_na| Does not apply for the FF-A instance or version
+
+Partition boot protocol
+-----------------------
+
+Only FF-A v1.0 partition boot protocol is supported by the SPMC.
+
+Supported partition manifest fields
+-----------------------------------
+
++--------------------------------+-----------+-----------+-----------+
+| Field                          | Mandatory | FF-A v1.0 | FF-A v1.1 |
++================================+===========+===========+===========+
+| FF-A version                   | Yes       | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| UUID                           | Yes       | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Partition ID                   | No        | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Auxiliary IDs                  | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Name (description)             | No        | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Number of execution contexts   | Yes       | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Run-time EL                    | Yes       | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Execution state                | Yes       | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Load address                   | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Entry point offset             | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Translation granule            | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Boot order                     | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| RX/TX information              | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Messaging method               | Yes       | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Primary scheduler implemented  | No        | |ffa_na|  | |ffa_na|  |
++--------------------------------+-----------+-----------+-----------+
+| Run-time model                 | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Tuples                         | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+|                        **Memory regions**                          |
++--------------------------------+-----------+-----------+-----------+
+| Base address                   | No        | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Load address relative offset   | No        | |ffa_na|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Page count                     | Yes       | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Attributes                     | Yes       | |ffa_ps|  | |ffa_ps|  |
++--------------------------------+-----------+-----------+-----------+
+| Name                           | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Stream & SMMU IDs              | No        | |ffa_na|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Stream ID access permissions   | No        | |ffa_na|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+|                        **Device regions**                          |
++--------------------------------+-----------+-----------+-----------+
+| Physical base address          | Yes       | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Page count                     | Yes       | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Attributes                     | Yes       | |ffa_fs|  | |ffa_fs|  |
++--------------------------------+-----------+-----------+-----------+
+| Interrupts                     | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| SMMU IDs                       | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Stream IDs                     | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Exclusive access and ownership | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+| Name                           | No        | |ffa_ns|  | |ffa_ns|  |
++--------------------------------+-----------+-----------+-----------+
+
+Limitations
+^^^^^^^^^^^
+
+* The values of mandatory but not supported fields are ignored by the SP loader.
+  This means all values are accepted but the SPMC might behave differently than
+  expected.
+* Memory region attributes doesn't support shareability and cacheability flags.
+
+Supported FF-A interfaces
+-------------------------
+
+The table below describes the implementation level of each FF-A interface on
+different FF-A instances. The two instances are between OP-TEE SPMC and the SPMC
+and between OP-TEE SPMC and its S-EL0 secure partitions. The FF-A specification
+uses 'Secure Phyisical' and 'Secure Virtual' terms for these instances.
+
++--------------------------+-----------------------+-----------------------+
+|                          | OP-TEE <-> SPMD       | OP-TEE <-> S-EL0 SPs  |
+| Interface                +-----------+-----------+-----------+-----------+
+|                          | FF-A v1.0 | FF-A v1.1 | FF-A v1.0 | FF-A v1.1 |
++==========================+===========+===========+===========+===========+
+| FFA_ERROR                | |ffa_fs|  | |ffa_ps|  | |ffa_fs|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_SUCCESS              | |ffa_fs|  | |ffa_fs|  | |ffa_ps|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_INTERRUPT            | |ffa_ps|  | |ffa_ps|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_VERSION              | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_FEATURES             | |ffa_ps|  | |ffa_ns|  | |ffa_ps|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_RX_ACQUIRE           | |ffa_na|  | |ffa_ns|  | |ffa_na|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_RX_RELEASE           | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_RXTX_MAP             | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_RXTX_UNMAP           | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_PARTITION_INFO_GET   | |ffa_fs|  | |ffa_ns|  | |ffa_fs|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_ID_GET               | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_SPM_ID_GET           | |ffa_na|  | |ffa_ns|  | |ffa_na|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MSG_WAIT             | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_YIELD                | |ffa_na|  | |ffa_ns|  | |ffa_na|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_RUN                  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_NORMAL_WORLD_RESUME  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MSG_SEND             | |ffa_na|  | |ffa_na|  | |ffa_na|  | |ffa_na|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MSG_SEND2            | |ffa_na|  | |ffa_ns|  | |ffa_na|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MSG_SEND_DIRECT_REQ  | |ffa_fs|  | |ffa_ps|  | |ffa_fs|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MSG_SEND_DIRECT_RESP | |ffa_fs|  | |ffa_ps|  | |ffa_fs|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MSG_POLL             | |ffa_na|  | |ffa_na|  | |ffa_na|  | |ffa_na|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_DONATE           | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_LEND             | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_SHARE            | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_RETRIEVE_REQ     | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_RETRIEVE_RESP    | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_RELINQUISH       | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  | |ffa_ps|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_RECLAIM          | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_PERM_GET         | |ffa_na|  | |ffa_na|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_PERM_SET         | |ffa_na|  | |ffa_na|  | |ffa_fs|  | |ffa_fs|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_FRAG_RX          | |ffa_fs|  | |ffa_fs|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_FRAG_TX          | |ffa_fs|  | |ffa_fs|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_OP_PAUSE         | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+| FFA_MEM_OP_RESUME        | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  | |ffa_ns|  |
++--------------------------+-----------+-----------+-----------+-----------+
+
+Limitations
+^^^^^^^^^^^
+
+* FF-A v1.1 error code ``NO_DATA`` is not supported.
+* ``FFA_SUCCESS`` is not supported as a response to an
+  ``FFA_MSG_SEND_DIRECT_REQ`` message.
+* Non-secure interrupts are not forwarded to the normal world via
+  ``FFA_INTERRUPT``.
+* Interrupts cannot be forwarded to S-EL0 secure partitions.
+* Only ``FFA_RXTX_MAP`` feature query is supported by the ``FFA_FEATURES``
+  interface. ``FFA_MEM_DONATE``, ``FFA_MEM_LEND``, ``FFA_MEM_SHARE`` and
+  ``FFA_MEM_RETRIEVE_REQ`` feature query is not implemented.
+* FF-A v1.1 ``Flags`` field in ``FFA_MSG_SEND_DIRECT_REQ`` and
+  ``FFA_MSG_SEND_DIRECT_RESP`` calls is not supported.
+* Transferring memory transaction descriptors in a buffer distinct from the TX
+  buffer is not supported by the secure virtual instance.
+* Transferring fragmented memory transaction descriptors is not supported by the
+  secure virtual instance.
+* The only supported 'Memory region attributes descriptor' value is normal
+  memory, write-back cacheability and inner shareable. All other values are
+  denied on the secure physical instance. The secure virtual instance's
+  implementation ignores the value of this descriptor but uses the same
+  attributes for the region.
+* The NS flag support in not implemented for 'Memory region attributes
+  descriptor'.
+* Only read-write non-executable value can be used in the 'Memory access
+  permissions descriptor' at the secure phyisical instance.
+* The ``Flags`` field of ``FFA_MEM_RELINQUISH`` is ignored.
+* The secure phyisical instanced doesn't implemented the receiving of
+  ``FFA_MEM_RELINQUISH``.
+* Time slicing of memory management operations is not supported.
 
 Configuration
 =============
