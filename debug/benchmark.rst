@@ -1,4 +1,3 @@
-.. _benchmark_framework:
 
 .. note::
    The feature described in this section depends on a Linux
@@ -26,6 +25,8 @@
 .. _kernel patch: https://github.com/linaro-swg/linux/commit/d9b0331b46540fa67c0f16e391940f12fde1288b
 .. _linaro-swg kernel: https://github.com/linaro-swg/Linux
 .. _optee-3.15.0: https://github.com/linaro-swg/linux/commits/optee-3.15.0
+
+.. _benchmark_framework:
 
 Benchmark framework
 ###################

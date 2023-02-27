@@ -318,9 +318,9 @@ Q: Has any test lab been testing OP-TEE?
       (see `PR#2745`). The `OP-TEE OS Security Advisories`_ page on Github will be
       updated with more information regarding that in the future.
 
-    Q: Where are listed security vulnerabilities addressed in OP-TEE
+Q: Where are listed security vulnerabilities addressed in OP-TEE
 ================================================================
-    - Please see :ref:`OP-TEE OS Security Advisories` page.
+    - Please see `OP-TEE OS Security Advisories`_ page.
 
 Q: Have there been any code audit / code review done?
 =====================================================
