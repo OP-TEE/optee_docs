@@ -294,7 +294,7 @@ The TA is finally verified using the last subkey. All these headers are
 added in front of the TA binary so everything needed to verify the TA is
 available when it's loaded into memory.
 
-For details on subkeys see also :ref:`_subkeys`
+For details on subkeys see also :ref:`subkeys`
 
 Loading REE-FS TA
 -----------------
