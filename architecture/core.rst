@@ -499,7 +499,7 @@ Notifications are identified with a value, allocated as:
 If the **Max** value is smaller than 63, then there's only the mixed range.
 
 If asynchronous notifications are enabled then is the value 0 reserved for
-signalling the a driver need a bootom half call, that is the yielding call
+signalling the a driver need a bottom half call, that is the yielding call
 ``OPTEE_MSG_CMD_DO_BOTTOM_HALF``.
 
 The rest of the asynchronous notification values are managed with two
