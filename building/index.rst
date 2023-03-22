@@ -24,3 +24,4 @@ You may also want to look at ":ref:`faq_try_optee`".
    trusted_applications
    efi_vars/stmm
    optee_with_rust
+   userland_integration
