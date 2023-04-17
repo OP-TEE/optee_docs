@@ -47,7 +47,7 @@ Q: What’s the maximum size for heap and stack? Can it be changed?
 Q: What is the size of OP-TEE itself?
 =====================================
     - As of 2016.01, optee_os is about ``244KB`` (release build). It is
-      preferred to run :ref:`optee_os` entierly in SRAM, but if there is not
+      preferred to run :ref:`optee_os` entirely in SRAM, but if there is not
       enough room, DRAM can be used and protected with TZASC. We are also
       looking into the possibility of creating a ‘minimal’ OP-TEE, i.e. a
       limited OP-TEE usable even in a very memory constrained environment, by
