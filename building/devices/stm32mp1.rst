@@ -57,6 +57,10 @@ A usual short fecth/build/load shell sequence is like the one below:
   $ make toolchains
   $ make PLATFORM=stm32mp1-157C_DK2 all
   $ dd if=../out/bin/sdcard.img of=/dev/sdX conv=fdatasync status=progress
+  $ sgdisk -e /dev/sdX
+
+Command ``sgdisk -e`` fixes the GPT backup data which location depends on
+storage device effective size.
 
 .. _STM32MP135F-DK: https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html
 .. _STM32MP157A-DK1: https://www.st.com/en/evaluation-tools/stm32mp157a-dk1.html
