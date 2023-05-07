@@ -13,6 +13,8 @@ Supported boards
 +---------------------+--------------------+------------+-------------------------------+
 | Board Name          | Manufacturer       | Boot media | Hardware Description          |
 +=====================+====================+============+===============================+
+| `STM32MP135F-DK`_   | STMicroelectronics | SDcard     | `Wiki STM32MP135x-DK`_        |
++---------------------+--------------------+------------+-------------------------------+
 | `STM32MP157A-DK1`_  | STMicroelectronics | SDcard     | `Wiki STM32MP157X-DKX`_       |
 +---------------------+--------------------+------------+-------------------------------+
 | `STM32MP157C-DK2`_  | STMicroelectronics | SDcard     | `Wiki STM32MP157X-DKX`_       |
@@ -31,6 +33,8 @@ as listed in table below:
 +------------------------+--------------------------------------+
 | Board Name             | Build configuration directive        |
 +========================+======================================+
+| `STM32MP135F-DK`_      | ``PLATFORM=stm32mp1-135F_DK``        |
++------------------------+--------------------------------------+
 | STM32MP157A-DK1        | ``PLATFORM=stm32mp1-157A_DK1``       |
 +------------------------+--------------------------------------+
 | STM32MP157C-DK2        | ``PLATFORM=stm32mp1-157C_DK2``       |
@@ -54,8 +58,10 @@ A usual short fecth/build/load shell sequence is like the one below:
   $ make PLATFORM=stm32mp1-157C_DK2 all
   $ dd if=../out/bin/sdcard.img of=/dev/sdX conv=fdatasync status=progress
 
+.. _STM32MP135F-DK: https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html
 .. _STM32MP157A-DK1: https://www.st.com/en/evaluation-tools/stm32mp157a-dk1.html
 .. _STM32MP157C-DK2: https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
 .. _STM32MP157C-EV1: https://www.st.com/en/evaluation-tools/stm32mp157c-ev1.html
+.. _Wiki STM32MP135x-DK: https://wiki.st.com/stm32mpu/wiki/STM32MP135x-DK_-_hardware_description
 .. _Wiki STM32MP157X-DKX: https://wiki.st.com/stm32mpu/wiki/STM32MP157X-DKX_-_hardware_description
 .. _Wiki STM32MP157C-EV1: https://wiki.st.com/stm32mpu/wiki/STM32MP157C-EV1_-_hardware_description
