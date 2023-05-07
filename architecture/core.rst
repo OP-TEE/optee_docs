@@ -390,6 +390,149 @@ normal world supports scheduling of processes. Even on UP systems, supporting
 several trusted threads in optee_os helps normal world scheduler to be
 efficient.
 
+Core handlers for native interrupts
+===================================
+
+OP-TEE core provides methods for device drivers to setup and register
+handler functions for native interrupt controller drivers
+(see:ref:`native_foreign_irqs`).
+Interrupt handlers can be nested as when an interrupt controller
+exposes interrupts which signaling is multiplexed on an interrupt
+controlled by a parent interrupt controller.
+
+Interrupt controllers are represented by an instance of ``struct itr_chip``.
+An interrupt controller exposes a given number of interrupts, each identified
+by an index from 0 to N-1 where N is the total number of interrupts exposed
+by that controller. In the literature, an interrupt index identifier
+is called interrupt number.
+
+**Interrupt management API functions**
+
+Interrupt management resources are declared in header file interrupt.h_.
+Interrupt consumers main API functions are:
+
+    - ``interrupt_enable()`` and ``interrupt_disable()`` to respectively
+      enable or disable an interrupt.
+
+    - ``interrupt_mask()`` and ``interrupt_unmask()`` to respectively mask
+      or unmask an interrupt. Masking of an enabled interrupt temporarily
+      disables the interrupt while unmasking enables a previously masked
+      interrupt. ``interrupt_mask()`` and ``interrupt_unmask()`` are
+      allowed to be called from an interrupt context, but
+      ``interrupt_enable()`` and ``interrupt_disable()`` not so.
+
+    - ``interrupt_configure()`` to configure an interrupt detection mode
+      and priority.
+
+    - ``interrupt_add_handler()`` to configure an interrupt and register
+      an interrupt handler function, see below.
+
+    - ``interrupt_remove_handler()`` to unregister an interrupt handler
+      function from an interrupt.
+
+**Interrupt controller drivers**
+
+An interrupt controller instance, named chip (``struct itr_chip``) defines
+operation function handlers for management of the interrupt(s) it controls.
+An interrupt chip driver must provide operation handler functions ``.add``,
+``.mask``, ``.unmask``, ``.enable`` and ``.disable``. There are other
+operation handler functions that are optional, as for example ``.rasie_pi``,
+``.raise_sgi`` and ``.set_priority``.
+
+An interrupt chip driver registers the controller instance with API
+function ``itr_chip_init()``. The driver calls the registered interrupt
+consumer(s) handler(s) with API function ``interrupt_call_handlers()``.
+
+**CPU main interrupt controller driver**
+
+The CPU interrupt controller (e.g. a GIC instance on Arm architecture CPUs)
+is called the main interrupt controller. Its driver must register as main
+controller using API function ``interrupt_main_init()``. The function is
+in charge of calling ``itr_chip_init()`` for that chip instance.
+
+Interrupt consumer drivers can get a reference to the main interrupt
+controller with the API function ``interrupt_get_main_chip()``.
+
+**Interrupt handlers**
+
+Interrupt handler functions are callback functions registered by interrupt
+consumer drivers that core shall call when the related interrupt occurs.
+Structure ``struct itr_handler`` references a handler. It contains the
+handler function entry point, the interrupt number, the interrupt controller
+device and a few more parameters.
+
+An interrupt handler function return value is of type ``enum itr_return``.
+It shall return ``ITRR_HANDLED`` when the interrupt is served and
+``ITRR_NONE`` when the interrupt cannot be served.
+
+The interrupt handler runs in an interrupt context rather than a thread
+context. When this occurs, all other interrupts are masked, necessitating fast
+execution of the interrupt handler to avoid delaying or missing out on other
+interrupts. When an interrupt occurs that requires the completion of
+long-running operations, the interrupt handler should request the OP-TEE
+bottom half thread (see :ref:`notifications`) to execute those operations.
+
+API function ``interrupt_add_handler()``,
+``interrupt_add_handler_with_chip()`` and ``interrupt_alloc_add_handler()``
+configure and register a handler function to a given interrupt.
+
+API function ``interrupt_remove_handler()`` and
+``interrupt_remove_free_handler()`` unregister a registered handler.
+
+**Interrupt consumer driver**
+
+A typical implementation of a driver consuming an interrupt includes
+retrieving of the interrupt resource (interrupt controller and interrupt
+number in that controller), configuring the interrupt, registering a handler
+for the interrupt and enabling/disabling the interrupt.
+
+For example, the dummy driver below prints a debug trace when the related
+interrupt occurs:
+
+.. code-block:: c
+
+    static struct itr_handler *foo_int1_handler;
+
+    static struct foo_int1_data = {
+            /* field with some interrupt handler private data */
+    };
+
+    static enum itr_return foo_it_handler_fn(struct itr_handler *h)
+    {
+            foo_acknowledge_interrupt(h->it);.
+            DMSG("Interrupt FOO%u served", h->it);
+
+            return ITRR_HANDLED;
+    }
+
+    static TEE_Result foo_initialization(void)
+    {
+            TEE_Result res = TEE_ERROR_GENERIC;
+
+            res = interrupt_alloc_add_handler(itr_core_get(),
+                                              GIC_INT_FOO,
+                                              foo_it_handler_fn,
+                                              ITRF_TRIGGER_LEVEL,
+                                              &foo_int1_data,
+                                              &foo_int1_handler);
+            if (res)
+                    return res;
+
+            interrupt_enable(itr_chip, it_num);
+
+            return TEE_SUCCESS;
+    }
+
+    static void foo_release(void)
+    {
+            if (foo_int1_handler) {
+                    interrupt_disable(foo_int1_handler->chip,
+                                      foo_int1_handler->it);
+
+                    interrupt_remove_free_handler(&foo_int1_handler);
+            }
+    }
+
 ----
 
 .. _notifications:
@@ -1621,6 +1764,7 @@ Condvar
 .. _optee_smc.h: https://github.com/OP-TEE/optee_os/blob/master/core/arch/arm/include/sm/optee_smc.h
 .. _thread.c: https://github.com/OP-TEE/optee_os/blob/master/core/arch/arm/kernel/thread.c
 .. _thread.h: https://github.com/OP-TEE/optee_os/blob/master/core/arch/arm/include/kernel/thread.h
+.. _interrupt.h: https://github.com/OP-TEE/optee_os/blob/master/core/include/kernel/interrupt.h
 
 .. _ARM_DEN0028A_SMC_Calling_Convention: http://infocenter.arm.com/help/topic/com.arm.doc.den0028b/ARM_DEN0028B_SMC_Calling_Convention.pdf
 .. _Cortex-A53 TRM: http://infocenter.arm.com/help/topic/com.arm.doc.ddi0500j/DDI0500J_cortex_a53_trm.pdf
