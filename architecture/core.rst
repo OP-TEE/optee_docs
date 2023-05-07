@@ -390,6 +390,185 @@ normal world supports scheduling of processes. Even on UP systems, supporting
 several trusted threads in optee_os helps normal world scheduler to be
 efficient.
 
+Core handlers for native interrupts
+===================================
+
+OP-TEE core provides methods for device drivers to setup and register
+handler functions for native interrupt controller drivers
+(see:ref:`native_foreign_irqs`).
+Interrupt handlers can be nested for when an interrupt controller
+exposes interrupts which signaling is multiplexed on an interrupt
+controlled by a parent interrupt controller.
+
+Interrupt controllers are represented by an instance of ``struct itr_chip``.
+An interrupt controller exposes a given number of interrupts, each identified
+by an index from 0 to N-1 where N is the total number of interrupts exposed
+by that controller. In the literature, an interrupt index identifier
+is called interrupt number.
+
+The root interrupt controller currently implemented in OP-TEE core is a
+GIC instance for the Arm architecture.
+
+**Interrupt management API functions**
+
+Interrupt management resources are declared in header file
+kernel/interrupt.h_. Main API function are:
+
+    - ``interrupt_enable()`` and ``interrupt_disable()`` to respectively
+      enable and disable an interrupt.
+
+    - ``interrupt_mask()`` and ``interrupt_unmask()`` to respectively
+      mask/unmask an interrupt.
+
+    - ``interrupt_configure()`` to configure an interrupt detection mode
+      and priority.
+
+    - ``interrupt_add_handler()`` and ``interrupt_remove_handler()`` to
+      respectively register and unregister an interrupt handler function
+      for a given interrupt.
+
+When the configuration switch ``CFG_DT`` is enabled, OP-TEE core provides a
+way to describe the platform's interrupt topology using Device Tree.
+When used, the platform must provide a secure device tree blob
+(DTB) which platform and device drivers can use to get references to
+interrupt controllers and relative interrupt numbers they consume.
+The Main API functions are:
+
+    - ``dt_register_interrupt_provider()`` to register an interrupt
+      controller related to a given node in the Device Tree. This function
+      requires, among its arguments, a callback function that is called when
+      an interrupt consumer requires a reference to a specific interrupt
+      exposed by the controller.
+
+    - ``dt_get_interrupt()``, ``dt_get_interrupt_by_index()`` and
+      ``dt_get_interrupt_by_name()`` for an interrupt consumer to get the
+      reference to the interrupt controller and number it consumes, based
+      on the properties found in the consumer Device Tree node.
+
+**Interrupt controller drivers**
+
+An interrupt controller instance (``struct itr_chip``) registers operation
+function handlers for management of the interrupt it controls. An interrupt
+controller must provide operation handler functions ``.add``, ``.enable``
+and ``.disable``. There are other operation handler functions but these are
+not mandatory, as ``.mask``, ``.unmask``, ``.rasie_pi``, ``.raise_sgi`` and
+``.set_priority``.
+
+A reference to CPU root interrupt controller, e.g. a GIC instance on Arm
+architecture CPUs, can be retrieved with API function ``itr_core_get()``.
+
+**Interrrupt handlers**
+
+Interrupt handler functions are functions registered by drivers that
+core shall call when the related interrupt occurs. Structure
+``struct itr_handler`` references a handler. It contains the handler function
+entry point, the interrupt number, the interrupt controller device and a
+few more parameters.
+
+An interrupt handler function return value is of type ``enum itr_return``.
+It shall return ``ITRR_HANDLED`` when the interrupt is served and
+``ITRR_NONE`` when the interrupt cannot be served.
+
+The interrupt handler runs in an interrupt context rather than a thread
+context. When this occurs, all other interrupts are masked, necessitating fast
+execution of the interrupt handler to avoid delaying or missing out on other
+interrupts. If there are long lasting operations to do on that interrupt
+occurrence, the interrupt handler should request execution of the OP-TEE
+bottom half thread, see :ref:`_notifications`.
+
+Refer to API function ``interrupt_add_handler()`` and friends for registering
+a handler function to a given interrupt.
+
+**Interrrupt consumer driver**
+
+A typical implementation of a driver consuming an interrupt includes
+retrieving of the interrupt resource (interrupt controller and interrupt
+number in that controller), configuring the interrupt, registering a handler
+for the interrupt and enabling/disabling the interrupt.
+
+For example, the dummy driver below prints a debug trace when the related
+interrupt occurs:
+
+.. code-block:: c
+
+    static struct itr_handler *foo_int1_handler;
+
+    static struct foo_int1_data = {
+            /* field with some interrupt handler private data */
+    };
+
+    static enum itr_return foo_it_handler_fn(struct itr_handler *h)
+    {
+            foo_acknowledge_interrupt(h->it);.
+            DMSG("Interrupt FOO%u served", h->it);
+
+            return ITRR_HANDLED;
+    }
+
+    static TEE_Result foo_initialization(void)
+    {
+            TEE_Result res = TEE_ERROR_GENERIC;
+
+            res = interrupt_alloc_add_handler(itr_core_get(),
+                                              GIC_INT_FOO,
+                                              foo_it_handler_fn,
+                                              ITRF_TRIGGER_LEVEL,
+                                              &foo_int1_data,
+                                              &foo_int1_handler);
+            if (res)
+                    return res;
+
+            interrupt_enable(itr_chip, it_num);
+
+            return TEE_SUCCESS;
+    }
+
+    static void foo_release(void)
+    {
+            if (foo_int1_handler) {
+                    interrupt_disable(foo_int1_handler->chip,
+                                      foo_int1_handler->it);
+
+                    interrupt_remove_free_handler(&foo_int1_handler);
+            }
+    }
+
+**Using device tree**
+
+Device drivers can rely on Device Tree to get references to the
+interrupt they consume. Refer to the Device Tree documentation
+for how to properly define interrupt controller chip devices and reference
+interrupts in consumer device nodes.
+
+The example in the previous section implementing an interrupt consumer driver
+could be implemented as below, when the platform uses Device Tree means
+to define some platform resources.
+
+.. code-block:: c
+
+    static TEE_Result foo_probe(const void *fdt, int node, const void *compat)
+    {
+            TEE_Result res = TEE_ERROR_GENERIC;
+            struct itr_chip *itr_chip = NULL;
+            size_t it_num = 0;
+
+            res = dt_get_interrupt(fdt, node, &itr_chip, &it_num);
+            if (res)
+                    return res;
+
+            res = interrupt_alloc_add_handler(&itr_chip, &itr_num,
+                                              foo_it_handler_fn,
+                                              ITRF_TRIGGER_LEVEL,
+                                              &foo_int1_data,
+                                              &foo_int1_handler);
+            if (res)
+                    return res;
+
+            interrupt_enable(itr_chip, it_num);
+
+            return TEE_SUCCESS;
+    }
+
 ----
 
 .. _notifications:
