@@ -23,10 +23,14 @@ Supported boards
 +---------------------+                    |            |                               |
 | `STM32MP157F-DK2`_  |                    |            |                               |
 +---------------------+--------------------+------------+-------------------------------+
-| `STM32MP157C-EV1`_  | STMicroelectronics | SDCard     | `Wiki STM32MP157x-EV1`_       |
+| `STM32MP157C-EV1`_  | STMicroelectronics | SDCard (1) | `Wiki STM32MP157x-EV1`_       |
 +---------------------+                    |            |                               |
 | `STM32MP157F-EV1`_  |                    |            |                               |
 +---------------------+--------------------+------------+-------------------------------+
+
+(1): STM32MP157x-EV1 boards also integrate an eMMC device, a NOR flash and a
+Nand flash the system can boot on. OP-TEE distribution however only supports
+booting from the SDcard slot.
 
 Build instructions
 ******************
