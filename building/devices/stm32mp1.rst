@@ -15,17 +15,23 @@ Supported boards
 +=====================+====================+============+===============================+
 | `STM32MP135F-DK`_   | STMicroelectronics | SDcard     | `Wiki STM32MP135x-DK`_        |
 +---------------------+--------------------+------------+-------------------------------+
-| `STM32MP157A-DK1`_  | STMicroelectronics | SDcard     | `Wiki STM32MP157X-DKX`_       |
+| `STM32MP157A-DK1`_  | STMicroelectronics | SDcard     | `Wiki STM32MP157x-DKx`_       |
++---------------------+                    |            |                               |
+| `STM32MP157D-DK1`_  |                    |            |                               |
 +---------------------+--------------------+------------+-------------------------------+
-| `STM32MP157C-DK2`_  | STMicroelectronics | SDcard     | `Wiki STM32MP157X-DKX`_       |
+| `STM32MP157C-DK2`_  | STMicroelectronics | SDcard     | `Wiki STM32MP157x-DKx`_       |
++---------------------+                    |            |                               |
+| `STM32MP157F-DK2`_  |                    |            |                               |
 +---------------------+--------------------+------------+-------------------------------+
-| `STM32MP157C-EV1`_  | STMicroelectronics | SDCard     | `Wiki STM32MP157C-EV1`_       |
+| `STM32MP157C-EV1`_  | STMicroelectronics | SDCard     | `Wiki STM32MP157x-EV1`_       |
++---------------------+                    |            |                               |
+| `STM32MP157F-EV1`_  |                    |            |                               |
 +---------------------+--------------------+------------+-------------------------------+
 
 Build instructions
 ******************
 
-Follow the instructions at ":ref:`get_and_build_the_solution`".
+Follow the instructions at "get_and_build_the_solution".
 
 Configuration switch ``PLATFORM`` can be used to specify the target device
 as listed in table below:
@@ -35,11 +41,14 @@ as listed in table below:
 +========================+======================================+
 | `STM32MP135F-DK`_      | ``PLATFORM=stm32mp1-135F_DK``        |
 +------------------------+--------------------------------------+
-| STM32MP157A-DK1        | ``PLATFORM=stm32mp1-157A_DK1``       |
+| `STM32MP157A-DK1`      | ``PLATFORM=stm32mp1-157A_DK1``       |
+| `STM32MP157D-DK1`      |                                      |
 +------------------------+--------------------------------------+
-| STM32MP157C-DK2        | ``PLATFORM=stm32mp1-157C_DK2``       |
+| `STM32MP157C-DK2`      | ``PLATFORM=stm32mp1-157C_DK2``       |
+| `STM32MP157F-DK2`      |
 +------------------------+--------------------------------------+
-| STM32MP157C-EV1        | ``PLATFORM=stm32mp1-157C_EV1``       |
+| `STM32MP157C-EV1`      | ``PLATFORM=stm32mp1-157C_EV1``       |
+| `STM32MP157F-EV1`      |                                      |
 +------------------------+--------------------------------------+
 
 When the build completes, generated image file sdcard.img can be found
@@ -64,8 +73,11 @@ storage device effective size.
 
 .. _STM32MP135F-DK: https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html
 .. _STM32MP157A-DK1: https://www.st.com/en/evaluation-tools/stm32mp157a-dk1.html
+.. _STM32MP157D-DK1: https://www.st.com/en/evaluation-tools/stm32mp157d-dk1.html
 .. _STM32MP157C-DK2: https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
+.. _STM32MP157F-DK2: https://www.st.com/en/evaluation-tools/stm32mp157f-dk2.html
 .. _STM32MP157C-EV1: https://www.st.com/en/evaluation-tools/stm32mp157c-ev1.html
+.. _STM32MP157F-EV1: https://www.st.com/en/evaluation-tools/stm32mp157f-ev1.html
 .. _Wiki STM32MP135x-DK: https://wiki.st.com/stm32mpu/wiki/STM32MP135x-DK_-_hardware_description
-.. _Wiki STM32MP157X-DKX: https://wiki.st.com/stm32mpu/wiki/STM32MP157X-DKX_-_hardware_description
-.. _Wiki STM32MP157C-EV1: https://wiki.st.com/stm32mpu/wiki/STM32MP157C-EV1_-_hardware_description
+.. _Wiki STM32MP157x-DKx: https://wiki.st.com/stm32mpu/wiki/STM32MP157x-DKx_-_hardware_description
+.. _Wiki STM32MP157x-EV1: https://wiki.st.com/stm32mpu/wiki/STM32MP157x-EV1_-_hardware_description
