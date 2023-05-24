@@ -13,6 +13,7 @@ Device specific information
     hikey620
     hikey960
     juno
+    nuvoton
     qemu
     rockpi4
     rpi3
