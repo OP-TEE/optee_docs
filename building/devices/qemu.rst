@@ -19,12 +19,12 @@ for Armv7-A is like the one below:
 
 .. code-block:: bash
 
+  $ mkdir optee
+  $ cd optee
   $ repo init -u https://github.com/OP-TEE/manifest.git
   $ repo sync
   $ cd build
   $ make toolchains
-  # Note that if you wish to debug optee-os or a TA, you should disable ASLR
-  # with flag "CFG_CORE_ASLR=n"
   $ make run
 
 .. hint::
@@ -251,12 +251,12 @@ for Armv8-A is like the one below:
 
 .. code-block:: bash
 
+  $ mkdir optee
+  $ cd optee
   $ repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml
   $ repo sync
   $ cd build
   $ make toolchains
-  # Note that if you wish to debug optee-os or a TA, you should disable ASLR
-  # with flag "CFG_CORE_ASLR=n"
   $ make run
 
 All other things (networking, GDB etc) in the v7 section above is also
