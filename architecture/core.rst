@@ -412,7 +412,7 @@ GIC instance for the Arm architecture.
 **Interrupt management API functions**
 
 Interrupt management resources are declared in header file
-kernel/interrupt.h_. Main API function are:
+kernel/interrupt.h_. Main API functions are:
 
     - ``interrupt_enable()`` and ``interrupt_disable()`` to respectively
       enable and disable an interrupt.
@@ -425,7 +425,7 @@ kernel/interrupt.h_. Main API function are:
 
     - ``interrupt_add_handler()`` and ``interrupt_remove_handler()`` to
       respectively register and unregister an interrupt handler function
-      for a given interrupt.
+      for a given interrupt, see below.
 
 When the configuration switch ``CFG_DT`` is enabled, OP-TEE core provides a
 way to describe the platform's interrupt topology using Device Tree.
@@ -438,29 +438,39 @@ The Main API functions are:
       controller related to a given node in the Device Tree. This function
       requires, among its arguments, a callback function that is called when
       an interrupt consumer requires a reference to a specific interrupt
-      exposed by the controller.
+      exposed by the controller. The callback function shall be of type
+      ``dt_get_itr_func`` shall allocate a temporary instance of
+      ``struct irq_desc`` to describe the interrupt. This allocation shall
+      to done using ``malloc()`` or like (``calloc()``, ``memalign()``
+      etc...) as it is automatically freed with ``free()``.
 
     - ``dt_get_interrupt()``, ``dt_get_interrupt_by_index()`` and
-      ``dt_get_interrupt_by_name()`` for an interrupt consumer to get the
-      reference to the interrupt controller and number it consumes, based
-      on the properties found in the consumer Device Tree node.
+      ``dt_get_interrupt_by_name()`` to be used by interrupt consumer driver
+      to get the reference to the interrupt controller and number it consumes,
+      based on the properties found in the consumer Device Tree node.
 
 **Interrupt controller drivers**
 
 An interrupt controller instance (``struct itr_chip``) registers operation
 function handlers for management of the interrupt it controls. An interrupt
-controller must provide operation handler functions ``.add``, ``.enable``
-and ``.disable``. There are other operation handler functions but these are
-not mandatory, as ``.mask``, ``.unmask``, ``.rasie_pi``, ``.raise_sgi`` and
+controller must provide operation handler functions ``.add``, ``.mask``
+and ``.unmask``. There are other operation handler functions but these are
+not mandatory, as ``.enable``, ``.disable``, ``.rasie_pi``, ``.raise_sgi`` and
 ``.set_priority``.
 
-A reference to CPU root interrupt controller, e.g. a GIC instance on Arm
-architecture CPUs, can be retrieved with API function ``itr_core_get()``.
+An interrupt controller driver initializes its ``struct itr_chip`` instance
+by calling API function ``itr_chip_init()``.
+
+A reference to CPU main interrupt controller, e.g. a GIC instance on Arm
+architecture CPUs, can be retrieved with API function
+``interrupt_get_main_chip()``. Main interrupt controller driver must
+register as main controller using API function ``interrupt_main_init()``
+which is in charge of calling ``itr_chip_init()``.
 
 **Interrrupt handlers**
 
-Interrupt handler functions are functions registered by drivers that
-core shall call when the related interrupt occurs. Structure
+Interrupt handler functions are functions registered by interrupt consumer
+drivers that core shall call when the related interrupt occurs. Structure
 ``struct itr_handler`` references a handler. It contains the handler function
 entry point, the interrupt number, the interrupt controller device and a
 few more parameters.
@@ -476,8 +486,12 @@ interrupts. If there are long lasting operations to do on that interrupt
 occurrence, the interrupt handler should request execution of the OP-TEE
 bottom half thread, see :ref:`_notifications`.
 
-Refer to API function ``interrupt_add_handler()`` and friends for registering
-a handler function to a given interrupt.
+API function ``interrupt_add_handler()``,
+``interrupt_add_handler_with_chip()`` and ``interrupt_alloc_add_handler()``
+register a handler function to a given interrupt.
+
+API function ``interrupt_remove_handler()`` and
+``interrupt_remove_free_handler()`` unregister a registered handler.
 
 **Interrrupt consumer driver**
 
