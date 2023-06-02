@@ -422,6 +422,11 @@ driver. The top half is done in the secure interrupt handler which then
 triggers normal world to make a yielding call into secure world to do the
 bottom half processing.
 
+Asynchronous notifications can also be used by secure world to notify
+non-secure of interrupt events when these events are multiplexed on
+a secure interrupt. These feature in described in section
+ `_ns_interrupt_notifications`_.
+
 .. uml::
     :align: center
     :caption: Top half, bottom half example
@@ -504,6 +509,88 @@ signalling the a driver need a bottom half call, that is the yielding call
 
 The rest of the asynchronous notification values are managed with two
 functions ``notif_alloc_async_value()`` and ``notif_free_async_value()``.
+
+.. _ns_interrupt_notifications:
+
+Interrupt Notifications
+***********************
+
+The asynchronous notification method presented in `notifications`_ can also
+be used by secure world to notify interrupt events to non-secure world when
+such interrupt events are multiplexed on a secure interrupt. In such case
+secure world acts as a interrupt controller virtual chip from non-secure
+world view.
+
+Interrupt event notified are identified by a number which is platform specific
+and shall be known from non-secure world. As non-secure world OP-TEE driver
+acts as an interrupt chip, the interrupt consumer uses that interrupt
+notification number to define which of the OP-TEE interrupt notifiers that
+consume.
+
+Such a non-secure interrupt event is detected by a secure interrupt controller
+and relayed to non-secure world using the same non-secure interrupt presented
+in `notifications`_. This scheme allows to multiplex these interrupt
+notifications on a single non-secure physical interrupt.
+
+When secure wolrd notifies such a multiplexed interrupt event to non-secure
+world, it calls function ``notif_itr_raise_event()`` which records the
+notified interrupt occurrence in secure memory and raises the non-secure
+physical interrupt with ``itr_raise_pi()``. Upon that physical interrupt
+occurrence, non-secure world can call atomic secure world service to
+retrieve pending interrupt notification events.
+
+.. uml::
+    :align: center
+    :caption: Example of a non-secure interrupt notification
+
+    participant "OP-TEE OS\ninterrupt handler" as sec_itr
+    participant "OP-TEE OS\nfastcall handler" as fastcall
+    participant "OP-TEE OS\nInterrupt controller" as sec_itc
+    participant "Normal World\ninterrupt handler" as ns_itr
+    participant "Normal World\nInterrupt consumer\ntop half" as ns_cons_top
+    participant "Normal World\nInterrupt consumer\nbottom half" as ns_cons_bottom
+
+    sec_itc --> sec_itr : Secure interrupt
+    activate sec_itr
+    sec_itr -> sec_itr : Top half processing
+    sec_itr --> sec_itc : Trigger NS interrupt
+    sec_itc --> ns_itr : Non-secure interrupt
+    activate ns_itr
+    sec_itr --> sec_itc: End of interrupt
+    deactivate sec_itr
+    ns_itr -> fastcall ++: Get notification
+    fastcall -> ns_itr --: Return notification
+    alt Notify interrupt consumer top half
+        ns_itr --> ns_cons_top : Call consumer handler
+        activate ns_cons_top
+        ns_cons_top --> ns_cons_top : Process top half
+        ns_cons_top --> ns_itr : Done
+        deactivate ns_cons_top
+
+        alt Notify interrupt consumer bottom half
+            ns_itr --> ns_cons_bottom : Laucn consumer bottom half
+            activate ns_cons_bottom
+            ns_itr --> sec_itc: End of interrupt
+            deactivate ns_itr
+            ns_cons_bottom --> : Process bottom half
+            deactivate ns_cons_bottom
+        end
+
+    else Some other notification
+    end
+
+An OP-TEE driver willing to notify an interrupt event to non-secure world
+shall register using API function ``notif_itr_register()`` that describes
+the virtual interrupt number notified to non-secure world and the operation
+handlers related to that interrupt event for when non-secure world calls
+interrupt notifier service to enable/disable/mask/unmask for interrupt
+event or set the interrupt event low power state wakeup capability.
+Core implements services for non-secure world to call these operation
+handlers.
+
+API function ``notif_itr_unregister()`` unregisters an interrupt notification
+and releases its related allocated resources.
+
 
 ----
 
