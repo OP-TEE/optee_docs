@@ -564,9 +564,9 @@ to define some platform resources.
     {
             TEE_Result res = TEE_ERROR_GENERIC;
             struct itr_chip *itr_chip = NULL;
-            size_t it_num = 0;
+            size_t itr_num = 0;
 
-            res = dt_get_interrupt(fdt, node, &itr_chip, &it_num);
+            res = dt_get_interrupt(fdt, node, &itr_chip, &itr_num);
             if (res)
                     return res;
 
