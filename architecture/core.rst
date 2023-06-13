@@ -583,6 +583,96 @@ to define some platform resources.
             return TEE_SUCCESS;
     }
 
+
+** Relaxing CPU in a thread context using an interrupt **
+
+There are driver functions that can need wait some external hardware
+syncrhonizes before going further. When executing in a thread context
+drivers can relax CPU work load by using an interrupt to notify
+a step in a on going sequence/
+
+For that purpose, a driver can use a notifier together with an
+interrupt handler. Before yielded work start, caller gets an
+async value with ``notif_alloc_async_value()``. When yielded sequence
+needs to wait for the interrupt, it calls ``notif_wait()``. When the
+interrupt is trapped, the top half processing handler calls
+``notif_send_async()`` to get the waiting thread woken up. Upon
+yielded work completion, driver can release its async notif value
+with ``notif_free_async_value()``.
+
+For example:
+
+.. code-block:: c
+
+    static uint32_t mydev_itr_async_notif;
+
+    /* Value 0 cannot be obtained from notif_alloc_async_value() */
+    static_assert(NOTIF_VALUE_DO_BOTTOM_HALF == 0);
+
+    static enum itr_return mydev_itr_handler(struct itr_handler *h)
+    {
+            my_acknowledge_interrupt(h->it);.
+            if (mtdev_async_value)
+                    notif_send_async(mtdev_async_value);
+
+            return ITRR_HANDLED;
+    }
+
+    /* Chip and interrupt number are set during initilization */
+    static struct itr_handler mydev_itr;
+
+    static TEE_Result mydev_probe(const void *fdt, int node, const void *compat)
+    {
+            (...)
+
+            res = dt_get_interrupt(fdt, node, &itr_chip, &itr_num);
+            if (res)
+                    return res;
+
+            mydev_itr.chip = itr_chip;
+            mydev_itr.it = itr_num;
+
+            res = interrupt_add_handler(&mydev_itr);
+
+            (...)
+    }
+
+    static TEE_Result mydev_do_some_work(void)
+    {
+            uint32_t itr_notif = 0;
+
+            (...)
+
+            res = notif_alloc_async_value(&mydev_itr_async_notif);
+            if (res)
+                    return res;
+
+            interrupt_enable(itr_chip, it_num);
+
+            {
+                    /* Prepare some work */
+            }
+
+            while (!my_work_is_done()) {
+                    /* Wait next interrupt wakes us */
+                    notif_wait(itr_notif);
+
+                    res = do_some_work();
+                    if (res)
+                            break;
+            }
+
+            interrupt_disable(mydev_itr.chip, mydev_itr.it);
+            notif_free_async_value(mydev_itr_async_notif);
+            mtdev_async_value = 0;
+
+            if (res) {
+                    /* Some error management */
+            }
+
+            return res;
+    }
+
 ----
 
 .. _notifications:
