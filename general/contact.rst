@@ -45,10 +45,17 @@ limited, so it is probably **not** the best place to discuss OP-TEE.
 
 Vulnerability reporting
 ***********************
-The OP-TEE project as part of the TrustedFirmware.org organization is using the
-security incident process as described at the `TrustedFirmware.org security incident`_
-page. To report an issue, please follow the process as specified here. The email
-address to use can be found at the `Mailing Aliases`_ page.
+As part of the TrustedFirmware.org organization, the OP-TEE project uses the
+security incident procedure outlined on the `TrustedFirmware.org security
+incident`_ page. We offer two methods for reporting security issues. The first
+is the traditional method of sending email to the addresses listed on the
+`Mailing Aliases`_ page. The alternative method is through GitHub's `GitHub
+Security Advisories`_ page for OP-TEE.
+
+We prefer the `GitHub Security Advisories`_ page because they simplify the
+sharing and communication of reports. However, this also requires a GitHub
+account and we recognize that not everyone can or has the ability to report
+security issues via GitHub; therefore, we also accept reports via email.
 
 Note that OP-TEE is a reference implementation for developers and device
 manufacturers and by being a reference implementation it is not always running a
@@ -60,21 +67,24 @@ incident report should go to:
  b) The chipmaker? Does it only affect a certain platform? Is it a configuration described only under NDA?
  c) The ones making the end product? Is the issue only present on a certain device?
 
-The OP-TEE team are in some cases are working directly with chipmakers. But it's
-not uncommon that products are made using OP-TEE that the OP-TEE project is
-unaware of. In those cases we would recommend sending the security issue report
-to the company making the end product and that they in turn and if needed reach
-out to the OP-TEE project and/or the chipmaker.
+In some cases, the OP-TEE team works directly with chipmakers. However, it is
+not uncommon for products to be manufactured using OP-TEE without the OP-TEE
+project's knowledge. In such instances, we recommend sending the security issue
+report to the manufacturer of the final product, who should then, if necessary,
+contact the OP-TEE project and/or the chipmaker.
 
 .. _core_team:
 
 Core Team
 *********
-The core team consists of engineers from TrustedFirmware.org. Related, see the
-`core team`_ at GitHub.
+The core team consists of TrustedFirmware.org engineers. See also "THE REST" in
+the `OP-TEE MAINTAINERS`_ file, which oversees the essential activities, such as
+performing releases, merging patches, and being the first to respond to security
+incidents.
 
-.. _core team: https://github.com/orgs/OP-TEE/teams/linaro/members
+.. _GitHub Security Advisories: https://github.com/OP-TEE/optee_os/security/advisories
 .. _issues: https://help.github.com/articles/about-issues/
 .. _issues at optee_os: https://github.com/OP-TEE/optee_os/issues
 .. _Mailing Aliases: https://developer.trustedfirmware.org/w/collaboration/security_center/mailing_aliases
+.. _OP-TEE MAINTAINERS: https://github.com/OP-TEE/optee_os/blob/master/MAINTAINERS
 .. _TrustedFirmware.org security incident: https://developer.trustedfirmware.org/w/collaboration/security_center
