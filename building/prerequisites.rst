@@ -103,7 +103,6 @@ available.
               netcat \
               ninja-build \
               python3-crypto \
-              python3-cryptography \
               python3-pip \
               python3-pyelftools \
               python3-serial \
@@ -114,6 +113,8 @@ available.
               xterm \
               xz-utils \
               zlib1g-dev
+
+            $ pip3 install cryptography
 
 
     .. tab:: Older
