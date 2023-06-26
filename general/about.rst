@@ -3,7 +3,7 @@ About OP-TEE
 ############
 OP-TEE is a Trusted Execution Environment (TEE) designed as companion to a
 non-secure Linux kernel running on Arm; Cortex-A cores using the TrustZone
-technology. OP-TEE implements :ref:`tee_internal_core_api` v1.1.x which is the
+technology. OP-TEE implements :ref:`tee_internal_core_api` v1.3.1 which is the
 API exposed to Trusted Applications and the :ref:`tee_client_api` v1.0, which is
 the API describing how to communicate with a TEE. Those APIs are defined in the
 :ref:`globalplatform_api` specifications.

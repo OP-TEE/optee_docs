@@ -9,7 +9,7 @@ GlobalPlatform_ works across industries to identify, develop and publish
 specifications which facilitate the secure and interoperable deployment and
 management of multiple embedded applications on secure chip technology. OP-TEE
 has support for GlobalPlatform TEE Client API Specification_ v1.0 (GPD_SPE_007)
-and TEE Internal Core API Specification v1.1.2 (GPD_SPE_010).
+and TEE Internal Core API Specification v1.3.1 (GPD_SPE_010).
 
 
 .. _tee_client_api:
@@ -103,7 +103,7 @@ Examples / usage
 ================
 Calling the Internal Core API is done in the same way as described above using
 Client API. The best place to find information how this should be done is in the
-TEE Internal Core API Specification_ v1.1.2 which contains many examples of how
+TEE Internal Core API Specification_ which contains many examples of how
 to call the various APIs. One can also have a look at the examples in the
 optee_examples_ git.
 
@@ -238,7 +238,7 @@ constructed as specified by the NIST specification if compliance is desired.
 
 **API extension**
 
-To support Concat KDF, the :ref:`tee_internal_core_api` v1.1 was extended with
+To support Concat KDF, the :ref:`tee_internal_core_api` v1.3.1 was extended with
 new algorithm descriptors, new object types, and new object attributes as
 described below.
 
@@ -419,10 +419,10 @@ HKDF
 ====
 OP-TEE implements the *HMAC-based Extract-and-Expand Key Derivation Function
 (HKDF)* as specified in `RFC 5869`_. This file documents the extensions to the
-:ref:`tee_internal_core_api` v1.1 that were implemented to support this
+:ref:`tee_internal_core_api` v1.3.1 that were implemented to support this
 algorithm.
 
-Note that the implementation follows the recommendations of version 1.1 of the
+Note that the implementation follows the recommendations of version 1.3.1 of the
 specification for adding new algorithms. It should make it compatible with
 future changes to the official specification. You can disable this extension by
 setting the following in ``conf.mk``:
@@ -627,7 +627,7 @@ configuration variable in ``conf.mk``:
 
 **API extension**
 
-To support PBKDF2, the :ref:`tee_internal_core_api` v1.1 was extended with a new
+To support PBKDF2, the :ref:`tee_internal_core_api` v1.3.1 was extended with a new
 algorithm descriptor, new object types, and new object attributes as described
 below.
 
