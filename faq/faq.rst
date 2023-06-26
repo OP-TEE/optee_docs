@@ -382,7 +382,8 @@ Interfaces
 Q: Which API’s have been implemented in OP-TEE?
 ===============================================
     - GlobalPlatform (see :ref:`globalplatform_api` for more details).
-        - GlobalPlatform's TEE Client API v1.1 specification
+        - GlobalPlatform's TEE Client API v1.0 (Errata and Precisions 2.0)
+          specification
         - GlobalPlatform's TEE Internal Core API v1.3.1 specification.
         - GlobalPlatform's Secure Elements v1.0 (**now deprecated**, see ``git
           log``).

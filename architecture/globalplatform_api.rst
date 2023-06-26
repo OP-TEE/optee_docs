@@ -9,7 +9,8 @@ GlobalPlatform_ works across industries to identify, develop and publish
 specifications which facilitate the secure and interoperable deployment and
 management of multiple embedded applications on secure chip technology. OP-TEE
 has support for GlobalPlatform TEE Client API Specification_ v1.0 (GPD_SPE_007)
-and TEE Internal Core API Specification v1.3.1 (GPD_SPE_010).
+plus Errata and Precisions 2.0 (GPD_EPR_028) and TEE Internal Core API
+Specification v1.3.1 (GPD_SPE_010).
 
 
 .. _tee_client_api:
