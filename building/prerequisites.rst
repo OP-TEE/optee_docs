@@ -22,6 +22,7 @@ available.
               bc \
               bison \
               build-essential \
+              cpio \
               ccache \
               cscope \
               curl \
@@ -32,6 +33,7 @@ available.
               flex \
               ftp-upload \
               gdisk \
+              git \
               libattr1-dev \
               libcap-dev \
               libfdt-dev \
@@ -59,6 +61,7 @@ available.
               swig \
               unzip \
               uuid-dev \
+              wget \
               xdg-utils \
               xterm \
               xz-utils \
