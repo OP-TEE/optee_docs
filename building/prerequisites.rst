@@ -78,6 +78,7 @@ available.
               bison \
               build-essential \
               ccache \
+              cpio \
               cscope \
               curl \
               device-tree-compiler \
@@ -85,6 +86,7 @@ available.
               flex \
               ftp-upload \
               gdisk \
+              git \
               iasl \
               libattr1-dev \
               libcap-dev \
@@ -96,12 +98,14 @@ available.
               libmpc-dev \
               libncurses5-dev \
               libpixman-1-dev \
+              libslirp-dev \
               libssl-dev \
               libtool \
               make \
               mtools \
               netcat \
               ninja-build \
+              python-is-python3 \
               python3-crypto \
               python3-cryptography \
               python3-pip \
@@ -110,6 +114,7 @@ available.
               rsync \
               unzip \
               uuid-dev \
+              wget \
               xdg-utils \
               xterm \
               xz-utils \
