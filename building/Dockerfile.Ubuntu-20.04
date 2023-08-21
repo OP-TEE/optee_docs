@@ -1,0 +1,60 @@
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt upgrade -y
+RUN apt install -y \
+    android-tools-adb \
+    android-tools-fastboot \
+    autoconf \
+    automake \
+    bc \
+    bison \
+    build-essential \
+    ccache \
+    cpio \
+    cscope \
+    curl \
+    device-tree-compiler \
+    expect \
+    flex \
+    ftp-upload \
+    gdisk \
+    git \
+    iasl \
+    libattr1-dev \
+    libcap-dev \
+    libfdt-dev \
+    libftdi-dev \
+    libglib2.0-dev \
+    libgmp3-dev \
+    libhidapi-dev \
+    libmpc-dev \
+    libncurses5-dev \
+    libpixman-1-dev \
+    libslirp-dev \
+    libssl-dev \
+    libtool \
+    make \
+    mtools \
+    netcat \
+    ninja-build \
+    python-is-python3 \
+    python3-crypto \
+    python3-cryptography \
+    python3-pip \
+    python3-pyelftools \
+    python3-serial \
+    rsync \
+    unzip \
+    uuid-dev \
+    wget \
+    xdg-utils \
+    xterm \
+    xz-utils \
+    zlib1g-dev
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo && chmod a+x /bin/repo
+RUN mkdir /optee
+WORKDIR /optee
+RUN repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml && repo sync -j10
+WORKDIR /optee/build
+RUN make -j2 toolchains
+RUN make -j$(nproc) check
