@@ -38,6 +38,36 @@ up the communication channel towards the specified Trusted Application
 identified by the ``UUID``. At this stage the client and the Trusted Application
 can start to exchange data.
 
+TEE Shared memory
+=================
+The TEE Client API describes many ways of sharing memory between the client
+and the TEE. Some ways are more efficient than others due to how they are
+implemented, but they have all their advantages too. For example, using a
+temporary memory reference (``TEEC_TempMemoryReference``) is often
+convenient, but depending on the situation often not the most efficient. A
+temporary memory reference is established internally in the TEE Client
+library before it is used, and when the call to secure world has returned
+it is torn down again. That results in a few extra re-entries into the TEE.
+
+For more efficient communication a shared memory block
+(``TEEC_SharedMemory``) should be used since it can be reused between calls
+and also tuned in more ways. A shared memory block can be initialized
+either with ``TEEC_RegisterSharedMemory()`` or
+``TEEC_AllocateSharedMemory()``.
+
+``TEEC_RegisterSharedMemory()`` sometimes fails to establish zero-copy
+shared memory and must in those cases fall back to a temporary "shadow
+buffer". The TEE framework will for instance refuse to register a memory
+block that is mapped read-only in the client. Another reason can be if FF-A
+is used and a part of the memory range has been registered previously.
+
+``TEEC_AllocateSharedMemory()`` is the best choice to establish zero-copy
+shared memory. If ``TEEC_RegisterSharedMemory()`` must be used instead
+because the buffer is allocated in advance or externally there are still a
+few things that helps avoid a fallback to a "shadow buffer". Make sure that
+the memory range is normal read/write memory and if possible use
+page-aligned memory buffers.
+
 
 TEE Client API example / usage
 ==============================
