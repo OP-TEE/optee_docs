@@ -290,7 +290,7 @@ Example of a property header file
            print('\n' + '#define TA_UUID\n\t{ ' + \
                  '0x{:08x}'.format(u.time_low) + ', ' + \
                  '0x{:04x}'.format(u.time_mid) + ', ' + \
-                 '0x{:04x}'.format(u.time_hi_version) + ', \\ \n\n\t\t{ ' + \
+                 '0x{:04x}'.format(u.time_hi_version) + ', \x5c\n\t\t{ ' + \
                  '0x{:02x}'.format(u.clock_seq_hi_variant) + ', ' + \
                  '0x{:02x}'.format(u.clock_seq_low) + ', ' + \
                  '0x' + ''.join(n) + '} }')"
