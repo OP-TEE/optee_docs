@@ -55,6 +55,18 @@ Having done that, now is the time to unpack the BSP:
 	$ ls
 	   xilinx-vck190-2022.1
 
+In order for the Versal OP-TEE port to work correctly, the PLM needs to be
+updated to add the XilNvm and XilPuf libraries. This can be accomplished by the
+following steps within the PetaLinux workspace created above:
+
+.. code-block:: bash
+
+   $ mkdir project-spec/meta-user/recipes-bsp/embeddedsw
+   $ cp ~/optee-project/build/versal/plm-firmware_%.bbappend project-spec/meta-user/recipes-bsp/embeddedsw
+   $ petalinux-build -c plm
+
+The newly created PLM will be located in the folder ``images/linux/plm.elf``.
+
 .. note::
    Replace the VCK190 BSP with the VMK180 BSP if you want to build this project
    for the VMK180 development board.
@@ -72,7 +84,7 @@ proceeding:
    The default PLM **only** contains the xilsecure library. If you would like to
    take advantage of all of hardware cryptographic features implemented for
    Versal, you **must** enable the xilpuf and xilnvm libraries by following the
-   steps for customizing the PLM found here (`PLM_Customization`_).
+   steps above for customizing the PLM (`PLM_Customization`_).
 
 The xilpuf library enables support of the physically unclonable function (PUF)
 and the xilnvm library enables support of reading and writing to eFUSEs. Once
