@@ -35,7 +35,7 @@ booting from the SDcard slot.
 Build instructions
 ******************
 
-Follow the instructions at "get_and_build_the_solution".
+Follow the instructions at ":ref:`get_and_build_the_solution`".
 
 Configuration switch ``PLATFORM`` can be used to specify the target device
 as listed in table below:
