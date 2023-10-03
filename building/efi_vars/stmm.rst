@@ -4,9 +4,9 @@
 StandAloneMM
 ############
 
-StandAlomeMM is a PE/COFF binary produced by EDK2. For Arm platforms we 
+StandAloneMM is a PE/COFF binary produced by EDK2. For Arm platforms we 
 can compile and use it, in combination with OP-TEE to store EFI variables
-in and RPMB partition of our eMMC.
+in an RPMB partition of our eMMC.
 
 EDK2 Build instructions
 ***********************
