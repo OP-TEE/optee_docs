@@ -21,7 +21,7 @@ RUN apt install -y \
     git \
     iasl \
     libattr1-dev \
-    libcap-dev \
+    libcap-ng-dev \
     libfdt-dev \
     libftdi-dev \
     libglib2.0-dev \
