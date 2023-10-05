@@ -22,7 +22,7 @@ RUN apt install -y \
     gdisk \
     git \
     libattr1-dev \
-    libcap-dev \
+    libcap-ng-dev \
     libfdt-dev \
     libftdi-dev \
     libglib2.0-dev \
