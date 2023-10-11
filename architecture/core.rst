@@ -430,6 +430,26 @@ Interrupt consumers main API functions are:
     - ``interrupt_remove_handler()`` to unregister an interrupt handler
       function from an interrupt.
 
+When the configuration switch ``CFG_DT`` is enabled, OP-TEE core provides a
+way to describe the platform's interrupt topology using Device Tree.
+When used, the platform must provide a secure device tree blob
+(DTB) which platform and device drivers can use to get references to
+interrupt controllers and relative interrupt numbers they consume.
+The Main API functions are:
+
+    - ``interrupt_register_provider()`` to register an interrupt
+      controller related to a given node in the Device Tree. This function
+      requires, among its arguments, a callback function that is called when
+      an interrupt consumer requires a reference to a specific interrupt
+      exposed by the controller. The callback function shall be of type
+      ``itr_dt_get_func`` and, upon success, it shall fill the provided
+      instance of ``struct irq_desc`` to describe the interrupt.
+
+    - ``interrupt_dt_get()``, ``interrupt_dt_get_by_index()`` and
+      ``interrupt_dt_get_by_name()`` to be used by interrupt consumer driver
+      to get the reference to the interrupt controller and number it consumes,
+      based on the properties found in the consumer Device Tree node.
+
 **Interrupt controller drivers**
 
 An interrupt controller instance, named chip (``struct itr_chip``) defines
@@ -475,6 +495,10 @@ bottom half thread (see :ref:`notifications`) to execute those operations.
 API function ``interrupt_add_handler()``,
 ``interrupt_add_handler_with_chip()`` and ``interrupt_alloc_add_handler()``
 configure and register a handler function to a given interrupt.
+
+API function ``interrupt_create_handler()`` only registers a handler
+function for a given interrupt. It is to be used with dt_get_interrupt()
+and friends, where these later are in charge on interrupt configuration.
 
 API function ``interrupt_remove_handler()`` and
 ``interrupt_remove_free_handler()`` unregister a registered handler.
@@ -532,6 +556,62 @@ interrupt occurs:
                     interrupt_remove_free_handler(&foo_int1_handler);
             }
     }
+
+**Using device tree**
+
+Device drivers can rely on Device Tree to get references to the
+interrupt they consume. Refer to the Device Tree documentation
+for how to properly define interrupt controller chip devices and reference
+interrupts in consumer device nodes.
+
+The example in the previous section implementing an interrupt consumer driver
+could be implemented as below, when the platform uses Device Tree means
+to define some platform resources.
+
+.. code-block:: c
+
+    static TEE_Result foo_probe(const void *fdt, int node, const void *compat)
+    {
+            TEE_Result res = TEE_ERROR_GENERIC;
+            struct itr_handler *itr_handler = NULL;
+            struct itr_chip *itr_chip = NULL;
+            size_t itr_num = 0;
+
+            res = dt_get_interrupt(fdt, node, &itr_chip, &itr_num);
+            if (res)
+                    return res;
+
+            res = interrupt_create_handler(&itr_chip, &itr_num,
+                                           foo_it_handler_fn,
+                                           &foo_int1_data,
+                                           &itr_handler);
+            if (res)
+                    return res;
+
+            interrupt_enable(itr_chip, it_num);
+
+            (...)
+
+            return TEE_SUCCESS;
+
+    err_disable_release_irq:
+            interrupt_disable(itr_chip, it_num);
+            interrupt_remove_free_handler(itr_handler);
+
+            return res;
+
+    }
+
+    static const struct dt_device_match foo_match_table[] = {
+            { .compatible = "bar,foo" },
+            { }
+    };
+
+    DEFINE_DT_DRIVER(foo_dt_driver) = {
+            .name = "foo-driver",
+            .match_table = foo_match_table,
+            .probe = foo_probe,
+    };
 
 ----
 
