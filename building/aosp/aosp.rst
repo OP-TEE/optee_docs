@@ -5,14 +5,14 @@ AOSP
 ####
 This page contains information that tells how to get OP-TEE up and running on
 HiKey devices (see :ref:`hikey`, :ref:`hikey960`) together with AOSP. The build
-is based on the latest OP-TEE release and updated every quarter together with
-the regular OP-TEE releases.
+is based on the latest OP-TEE release, but is not maintained any longer
+since the 3.15.0 release.
 
 .. note::
 
-    We **only** use and support this static/stable configuration. If you try
-    using it with the latest available AOSP, there is a risk that both OP-TEE
-    and other parts are not working as expected.
+    This configuration is not supported any longer. If you try using it
+    with the latest available AOSP, there is a risk that both OP-TEE and
+    other parts are not working as expected.
 
 Prerequisites
 *************
