@@ -437,18 +437,16 @@ When used, the platform must provide a secure device tree blob
 interrupt controllers and relative interrupt numbers they consume.
 The Main API functions are:
 
-    - ``dt_register_interrupt_provider()`` to register an interrupt
+    - ``interrupt_register_provider()`` to register an interrupt
       controller related to a given node in the Device Tree. This function
       requires, among its arguments, a callback function that is called when
       an interrupt consumer requires a reference to a specific interrupt
       exposed by the controller. The callback function shall be of type
-      ``dt_get_itr_func`` and it shall allocate a temporary instance of
-      ``struct irq_desc`` to describe the interrupt. This allocation shall
-      to done using ``malloc()`` or like (``calloc()``, ``memalign()``
-      etc...) and is automatically freed with ``free()``.
+      ``itr_dt_get_func`` and, upon succes, it shall fill the provided
+      instance of ``struct irq_desc`` to describe the interrupt.
 
-    - ``dt_get_interrupt()``, ``dt_get_interrupt_by_index()`` and
-      ``dt_get_interrupt_by_name()`` to be used by interrupt consumer driver
+    - ``interrupt_dt_get()``, ``interrupt_dt_get_by_index()`` and
+      ``interrupt_dt_get_by_name()`` to be used by interrupt consumer driver
       to get the reference to the interrupt controller and number it consumes,
       based on the properties found in the consumer Device Tree node.
 
