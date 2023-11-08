@@ -50,7 +50,7 @@ Usage
     - Run helper scripts called ``ftrace_format.py`` to translate the function
       graph binary data into human readable text and ``symbolize.py`` to
       convert function addresses into function names:
-      ``cat ftrace-<ta_uuid>.out | optee_os/scripts/ftrace_format.py |
+      ``optee_os/scripts/ftrace_format.py ftrace-<ta_uuid>.out |
       optee_os/scripts/symbolize.py -d <ta_uuid>.elf -d tee.elf``
 
     - Refer to `commit 5c2c0fb31efb`_ for a full usage example on QEMU.
