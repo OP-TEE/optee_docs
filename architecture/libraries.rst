@@ -4,6 +4,24 @@
 Libraries
 #########
 
+.. _libutils:
+
+libutils
+********
+
+OP-TEE core and OP-TEE development kit for Trusted Application provide a
+standard C library that is named **libutils**. It implements many
+standard functions like ``snprintf()``, ``strncmp()``, ``memcpy()``,
+``malloc()``. ``qsort()``, and many more but not all standard C library
+functions.
+
+Note however that Trusted Applications implemented in C should use GP TEE
+Internal Core API functions rather than their standard C library function
+equivalent (e.g. ``TEE_MemMove()`` instead of ``memcpy()`` and
+``memmove()``, or ``TEE_Malloc()`` instead of ``malloc()`` and friends).
+This makes those TAs implementation more portable to other GP
+TEE compliant environments.
+
 .. _libutee:
 
 libutee
