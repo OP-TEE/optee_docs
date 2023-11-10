@@ -37,9 +37,3 @@ Some services for this API are fully statically implemented inside the libutee
 library while some services for the API are implemented inside the OP-TEE core
 (privileged level) and libutee calls such services through system calls.
 
-.. _libmpa:
-
-libmpa
-******
-Now deprecated, used to provide the BigNum library in OP-TEE.
-
