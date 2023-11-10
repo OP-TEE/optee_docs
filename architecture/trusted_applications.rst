@@ -57,6 +57,8 @@ Trusted Application benefit from the GlobalPlatform :ref:`tee_internal_core_api`
 as specified by the GlobalPlatform TEE specifications. There are several types
 of user mode TAs, which differ by the way they are stored.
 
+.. _ta_locations:
+
 TA locations
 ************
 Plain TAs (user mode) can reside and be loaded from various places. There are
