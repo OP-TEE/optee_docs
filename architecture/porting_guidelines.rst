@@ -317,17 +317,12 @@ Hardware Crypto IP
 By default OP-TEE uses a software crypto library (currently mbed TLS and
 LibTomCrypt) and you have the ability to enable Crypto Extensions that were
 introduced with ARMv8-A (if the device is capable of that). Some of the devices
-we have in our hands do have hardware crypto IP's, but due to NDA's etc it has
-not been possible to enable it. If you have a device capable of doing crypto
-operations on a dedicated crypto block and you prefer to use that in favor for
-the software implementation, then you will need to implement relevant functions
-defined in `core/include/crypto/crypto.h`_, the Crypto API, and write the low
-level driver that communicates with the device. Our
+supported in OP-TEE OS repository have hardware crypto capabilities. A
+framework, named drvcrypt has been designed to integrate them. The
+`drvcrypt_register_*()`` API functions allow drivers to register support for
+given cryptographic operations in OP-TEE core crypto API. Our
 :ref:`cryptographic_implementation` page describes in detail how the Crypto API
-is integrated. Since the communication with crypto blocks tends to be quite
-different depending on what kind of crypto IP you have, we have not written
-how that should be done. It might be that we do that in the future when get hold
-of a device where we can use the crypto block.
+is integrated.
 
 Random Number Generator
 ***********************
