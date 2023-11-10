@@ -1,3 +1,4 @@
+.. sectnum::
 .. _porting_guidelines:
 
 ##################

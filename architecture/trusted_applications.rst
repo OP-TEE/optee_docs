@@ -1,3 +1,4 @@
+.. sectnum::
 .. _trusted_applications:
 
 ####################

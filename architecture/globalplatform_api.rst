@@ -1,3 +1,4 @@
+.. sectnum::
 .. _globalplatform_api:
 
 ##################

@@ -1,3 +1,4 @@
+.. sectnum::
 .. _secure_storage:
 
 ##############

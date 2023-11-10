@@ -1,3 +1,4 @@
+.. sectnum::
 .. _cryptographic_implementation:
 
 ############################
