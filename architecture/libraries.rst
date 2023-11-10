@@ -43,6 +43,44 @@ library while some services for the API are implemented inside the OP-TEE core
 When ``CFG_ULIBS_SHARED`` is enabled, **libutee** is assigned UUID
 **4b3d937e-d57e-418b-8673-1c04f2420226**.
 
+libmbedtls
+**********
+
+OP-TEE OS source tree provides support of the Mbed TLS library, named
+**libmbedtls**.
+
+A specific build sequence can compile an instance of **libmbedtls** and link
+it to OP-TEE core. Another build sequence compiles an instance of
+**libmbedtls** that can be linked with Trusted Applications.
+
+When Mbed TLS is embedded in OP-TEE core, it is used as the default software
+implementation for most cryptography operations. When so, **libtomcrypt** is
+still used as default software implementation for few crypto operations.
+Embedding Mbed TLS in OP-TEE core requires ``CFG_CRYPTOLIB_NAME=mbedtls``
+and ``CFG_CRYPTOLIB_DIR=core/lib/libmbedtls``.
+
+When ``CFG_ULIBS_SHARED`` is enabled, **libmbedtls** userland library is
+assigned UUID **87bb6ae8-4b1d-49fe-9986-2b966132c309**.
+
+libunw
+******
+
+OP-TEE OS source tree implements execution stack back trace debug facilities
+available to both OP-TEE core and Trusted Applications. The feature relies
+on a library named **libunw**.
+
+**libunw**, when linked to a Trusted Application, is always linked as a static
+library.
+
+libdl
+*****
+
+**libdl** library implement API function ``dlopen()``, ``dlsym()`` and
+``dlclose()`` used by Trusted Applications to support dynamic shared libraries.
+
+When ``CFG_ULIBS_SHARED`` is enabled, **libdl** is assigned UUID
+**be807bbd-81e1-4dc4-bd99-3d363f240ece**.
+
 .. _statci_or_shared_lib:
 
 Static vs Shared libraries
