@@ -408,44 +408,64 @@ The build script will do two things:
 pointed to by ``TA_SIGN_KEY``, however they are not to be used due to the incompatibility reasons 
 mentioned in the paragraph above.
 
-There are now two ways to generate the final `.ta` files. Either re-sign the `.ta` files with a 
-customized `sign_encrypt.py` script (left to the user to implement) or stitch the `.stripped.elf` 
-files and their signatures together (explained in steps 3-5). In both cases however, note that the 
-private key used must be the one generated in step 0.
+There are now two ways to generate the final ``.ta`` files. Either re-sign the ``.ta`` files with a 
+customized ``sign_encrypt.py`` script (left to the user to implement) or stitch the ``.stripped.elf``
+files and their signatures together (explained in steps 3-5). 
 
-3. Manually generate a digest of the generated `.stripped.elf` files using
+Export the previously generated custom keypair and the UUID of the TA. In this example the UUID of 
+OP-TEE's pkcs11 in-tree TA is used. 
 
 .. code-block:: sh
 
-    sign_encrypt.py digest --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
+    export TA_SIGN_KEY=rsa2048.pem
+    export TA_PUBLIC_KEY=rsa2048_pub.pem
+    export UUID=fd02c9da-306c-48c7-a49c-bbd827ae86ee
+
+3. Manually generate a digest of the generated ``.stripped.elf`` files using
+
+.. code-block:: sh
+
+    sign_encrypt.py digest --key $TA_PUBLIC_KEY --uuid $UUID \
+        --elf $UUID.stripped.elf --dig $UUID.dig
+
+.. note::
+        It may be necessary to make use of the ``--ta-version`` argument here in some cases, 
+        e.g when building Widevine's oemcrypto. Check the make output of optee-os or the 
+        particular TAs and see if the version differs.
 
 4. Sign this digest offline, for example with OpenSSL
 
 .. code-block:: sh
 
-   base64 --decode digestfile | \
+   base64 --decode $UUID.dig | \
    openssl pkeyutl -sign -inkey $TA_SIGN_KEY \
        -pkeyopt digest:sha256 -pkeyopt rsa_padding_mode:pss \
        -pkeyopt rsa_pss_saltlen:digest -pkeyopt rsa_mgf1_md:sha256 | \
-   base64 > sigfile
+   base64 > $UUID.sig
 
-or with pkcs11-tool using a Nitrokey HSM
+or with ``pkcs11-tool`` using a Nitrokey HSM
 
 .. code-block:: sh
 
-   echo "0000: 3031300D 06096086 48016503 04020105 000420" | \
-     xxd -c 19 -r > /tmp/sighdr
-   cat /tmp/sighdr $(base64 --decode digestfile) > /tmp/hashtosign
-   pkcs11-tool --id $key_id -s --login -m RSA-PKCS-PSS --hash-algorithm SHA256 --mgf MGF1-SHA256 \
-     --input-file /tmp/hashtosign | \
-     base64 > sigfile
+     base64 --decode < $UUID.dig" > $UUID.dig.base64"
+     pkcs11-tool --id <your-key-id> -s --login -m RSA-PKCS-PSS \
+        --hash-algorithm SHA256 --mgf MGF1-SHA256 --input-file $UUID.dig.base64 \
+        | base64 $UUID.sig
+
+When using an HSM, the public key must be extracted and set as ``TA_PUBLIC_KEY``. ``TA_SIGN_KEY`` 
+doesn't need to be set in this case, since it is stored in the HSM module.
 
 5. Manually stitch the TA and signature together
 
 .. code-block:: sh
 
-    sign_encrypt.py stitch --key $(TA_SIGN_KEY) --uuid $(user-ta-uuid)
+    sign_encrypt.py stitch --key $TA_PUBLIC_KEY --uuid $UUID \
+        --elf $UUID.stripped.elf --sig $UUID.sig --out $UUID.ta
 
-By default, the UUID is taken as the base file name for all files. Different file
-names and paths can be set through additional options to ``sign_encrypt.py``. Consult
-``sign_encrypt.py --help`` for a full list of options and parameters.
+.. note::
+        If the ``--ta-version`` flag was used in step 3., it needs to be used here as well.
+
+By default, the UUID is taken as the base file name for all files. When signing directly inside 
+the optee-os repository the ``$UUID.sig``, ``UUID.dig`` and ``$UUID.ta`` arguments can be omitted.
+They were merely provided in this example for completeness. Consult ``sign_encrypt.py --help`` 
+for a full list of options and parameters.
