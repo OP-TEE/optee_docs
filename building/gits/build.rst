@@ -424,9 +424,9 @@ instead of 15-30 minutes. The way to do this are as follows.
 
        .. code-block:: bash
 
-        $ repo init -u https://github.com/OP-TEE/manifest.git --reference $HOME/devel/optee-ref
+        $ repo init -u https://github.com/OP-TEE/manifest.git --partial-clone --reference $HOME/devel/optee-ref
 
-    4. The rest is the same above, but now it will only take a couple of seconds
+    4. The rest is the same above, but now it will only take less than a minute
        to clone a forest.
 
 Normally '1' and '2' above is something you will only do once. Also if you
