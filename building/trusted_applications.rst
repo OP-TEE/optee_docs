@@ -510,7 +510,7 @@ or with ``pkcs11-tool`` using a Nitrokey HSM
 
 .. code-block:: sh
 
-     base64 --decode < $UUID.dig" > $UUID.dig.base64"
+     base64 --decode < $UUID.dig > $UUID.dig.base64
      pkcs11-tool --id <your-key-id> -s --login -m RSA-PKCS-PSS \
         --hash-algorithm SHA256 --mgf MGF1-SHA256 --input-file $UUID.dig.base64 \
         | base64 $UUID.sig
