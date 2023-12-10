@@ -1417,6 +1417,12 @@ shared memory areas known from the OP-TEE core. OP-TEE supports two kinds
 of shared memory areas: an area for contiguous buffers and an area for
 noncontiguous buffers. At least one has to be enabled.
 
+Contiguous shared memory is the historical OP-TEE legacy shared memory
+scheme where a specific physical memory area is shared. Nowadays,
+platforms tend to describe the physical memory layout and enable
+noncontiguous dynamic shared memory, allowing the non-secure OS to
+use its native system memory as legitimate shared memory references.
+
 Contiguous shared buffers
 =========================
 Configuration directives ``CFG_SHMEM_START`` and ``CFG_SHMEM_SIZE``
