@@ -1441,19 +1441,26 @@ is enabled with the configuration flag ``CFG_CORE_RESERVED_SHM=y``.
 
 Noncontiguous shared buffers
 ============================
-To benefit from noncontiguous shared memory buffers, secure world register
-dynamic shared memory areas and non-secure world must register noncontiguous
-buffers prior to referring to them using the OP-TEE API.
+To benefit from noncontiguous shared memory buffers, platform shall enable
+dynamic shared memory (``CFG_CORE_DYN_SHM=y``). When enabled, OP-TEE core is
+given the main memory address range(s) seen from non-secure OS. Non-secure
+client application can simply register a memory buffer as (e.g. with
+``TEEC_RegisterSharedMmeory()``) so that it can be used
+in OP-TEE communication.
 
+This feature requires Linux OP-TEE driver to properly handle the memory
+references of its various clients memories: userland applications,
+kernel drivers, remote services.
+
+This feature also requires OP-TEE core to know the legitimate addresses ranges
+where non-secure can claim to use a shared memory page.
 The OP-TEE core generic boot sequence discovers dynamic shared areas from the
-device tree and/or areas explicitly registered by the platform.
+device tree (``memory`` nodes) and/or areas explicitly registered by the
+platform (``register_ddr()``).
 
 Non-secure side needs to register buffers as 4kByte chunks lists into OP-TEE
 core using the ``OPTEE_MSG_CMD_REGISTER_SHM`` API prior referencing to them
 using the OP-TEE invocation API.
-
-Noncontiguous shared memory (also known as dynamic shared memory) is
-enabled with the configuration flag ``CFG_CORE_DYN_SHM=y``.
 
 For performance reasons, the TEE Client Library (``libteec``) uses
 noncontiguous shared memory when available since it avoids copies in some
