@@ -411,20 +411,20 @@ is called interrupt number.
 Interrupt management resources are declared in header file interrupt.h_.
 Interrupt consumers main API functions are:
 
-    - ``interrupt_enable()`` and ``interrupt_disable()`` to respectively
-      enable or disable an interrupt.
+    - ``interrupt_enable()`` and ``interrupt_disable()`` to respectively
+      enable or disable an interrupt.
 
-    - ``interrupt_mask()`` and ``interrupt_unmask()`` to respectively mask
-      or unmask an interrupt. Masking of an enabled interrupt temporarily
-      disables the interrupt while unmasking enables a previously masked
-      interrupt. ``interrupt_mask()`` and ``interrupt_unmask()`` are
-      allowed to be called from an interrupt context, but
-      ``interrupt_enable()`` and ``interrupt_disable()`` not so.
+    - ``interrupt_mask()`` and ``interrupt_unmask()`` to respectively mask
+      or unmask an interrupt. Masking of an enabled interrupt temporarily
+      disables the interrupt while unmasking enables a previously masked
+      interrupt. ``interrupt_mask()`` and ``interrupt_unmask()`` are
+      allowed to be called from an interrupt context, but
+      ``interrupt_enable()`` and ``interrupt_disable()`` not so.
 
-    - ``interrupt_configure()`` to configure an interrupt detection mode
-      and priority.
+    - ``interrupt_configure()`` to configure an interrupt detection mode
+      and priority.
 
-    - ``interrupt_add_handler()`` to configure an interrupt and register
+    - ``interrupt_add_handler()`` to configure an interrupt and register
       an interrupt handler function, see below.
 
     - ``interrupt_remove_handler()`` to unregister an interrupt handler
