@@ -338,6 +338,69 @@ sequence:
         }
     }
 
+
+Identifying TA's client
+***********************
+
+The GP TEE specification is designed to ensure that TEE sessions are reliable
+once created. A TA instance can identify its client login method when a session
+is opened. A TA can use the client login credentials to establish or reject
+the session. A TA can get its client identity from property
+``"gpd.client.identity"`` with the TEE Internal Core API function
+``TEE_GetPropertyAsIdentity(()``:
+
+.. code-block:: c
+
+    TEE_Result TA_OpenSessionEntryPoint(uint32_t __unused param_types,
+                                        TEE_Param __unused params[4],
+                                        void **tee_session)
+    {
+        TEE_Identity identity = { };
+        TEE_Result res = TEE_SUCCESS;
+
+        res = TEE_GetPropertyAsIdentity(TEE_PROPSET_CURRENT_CLIENT,
+                                        "gpd.client.identity", &identity);
+        if (res)
+            return res;
+
+        switch (identity.login) {
+        case TEE_LOGIN_PUBLIC:
+            return login_public(&identity.uuid, tee_session);
+        case TEE_LOGIN_USER:
+            return login_user(&identity.uuid, tee_session);
+        case TEE_LOGIN_GROUP:
+            return login_group(&identity.uuid, tee_session);
+        case TEE_LOGIN_REE_KERNEL:
+            return login_kernel(&identity.uuid, tee_session);
+        case TEE_LOGIN_TRUSTED_APP:
+            return login_ta(&identity.uuid, tee_session);
+        default:
+            return TEE_ERROR_ACCESS_DENIED;
+        }
+    }
+
+The value of the UUID found in ``identity.uuid`` depends on the login method:
+
+    - When the client is a TA, ``identity.login`` is ``TEE_LOGIN_TRUSTED_APP``
+      and ``identity.uuid`` is the client TA UUID;
+
+    - When the non-secure client uses ``TEE_LOGIN_PUBLIC`` or
+      ``TEE_LOGIN_REE_KERNEL`` method, the UUID is not used. By convention,
+      Linux kernel and U-Boot both set nil UUID (all zeroes).
+
+    - When the non-secure client uses ``TEE_LOGIN_USER`` or ``TEE_LOGIN_GROUP``
+      method, the UUID is generated from the UUIDv5 namespace derivation of a
+      user ID tag (``"uid=%x"``) or a group ID tag (``"gid=%x"``) in
+      ``tee_client_uuid_ns`` namespace (below). The derivation is performed
+      by the Linux kernel that verifies that the client's UID/GID is genuine,
+      refer to `tee_session_calc_client_uuid()`_.
+
+.. code-block:: c
+
+    static const uuid_t tee_client_uuid_ns = UUID_INIT(0x58ac9ca0, 0x2086, 0x4683,
+                                                       0xa1, 0xb8, 0xec, 0x4b,
+                                                       0xc0, 0x8e, 0x01, 0xb6);
+
 .. _TASign:
 
 Signing of TAs
@@ -469,3 +532,5 @@ By default, the UUID is taken as the base file name for all files. When signing 
 the optee-os repository the ``$UUID.sig``, ``UUID.dig`` and ``$UUID.ta`` arguments can be omitted.
 They were merely provided in this example for completeness. Consult ``sign_encrypt.py --help`` 
 for a full list of options and parameters.
+
+.. _tee_session_calc_client_uuid(): https://elixir.bootlin.com/linux/latest/A/ident/tee_session_calc_client_uuid
