@@ -131,3 +131,9 @@ Refer to ``core/include/kernel/dt.h`` for API to access embedded DTB.
 
 Section :ref:`generic_boot_and_dtbs` documents the generic boot sequence
 against embedded DTB.
+
+.. _optee_specific_bindings:
+
+OP-TEE Specific Bindings
+***************************
+:ref:`google_widevine_bindings`
