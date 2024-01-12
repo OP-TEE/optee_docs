@@ -7,6 +7,7 @@ Architecture
    core
    Crypto <crypto>
    device_tree
+   device_tree_bindings/index
    file_structure
    globalplatform_api
    libraries
