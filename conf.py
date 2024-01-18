@@ -42,7 +42,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.graphviz',
-    'sphinx_panels',
+    'sphinx_design',
     'sphinxcontrib.plantuml',
     'sphinx_tabs.tabs',
 ]

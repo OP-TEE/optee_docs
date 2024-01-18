@@ -286,10 +286,10 @@ access to the Normal World buffers.
 FF-A compliance
 ===============
 
-.. |ffa_fs| replace:: :opticon:`check-circle-fill`
-.. |ffa_ps| replace:: :opticon:`check-circle`
-.. |ffa_ns| replace:: :opticon:`x`
-.. |ffa_na| replace:: :opticon:`horizontal-rule`
+.. |ffa_fs| replace:: :octicon:`check-circle-fill`
+.. |ffa_ps| replace:: :octicon:`check-circle`
+.. |ffa_ns| replace:: :octicon:`x`
+.. |ffa_na| replace:: :octicon:`horizontal-rule`
 
 Legend
 ------
