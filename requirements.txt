@@ -1,6 +1,6 @@
-sphinx-rtd-theme
-sphinxcontrib-plantuml==0.24
-Pillow==9.3.0
-sphinx-tabs
-sphinx-panels==0.6.0
-sphinx==4.5.0
+pillow==10.2.0 
+Sphinx==7.2.6
+sphinxcontrib-plantuml==0.27
+sphinx_design==0.5.0
+sphinx-rtd-theme==2.0.0
+sphinx-tabs==3.4.4
