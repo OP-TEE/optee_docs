@@ -500,20 +500,23 @@ OP-TEE's pkcs11 in-tree TA is used.
 
 .. code-block:: sh
 
-   base64 --decode $UUID.dig | \
-   openssl pkeyutl -sign -inkey $TA_SIGN_KEY \
-       -pkeyopt digest:sha256 -pkeyopt rsa_padding_mode:pss \
-       -pkeyopt rsa_pss_saltlen:digest -pkeyopt rsa_mgf1_md:sha256 | \
-   base64 > $UUID.sig
+    base64 --decode $UUID.dig | \
+    openssl pkeyutl -sign -inkey $TA_SIGN_KEY \
+        -pkeyopt digest:sha256 -pkeyopt rsa_padding_mode:pss \
+        -pkeyopt rsa_pss_saltlen:digest -pkeyopt rsa_mgf1_md:sha256 | \
+    base64 > $UUID.sig
 
-or with ``pkcs11-tool`` using a Nitrokey HSM
+or using a Nitrokey HSM (assuming a working OpenSSL configuration for the PKCS11 engine is present)
 
 .. code-block:: sh
 
-     base64 --decode < $UUID.dig > $UUID.dig.base64
-     pkcs11-tool --id <your-key-id> -s --login -m RSA-PKCS-PSS \
-        --hash-algorithm SHA256 --mgf MGF1-SHA256 --input-file $UUID.dig.base64 \
-        | base64 $UUID.sig
+    base64 -d $UUID.dig | \
+    openssl pkeyutl -engine pkcs11 -keyform engine \
+        -sign -inkey "pkcs11:token=<my access token>;type=cert;object=<key label> or id=<key id>" \
+        -pkeyopt digest:sha256 -pkeyopt rsa_padding_mode:pss \
+        -pkeyopt rsa_pss_saltlen:digest \
+        -pkeyopt rsa_mgf1_md:sha256 | \
+    base64 > $UUID.sig
 
 When using an HSM, the public key must be extracted and set as ``TA_PUBLIC_KEY``. ``TA_SIGN_KEY`` 
 doesn't need to be set in this case, since it is stored in the HSM module.
