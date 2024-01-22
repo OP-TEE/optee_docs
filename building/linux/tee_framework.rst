@@ -26,7 +26,6 @@ Linux kernel TEE framework
 
     KConfig flags
     - What flags to enable to run OP-TEE.
-    - Reference to :ref:`optee_benchmark`.
 
     Device Tree
     - What nodes/thing are important for OP-TEE.
