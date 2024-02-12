@@ -67,11 +67,11 @@ default implementation, mostly based on LibTomCrypt_, is as follows:
 
 .. code-block:: c
     :caption: File: core/crypto/crypto.c
-    
+
     /*
      * Default implementation for all functions in crypto.h
      */
-    
+
     #if !defined(_CFG_CRYPTO_WITH_HASH)
     TEE_Result crypto_hash_get_ctx_size(uint32_t algo __unused,
                                         size_t *size __unused)
@@ -80,19 +80,19 @@ default implementation, mostly based on LibTomCrypt_, is as follows:
     }
     ...
     #endif /*_CFG_CRYPTO_WITH_HASH*/
-    
+
 .. code-block:: c
     :caption: File: core/lib/libtomcrypt/tee_ltc_provider.c
-    
+
     #if defined(_CFG_CRYPTO_WITH_HASH)
     TEE_Result crypto_hash_get_ctx_size(uint32_t algo, size_t *size)
     {
     	/* ... */
     	return TEE_SUCCESS;
     }
-    
+
     #endif /*_CFG_CRYPTO_WITH_HASH*/
-    
+
 As shown above, families of algorithms can be disabled and crypto.c_ will
 provide default null implementations that will return
 ``TEE_ERROR_NOT_IMPLEMENTED``.
