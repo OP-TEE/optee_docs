@@ -191,6 +191,20 @@ GP requirements tested and covered by the OP-TEE sanity test suite
 supported - i.e: the SE05x does not implement all RSA key sizes - we opted for
 disabling those particular tests at build time rather than letting them fail.
 
+Some cryptographic co-processors may have limitations regarding the
+range of key sizes and supported ciphers. For instance, the AMD/Xilinx
+Versal ACAP Cryptographic driver may have constraints on key sizes,
+while NXP SE5X HSM modules may lack support for RSA or ECC. In such
+cases, especially when dealing with unsupported key sizes, it may be
+necessary to resort to a software implementation of the cipher,
+typically utilizing LibTomCrypt.
+
+.. note::
+    While the Hardware Security Modules or Cryptographic hardware
+    processors supported by OP-TEE may achieve FIPS 140-2 certification
+    at level 3, the software implementations of certain algorithms that
+    OP-TEE may fallback to cannot attain certification beyond level 2.
+
 NXP SE05X Family of Secure Elements
 ***********************************
 
