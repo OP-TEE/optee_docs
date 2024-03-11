@@ -53,14 +53,17 @@ folder:
 **conf.mk**
 
 This is the device specific makefile where you define configurations unique to
-your platform. This mainly comprises two things: - OP-TEE configuration
-variables (``CFG_``), which may be assigned values in two ways. ``CFG_FOO ?=
-bar`` should be used to provide a default value that may be modified at compile
-time. On the other hand, variables that must be set to some value and cannot be
-modified should be set by: ``$(call force,CFG_FOO,bar)``. - Compiler flags for
-the TEE core, the user mode libraries and the Trusted Applications, which may be
-added to macros used by the build system. Please see `Platform-specific
-configuration and flags`_ in the build system documentation.
+your platform. This mainly comprises two things:
+
+- OP-TEE configuration variables (``CFG_``), which may be assigned values in
+  two ways. ``CFG_FOO ?= bar`` should be used to provide a default value that
+  may be modified at compile time. On the other hand, variables that must be
+  set to some value and cannot be modified should be set by: ``$(call
+  force,CFG_FOO,bar)``.
+
+- Compiler flags for the TEE core, the user mode libraries and the Trusted
+  Applications, which may be added to macros used by the build system. Please
+  see :ref:`configuration_and_flags` and similar sections on that page.
 
 It is recommended to use a existing platform configuration file as a starting
 point. For instance, `core/arch/arm/plat-hikey/conf.mk`_.
@@ -433,6 +436,5 @@ their products on. Refer also to :ref:`platform_documentation`
 .. _MAINTAINERS.md: https://github.com/OP-TEE/optee_os/blob/master/MAINTAINERS
 .. _OTP: https://en.wikipedia.org/wiki/Programmable_read-only_memory
 .. _plat_arm_security_setup: https://github.com/ARM-software/arm-trusted-firmware/search?utf8=%E2%9C%93&q=plat_arm_security_setup&type=
-.. _Platform-specific configuration and flags: build_system.md#platform-specific-configuration-and-flags
 .. _TZC-380: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0431c/index.html
 .. _TZC-400: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.100325_0001_02_en/index.html
