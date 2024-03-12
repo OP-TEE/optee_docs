@@ -341,13 +341,21 @@ on the device: this is a one time action for the lifetime of the device. Once
 the key has been written on the eMMC controller, the controller uses it to
 authenticate requests.
 
-This key can be programmed in a number of ways. If you want OP-TEE to do it,
+The RPMB key can be programmed in a number of ways. The safest and most
+secure way is to program it from normal world during production in a secure
+environment. MMC-tools_ can for instance be used to program the RPMB
+key.
+
+If you want OP-TEE to program the key automatically,
 OP-TEE must be configured with ``CFG_RPMB_WRITE_KEY=y``.
 
 .. warning::
    Be aware that this configuration will send the RPMB key in clear to the
    non-secure side that relays the RPMB key programming request to the eMMC
    hardware device.
+
+   This configuration should only be enabled in a test or development
+   environment.
 
 OP-TEE can either embed a built-in RPMB key (``CFG_RPMB_TESTKEY=y``) or derive
 it from platform specific secrets (``CFG_RPMB_TESTKEY=n``). The former case
@@ -380,6 +388,30 @@ platforms shall use to implement its security logic
    For OP-TEE to be able to write the RPMB key, ``CFG_RPMB_WRITE_KEY=y`` must be
    configured and ``plat_rpmb_key_is_ready()`` must allow it at runtime.
 
+When programming the RPMB key from normal world the RPMB key must be made
+available to that tool. The RPMB key must for security reasons normally not
+be known outside OP-TEE, but an exception might be made in the factory
+during the manufacturing process.
+
+If the HUK is known, the script `scripts/derive_rpmb_key.py`_ can be used to
+derive the RPMB key.
+
+Pros and cons with OP-TEE automatically writing the RPMB key:
+    1. Automatic writing can be triggered after each boot controlled
+       entirely by the normal world, essentially tricking the secure world
+       to reveal the secret RPMB key. Having a separate OP-TEE binary in the
+       factory is not fully secure since it is enough to restore it from
+       from one device to achieve class breakage.
+
+    2. Automatic writing may target the wrong device if there is more than
+       one RPMB since the device name it determined by the probe order. The
+       probe order may differ between boot loader and the kernel or when
+       rebooting. This problem can be addressed by supplying --rpmb-cid and
+       the CID of the MMC device to use as argument.
+
+    3. Automatic writing must be used at the moment if tee-supplicant is
+       configured to emulate RPMB since it starts from scratch at each
+       boot.
 
 Encryption
 ==========
@@ -461,3 +493,5 @@ specification.
 .. _core/tee/tee_fs_key_manager.c: https://github.com/OP-TEE/optee_os/blob/master/core/tee/tee_fs_key_manager.c
 .. _core/tee/tee_rpmb_fs.c: https://github.com/OP-TEE/optee_os/blob/master/core/tee/tee_rpmb_fs.c
 .. _lib/libutee/: https://github.com/OP-TEE/optee_os/blob/master/lib/libutee/
+.. _mmc-tools: https://docs.kernel.org/driver-api/mmc/mmc-tools.html
+.. _scripts/derive_rpmb_key.py: https://github.com/OP-TEE/optee_os/blob/master/scripts/derive_rpmb_key.py
