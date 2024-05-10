@@ -16,7 +16,7 @@ under the same path(s).
 
 Direct download
 ===============
-Go the `Arm GCC download page`_ and download the "`AArch32 target with soft
+Go the `Arm GNU Toolchain Downloads page`_ and download the "`AArch32 target with soft
 float (arm-linux-gnueabi)`" for 32bit builds and the "`AArch64 GNU/Linux target
 (aarch64-linux-gnu)`" for 64bit builds. When the downloads have finished, you
 will untar them to a location that you later on will export to your ``$PATH``.
@@ -97,5 +97,5 @@ yourself is hard for the same reason, i.e. no cross-compiled compiler-rt
 libraries are generated.
 
 
-.. _Arm GCC download page: https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads
+.. _Arm GNU Toolchain Downloads page: https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 .. _get_clang.sh: https://github.com/OP-TEE/build/blob/master/get_clang.sh
