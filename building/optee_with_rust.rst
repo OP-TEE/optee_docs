@@ -38,7 +38,10 @@ and install them with Buildroot, run:
 
 .. code-block:: bash
 
-    $ (cd build && make toolchains && make OPTEE_RUST_ENABLE=y CFG_TEE_RAM_VA_SIZE=0x00300000)
+    $ (cd build && make toolchains && make)
+
+Note that the Rust applications are built by default; add ``RUST_ENABLE=n`` to
+disable them.
 
 Then start QEMUv8:
 
