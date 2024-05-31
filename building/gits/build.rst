@@ -8,12 +8,12 @@ everything on your own. You can build all the individual components, os, client,
 xtest, Linux kernel, TF-A, TianoCore, QEMU, Buildroot_ etc and put all the
 binaries at correct locations and write your own command lines, Makefiles,
 shell-scripts etc that will work nicely on the devices you are interested in. If
-you know how to do that, fine, please go a head. But for newcomers it's way to
+you know how to do that, fine, please go ahead. But for newcomers it's way too
 much behind the scenes to be able to setup a working environment. Also, if you
-for some reason want to run something in an automated way, then you need
-something else wrapping it up for you.
+want to run something in an automated way, then you need something else
+wrapping it up for you.
 
-With this particular git **built.git** our goal is to simply to make it easy for
+With this particular git **built.git** our goal is to make it easy for
 newcomers to get started with OP-TEE using the devices we've listed in this
 document.
 
