@@ -25,5 +25,5 @@ buttons.
 
 
 .. _ROCK 4: https://wiki.radxa.com/Rock4
-.. _ROCK Pi 4: https://wiki.radxa.com/RockPi4
+.. _ROCK Pi 4: https://wiki.radxa.com/Rock4
 .. _serial console: https://wiki.radxa.com/Rockpi4/dev/serial-console
