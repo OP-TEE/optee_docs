@@ -243,8 +243,23 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - No
      - Yes
 
-   * - `STMicroelectronics STM32MP1 series <http://www.st.com/stm32mp1>`_
-     - ``PLATFORM=stm32mp1``
+   * - `STMicroelectronics STM32MP157A-DK1 STM32MP157D-DK1 <https://www.st.com/en/evaluation-tools/stm32mp157d-dk1.html>`_
+     - ``PLATFORM=stm32mp1-157A_DK1`` or ``PLATFORM=stm32mp1-157A_DK1_SCMI``
+     - Yes
+     - Yes
+
+   * - `STMicroelectronics STM32MP157C-DK2 STM32MP157F-DK2 <https://www.st.com/en/evaluation-tools/stm32mp157f-dk2.html>`_
+     - ``PLATFORM=stm32mp1-157C_DK2`` or ``PLATFORM=stm32mp1-157C_DK2_SCMI``
+     - Yes
+     - Yes
+
+   * - `STMicroelectronics STM32MP157C-EV1 STM32MP157F-EV1 <https://www.st.com/en/evaluation-tools/stm32mp157f-ev1.html>`_
+     - ``PLATFORM=stm32mp1-157C_EV1`` or ``PLATFORM=stm32mp1-157C_EV1_SCMI``
+     - Yes
+     - Yes
+
+   * - `STMicroelectronics STM32MP135F-DK <https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html>`_
+     - ``PLATFORM=stm32mp1-135F_DK``
      - Yes
      - Yes
 
