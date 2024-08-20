@@ -431,7 +431,7 @@ their products on. Refer also to :ref:`platform_documentation`
 .. _core/include/kernel/tee_common_otp.h: https://github.com/OP-TEE/optee_os/blob/master/core/include/kernel/tee_common_otp.h
 
 
-.. _auth-framework.rst: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/auth-framework.rst
+.. _auth-framework.rst: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/design/auth-framework.rst
 .. _HSM: https://en.wikipedia.org/wiki/Hardware_security_module
 .. _MAINTAINERS.md: https://github.com/OP-TEE/optee_os/blob/master/MAINTAINERS
 .. _OTP: https://en.wikipedia.org/wiki/Programmable_read-only_memory

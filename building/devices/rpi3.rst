@@ -674,7 +674,7 @@ And shortly thereafter you will see GDB stops on your breakpoint and from there
 you can debug using normal GDB commands.
 
 
-.. _`Authentication Framework`: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/auth-framework.rst
+.. _`Authentication Framework`: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/design/auth-framework.rst
 .. _Bus Blaster: http://dangerousprototypes.com/docs/Bus_Blaster
 .. _core team: https://github.com/orgs/OP-TEE/teams/linaro/members
 .. _eBay: https://www.ebay.com/sch/i.html?&_nkw=UART+cable
