@@ -185,17 +185,19 @@ between 160 and 521 bit curves).
 
 .. code-block:: none
 
-    # p11 -l --pin 12345 --keypairgen --key-type EC:prime256v1 --label mykey
+    # p11 -l --pin 12345 --keypairgen --key-type EC:secp521r1 --label mykey --id 1234
     Using slot 0 with a present token (0x0)
     Key pair generated:
     Private Key Object; EC
       label:      mykey
+      ID:         1234
       Usage:      sign, derive
       Access:     sensitive, always sensitive, never extractable, local
-    Public Key Object; EC  EC_POINT 256 bits
-      EC_POINT:   044104e3f89bd32ac8101ba675815fbaf34c4f34bb7bb2d233589983bad934cfa09795d56811747778d22b94e245028d3af6aff9e6abbbdb3a75fe1433182c605868c7
-      EC_PARAMS:  06082a8648ce3d030107
+    Public Key Object; EC  EC_POINT 528 bits
+        EC_POINT:   04818504004d1f3a6022557f1c4ef7403679e453e2cecc13e0c1c8ae4e39098232918f875c54d87ca9142a6f7309beb69c6208d58a4aabde024f5b2b34b881fe68f8749717480061e49dc9034ae13a478131ad5f90d750334a7e02ec47172f2e087d6289ff780cb4e7992fa0e5ae098f2ab246b13b9e5ab376043661603e3a1febd3fb8c0baadcf2
+        EC_PARAMS:  06052b81040023 (OID 1.3.132.0.35)
       label:      mykey
+      ID:         1234
       Usage:      verify, derive
       Access:     local
 
@@ -223,7 +225,7 @@ OpenSSL to interface with a PKCS#11 library.
 
     [pkcs11_section]
     engine_id = pkcs11
-    dynamic_path = /usr/lib/engines-1.1/libpkcs11.so
+    dynamic_path = /usr/lib/engines-3/pkcs11.so
     MODULE_PATH = /usr/lib/libckteec.so
     PIN = 12345
 
@@ -250,36 +252,53 @@ Then, we can ask OpenSSL to create a CSR from the key we have previously created
 
 .. code-block:: none
 
-    # OPENSSL_CONF=optee_hsm.conf openssl req -new -engine pkcs11 -keyform engine -key label_mykey -subj "/CN=My CSR" -out mykey_csr.pem
+    # OPENSSL_CONF=optee_hsm.conf openssl req -new -engine pkcs11 -keyform engine -key 1234 -subj "/CN=My CSR" -out mykey_csr.pem
     engine "pkcs11" set.
 
 We can then inspect said CSR:
 
 .. code-block:: none
 
-    $ openssl req -in mykey_csr.pem -text
-    Certificate Request:
-        Data:
-            Version: 1 (0x0)
-            Subject: CN = My CSR
-            Subject Public Key Info:
-                Public Key Algorithm: id-ecPublicKey
-                    Public-Key: (256 bit)
-                    pub:
-                        04:e3:f8:9b:d3:2a:c8:10:1b:a6:75:81:5f:ba:f3:
-                        4c:4f:34:bb:7b:b2:d2:33:58:99:83:ba:d9:34:cf:
-                        a0:97:95:d5:68:11:74:77:78:d2:2b:94:e2:45:02:
-                        8d:3a:f6:af:f9:e6:ab:bb:db:3a:75:fe:14:33:18:
-                        2c:60:58:68:c7
-                    ASN1 OID: prime256v1
-                    NIST CURVE: P-256
-            Attributes:
-                a0:00
+    $ openssl req -in mykey_csr.pem -text -noout
+    Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            25:00:b4:69:fd:e8:b2:7b:21:73:d7:84:87:6b:60:ff:cc:50:ea:ca
         Signature Algorithm: ecdsa-with-SHA256
-             30:45:02:20:61:7e:05:30:cf:4d:d0:93:22:78:9e:45:cf:af:
-             3c:83:bb:04:c4:f0:81:f6:9a:5c:97:cd:ac:1e:94:cd:17:1b:
-             02:21:00:e7:7f:88:1d:4f:56:b8:e2:87:be:76:de:28:b3:92:
-             68:a7:16:3a:56:af:79:2f:98:bd:fd:6d:b3:82:e1:15:6c
+        Issuer: CN = My CSR
+        Validity
+            Not Before: Sep 23 10:28:02 2024 GMT
+            Not After : Oct 23 10:28:02 2024 GMT
+        Subject: CN = My CSR
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (521 bit)
+                pub:
+                    04:00:4d:1f:3a:60:22:55:7f:1c:4e:f7:40:36:79:
+                    e4:53:e2:ce:cc:13:e0:c1:c8:ae:4e:39:09:82:32:
+                    91:8f:87:5c:54:d8:7c:a9:14:2a:6f:73:09:be:b6:
+                    9c:62:08:d5:8a:4a:ab:de:02:4f:5b:2b:34:b8:81:
+                    fe:68:f8:74:97:17:48:00:61:e4:9d:c9:03:4a:e1:
+                    3a:47:81:31:ad:5f:90:d7:50:33:4a:7e:02:ec:47:
+                    17:2f:2e:08:7d:62:89:ff:78:0c:b4:e7:99:2f:a0:
+                    e5:ae:09:8f:2a:b2:46:b1:3b:9e:5a:b3:76:04:36:
+                    61:60:3e:3a:1f:eb:d3:fb:8c:0b:aa:dc:f2
+                ASN1 OID: secp521r1
+                NIST CURVE: P-521
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                1A:B7:81:9A:4E:F8:23:AD:6C:B8:E2:EF:65:F6:73:11:39:93:82:66
+    Signature Algorithm: ecdsa-with-SHA256
+    Signature Value:
+        30:81:87:02:42:01:cf:a4:88:06:4e:96:13:13:39:a9:ac:cb:
+        29:4d:bb:16:f2:6a:05:ec:8d:cf:3f:f1:39:84:6e:a5:d0:b2:
+        e6:6a:d8:81:c6:7b:32:29:8f:75:72:05:22:9d:20:4b:f7:bf:
+        7b:fb:23:33:d5:97:9c:83:7c:d7:df:1a:83:c8:5b:ab:e1:02:
+        41:0f:f6:ee:fe:46:09:e6:49:7d:2c:3d:df:0b:45:e3:35:b4:
+        8e:8d:ce:25:0f:22:3d:6d:36:6b:cb:3a:b6:ab:c2:d3:e6:32:
+        1b:83:ab:9e:fe:82:f1:f6:23:ce:20:58:39:39:c2:de:ac:7a:
+        e7:71:4a:09:91:4d:0a:f0:51:15:77:b5
 
 Note that the public key matches exactly that which we have previously created
 (``04 e3 f8...``). This CSR could then be signed by a CA. For simplicity
@@ -288,49 +307,53 @@ OP-TEE contained key:
 
 .. code-block:: none
 
-    # OPENSSL_CONF=optee_hsm.conf openssl req -new -engine pkcs11 -keyform engine -key label_mykey -subj "/CN=My CSR" -x509 -out mykey_selfsigned_cert.pem
+    # OPENSSL_CONF=optee_hsm.conf openssl req -new -engine pkcs11 -keyform engine -key 1234 -subj "/CN=My CSR" -x509 -out mykey_selfsigned_cert.pem
     engine "pkcs11" set.
 
 Again we can review this self-signed certificate:
 
 .. code-block:: none
 
-    $ openssl x509 -in mykey_selfsigned_cert.pem -text
+    $ openssl x509 -in mykey_selfsigned_cert.pem -text -noout
     Certificate:
         Data:
-            Version: 1 (0x0)
+            Version: 3 (0x2)
             Serial Number:
-                3f:8f:c8:c0:de:a8:75:ca:9d:62:79:31:c2:6c:48:f4:fd:50:22:1d
+                25:00:b4:69:fd:e8:b2:7b:21:73:d7:84:87:6b:60:ff:cc:50:ea:ca
             Signature Algorithm: ecdsa-with-SHA256
             Issuer: CN = My CSR
             Validity
-                Not Before: Mar 22 20:19:15 2023 GMT
-                Not After : Apr 21 20:19:15 2023 GMT
+                Not Before: Sep 23 10:28:02 2024 GMT
+                Not After : Oct 23 10:28:02 2024 GMT
             Subject: CN = My CSR
             Subject Public Key Info:
                 Public Key Algorithm: id-ecPublicKey
-                    Public-Key: (256 bit)
+                    Public-Key: (521 bit)
                     pub:
-                        04:e3:f8:9b:d3:2a:c8:10:1b:a6:75:81:5f:ba:f3:
-                        4c:4f:34:bb:7b:b2:d2:33:58:99:83:ba:d9:34:cf:
-                        a0:97:95:d5:68:11:74:77:78:d2:2b:94:e2:45:02:
-                        8d:3a:f6:af:f9:e6:ab:bb:db:3a:75:fe:14:33:18:
-                        2c:60:58:68:c7
-                    ASN1 OID: prime256v1
-                    NIST CURVE: P-256
+                        04:00:4d:1f:3a:60:22:55:7f:1c:4e:f7:40:36:79:
+                        e4:53:e2:ce:cc:13:e0:c1:c8:ae:4e:39:09:82:32:
+                        91:8f:87:5c:54:d8:7c:a9:14:2a:6f:73:09:be:b6:
+                        9c:62:08:d5:8a:4a:ab:de:02:4f:5b:2b:34:b8:81:
+                        fe:68:f8:74:97:17:48:00:61:e4:9d:c9:03:4a:e1:
+                        3a:47:81:31:ad:5f:90:d7:50:33:4a:7e:02:ec:47:
+                        17:2f:2e:08:7d:62:89:ff:78:0c:b4:e7:99:2f:a0:
+                        e5:ae:09:8f:2a:b2:46:b1:3b:9e:5a:b3:76:04:36:
+                        61:60:3e:3a:1f:eb:d3:fb:8c:0b:aa:dc:f2
+                    ASN1 OID: secp521r1
+                    NIST CURVE: P-521
+            X509v3 extensions:
+                X509v3 Subject Key Identifier: 
+                    1A:B7:81:9A:4E:F8:23:AD:6C:B8:E2:EF:65:F6:73:11:39:93:82:66
         Signature Algorithm: ecdsa-with-SHA256
-             30:45:02:20:4a:9d:63:f2:e0:12:4b:46:eb:eb:62:34:9e:86:
-             3d:d4:c8:cf:5f:c0:44:fe:8b:71:a0:b8:fa:41:d9:0b:60:3a:
-             02:21:00:fb:c2:b3:0a:7b:54:e9:bb:66:7b:8e:f7:11:52:81:
-             69:81:a6:cc:d0:bf:a2:7c:f7:2a:67:db:ab:f1:f3:2c:9f
-    -----BEGIN CERTIFICATE-----
-    MIIBHDCBwwIUP4/IwN6odcqdYnkxwmxI9P1QIh0wCgYIKoZIzj0EAwIwETEPMA0G
-    A1UEAwwGTXkgQ1NSMB4XDTIzMDMyMjIwMTkxNVoXDTIzMDQyMTIwMTkxNVowETEP
-    MA0GA1UEAwwGTXkgQ1NSMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4/ib0yrI
-    EBumdYFfuvNMTzS7e7LSM1iZg7rZNM+gl5XVaBF0d3jSK5TiRQKNOvav+earu9s6
-    df4UMxgsYFhoxzAKBggqhkjOPQQDAgNIADBFAiBKnWPy4BJLRuvrYjSehj3UyM9f
-    wET+i3GguPpB2QtgOgIhAPvCswp7VOm7ZnuO9xFSgWmBpszQv6J89ypn26vx8yyf
-    -----END CERTIFICATE-----
+        Signature Value:
+            30:81:87:02:42:01:cf:a4:88:06:4e:96:13:13:39:a9:ac:cb:
+            29:4d:bb:16:f2:6a:05:ec:8d:cf:3f:f1:39:84:6e:a5:d0:b2:
+            e6:6a:d8:81:c6:7b:32:29:8f:75:72:05:22:9d:20:4b:f7:bf:
+            7b:fb:23:33:d5:97:9c:83:7c:d7:df:1a:83:c8:5b:ab:e1:02:
+            41:0f:f6:ee:fe:46:09:e6:49:7d:2c:3d:df:0b:45:e3:35:b4:
+            8e:8d:ce:25:0f:22:3d:6d:36:6b:cb:3a:b6:ab:c2:d3:e6:32:
+            1b:83:ab:9e:fe:82:f1:f6:23:ce:20:58:39:39:c2:de:ac:7a:
+            e7:71:4a:09:91:4d:0a:f0:51:15:77:b5
 
 To test our self-signed certificate as a client certificate, we first need to
 initialize a TLS server. This can either be done on a remote machine or
@@ -361,7 +384,7 @@ OP-TEE stored client certificate:
 
 .. code-block:: none
 
-    # OPENSSL_CONF=optee_hsm.conf openssl s_client -engine pkcs11 -connect 192.168.178.34:9876 -cert mykey_selfsigned_cert.pem -keyform engine -key label_mykey
+    # OPENSSL_CONF=optee_hsm.conf openssl s_client -engine pkcs11 -connect 192.168.178.34:9876 -cert mykey_selfsigned_cert.pem -keyform engine -key 1234
     engine "pkcs11" set.
     CONNECTED(00000004)
     Can't use SSL_get_servername
