@@ -49,6 +49,7 @@ RUN apt install -y \
     unzip \
     uuid-dev \
     wget \
+    xalan \
     xdg-utils \
     xterm \
     xz-utils \
