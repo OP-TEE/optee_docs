@@ -300,10 +300,18 @@ Checking TA parameters
 **********************
 GlobalPlatforms TEE Client APIs ``TEEC_InvokeCommand()`` and
 ``TEE_OpenSession()`` allow clients to invoke a TA with some invocation
-parameters: values or references to memory buffers. It is mandatory that TA's
-verify the parameters types before using the parameters themselves. For this a
-TA can rely on the macro ``TEE_PARAM_TYPE_GET(param_type, param_index)`` to get
-the type of a parameter and check its value according to the expected parameter.
+parameters: values or references to memory buffers. It is **mandatory** that
+TA's verify the parameters types before using the parameters themselves. For
+this a TA can rely on the macro ``TEE_PARAM_TYPE_GET(param_type, param_index)``
+to get the type of a parameter and check its value according to the expected
+parameter.
+
+.. warning::
+  Missing verification of expected parameter types may expose arbitrary
+  read-and-write exploit primitives within the affected Trusted Application
+  (TA), potentially leading to partial control over the TEE in the worst-case
+  scenario. For more information, please refer to the GlobalConfusion_ paper,
+  which provides detailed insights into this issue.
 
 For example, if a TA expects that command ID 0 comes with ``params[0]`` being a
 input value, ``params[1]`` being a output value, and ``params[2]`` being a
@@ -537,3 +545,4 @@ They were merely provided in this example for completeness. Consult ``sign_encry
 for a full list of options and parameters.
 
 .. _tee_session_calc_client_uuid(): https://elixir.bootlin.com/linux/latest/A/ident/tee_session_calc_client_uuid
+.. _GlobalConfusion: https://hexhive.epfl.ch/publications/files/24SEC4.pdf
