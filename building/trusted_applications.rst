@@ -323,12 +323,13 @@ sequence:
     TEE_Result handle_command_0(void *session, uint32_t cmd_id,
                                 uint32_t param_types, TEE_Param params[4])
     {
-        if ((TEE_PARAM_TYPE_GET(param_types, 0) != TEE_PARAM_TYPE_VALUE_IN) ||
-            (TEE_PARAM_TYPE_GET(param_types, 1) != TEE_PARAM_TYPE_VALUE_OUT) ||
-            (TEE_PARAM_TYPE_GET(param_types, 2) != TEE_PARAM_TYPE_MEMREF_INOUT) ||
-            (TEE_PARAM_TYPE_GET(param_types, 3) != TEE_PARAM_TYPE_NONE)) {
-            return TEE_ERROR_BAD_PARAMETERS
-        }
+        uint32_t exp_param_types = TEE_PARAM_TYPES(TEE_PARAM_TYPE_VALUE_INPUT,
+                                                   TEE_PARAM_TYPE_VALUE_OUTPUT,
+                                                   TEE_PARAM_TYPE_MEMREF_INOUT,
+                                                   TEE_PARAM_TYPE_NONE);
+
+        if (param_types != exp_param_types)
+            return TEE_ERROR_BAD_PARAMETERS;
 
         /* process command */
         ...
