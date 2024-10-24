@@ -182,6 +182,15 @@ typically will need to be shared with normal world, so there is need for some
 kind of memory firewall for this (more about that further down). As you can see
 we have also added the UART configuration here, i.e., the ``DEVICE0_xyz`` part.
 
+Flashing
+========
+
+Flashing and loading OP-TEE is highly platform specific. If you just want to get things
+up and running (i.e. by loading OP-TEE via JTAG) the most important thing to know
+is that you should be using the ``tee-raw.bin`` file, this contains just the executable
+code. The ``tee.bin`` file contains the same code but has a header at the start which
+is not executable.
+
 Official board support in OP-TEE?
 =================================
 We do encourage everyone to submit their board support to the OP-TEE project
