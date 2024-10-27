@@ -159,6 +159,7 @@ with IRQ and FIQ masked. SMCs are categorised in two flavors: **fast** and
     participant "OP-TEE OS" as optee
     == IRQ and FIQ unmasked ==
     nwd -> smon : smc: TEE_FUNC_INVOKE
+    == IRQ and FIQ masked ==
     smon -> smon : Save non-secure context
     smon -> smon : Restore secure context
     smon --> entry : eret: TEE_FUNC_INVOKE
