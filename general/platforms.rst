@@ -28,6 +28,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Publicly available?
      - Maintained?
 
+   * - `AMD Versal Gen 2 <https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/prime-series.html>`_
+     - ``PLATFORM=versal2``
+     - Yes
+     - Yes
+
    * - `ARM Juno Board <http://www.arm.com/products/tools/development-boards/versatile-express/juno-arm-development-platform.php>`_
      - ``PLATFORM=vexpress-juno``
      - Yes
