@@ -48,6 +48,7 @@ RUN apt install -y \
     uuid-dev \
     wget \
     xdg-utils \
+    xsltproc \
     xterm \
     xz-utils \
     zlib1g-dev
