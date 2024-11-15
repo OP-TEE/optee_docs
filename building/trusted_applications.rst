@@ -347,6 +347,14 @@ sequence:
         }
     }
 
+.. warning::
+  As stated in the Global API documentation (v1.3.1, section 4.11.1), memory 
+  references (``TEE_PARAM_TYPE_MEMREF_*``) underlying buffers are not locked 
+  for TEE exclusive access and can therefore be modified by a non-secure client 
+  during command processing. It is the reponsability of the TA (or PTA) to ensure 
+  data immutability during command execution, if such a property is needed. 
+  For example, a TA (or PTA) could copy all input data into a locally allocated buffer
+  and only access this copy.
 
 Identifying TA's client
 ***********************
