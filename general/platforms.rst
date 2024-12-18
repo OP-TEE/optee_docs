@@ -233,6 +233,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Yes
      - Yes
 
+   * - `Rockchip RK3588 <https://www.rock-chips.com/a/en/products/RK35_Series/2022/0926/1660.html>`_
+     - ``PLATFORM=rockchip-rk3588``
+     - Yes
+     - Yes
+
    * - `STMicroelectronics b2260 - h410 (96boards fmt) <http://www.st.com/web/en/catalog/mmc/FM131/SC999/SS1628/PF258776>`_
      - ``PLATFORM=stm-b2260``
      - No
