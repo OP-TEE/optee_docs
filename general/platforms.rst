@@ -292,7 +292,12 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - ``PLATFORM=versal``
      - Yes
      - Yes
-       
+
+   * - `Telechips TCC805x <https://topst.ai/product/topstD3>`_
+     - ``PLATFORM=telechips-tcc805x``
+     - Yes
+     - Yes
+
    * - `Xilinx Zynq 7000 ZC702 <http://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html>`_
      - ``PLATFORM=zynq7k-zc702``
      - Yes
