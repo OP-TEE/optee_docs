@@ -489,6 +489,25 @@ property. The boolean property is set to ``true`` if ``TA_FLAGS`` sets bit
 ``TA_FLAG_INSTANCE_KEEP_ALIVE``, otherwise the boolean property is set to
 ``false``.
 
+Endianness
+----------
+``"gpd.ta.endian"`` is a 32bit integer property defining TA endianness. OP-TEE
+currently only supports little-endian TAs hence if enforces value 0 for this
+property.
+
+This property was introduced in version 1.2 of the TEE Internal Core API.
+
+Closing Corrupted Objects
+-------------------------
+``"gpd.ta.doesNotCloseHandleOnCorruptObject"`` is a boolean property telling
+whether the TA shall close object handles for corrupted objects.
+The TA flag ``TA_FLAG_DONT_CLOSE_HANDLE_ON_CORRUPT_OBJECT`` sets the
+configuration of this property. The boolean property is set to ``true`` if
+``TA_FLAGS`` has the bit ``TA_FLAG_DONT_CLOSE_HANDLE_ON_CORRUPT_OBJECT`` set,
+otherwise the boolean property is set to ``false``.
+
+This property was introduced in version 1.3 of the TEE Internal Core API.
+
 Heap Size
 ---------
 ``"gpd.ta.dataSize"`` is a 32bit integer property of the TA. This property
