@@ -442,8 +442,10 @@ This section give a more in depth description of the TA properties (see
 
 GlobalPlatform Properties
 =========================
-Standard TA properties must be defined through property flag in macro
-``TA_FLAGS`` in ``user_ta_header_defines.h``
+Standard TA properties are defined through dedicated macros in
+``user_ta_header_defines.h`` header file. Macros ``TA_FLAGS``, ``TA_DATA_SIZE``
+and ``TA_STACK_SIZE`` are required, other ``TA_*`` macros referred below are
+optional.
 
 Single Instance
 ---------------
@@ -501,6 +503,23 @@ Stack Size
 defines the size in bytes of the stack used for TA execution. The value of the
 property must be defined by the macro ``TA_STACK_SIZE`` in
 ``user_ta_header_defines.h`` (see :ref:`build_ta_properties`).
+
+TA version
+----------
+``"gpd.ta.version"`` is a string property defining the version of the TA.
+There are no specific constraints on the format of the version ID.
+The value of the property may be defined by the macro ``TA_VERSION`` in
+``user_ta_header_defines.h`` (see :ref:`build_ta_properties`). If the
+macro is not defined in ``user_ta_header_defines.h`` then the TA property
+will default to ``"Undefined version"``.
+
+TA Description
+--------------
+``"gpd.ta.description"`` is a string property describing the TA.
+The value of the property may be defined by the macro ``TA_DESCRIPTION`` in
+``user_ta_header_defines.h`` (see :ref:`build_ta_properties`). If the
+macro is not defined in ``user_ta_header_defines.h`` then the TA property
+will default to ``"Undefined description"``.
 
 Property Extensions
 ===================
