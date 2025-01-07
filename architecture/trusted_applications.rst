@@ -452,9 +452,9 @@ Single Instance
 ``"gpd.ta.singleInstance"`` is a boolean property of the TA. This property
 defines if one instance of the TA must be created and will receive all open
 session request, or if a new specific TA instance must be created for each
-incoming open session request. OP-TEE TA flag ``TA_FLAG_SINGLE_INSTANCE`` sets
-to configuration of this property. The boolean property is set to ``true`` if
-``TA_FLAGS`` sets bit ``TA_FLAG_SINGLE_INSTANCE``, otherwise the boolean
+incoming open session request. The TA flag ``TA_FLAG_SINGLE_INSTANCE`` sets
+the configuration of this property. The boolean property is set to ``true`` if
+``TA_FLAGS`` has the bit ``TA_FLAG_SINGLE_INSTANCE`` set, otherwise the boolean
 property is set to ``false``.
 
 Multi-session
@@ -468,9 +468,10 @@ session request will return with a busy error status.
 
     This property is **meaningless** if TA is **NOT** SingleInstance TA.
 
-OP-TEE TA flag ``TA_FLAG_MULTI_SESSION`` sets to configuration of this property.
-The boolean property is set to ``true`` if ``TA_FLAGS`` sets bit
-``TA_FLAG_MULTI_SESSION``, otherwise the boolean property is set to ``false``.
+The TA flag ``TA_FLAG_MULTI_SESSION`` sets the configuration of this property.
+The boolean property is set to ``true`` if ``TA_FLAGS`` has the bit
+``TA_FLAG_MULTI_SESSION`` set, otherwise the boolean property is set to
+``false``.
 
 Keep Alive
 ----------
@@ -484,9 +485,9 @@ restarted (boot/reboot).
 
     This property is **meaningless** if TA is **NOT** SingleInstance TA.
 
-OP-TEE TA flag ``TA_FLAG_INSTANCE_KEEP_ALIVE`` sets to configuration of this
-property. The boolean property is set to ``true`` if ``TA_FLAGS`` sets bit
-``TA_FLAG_INSTANCE_KEEP_ALIVE``, otherwise the boolean property is set to
+The TA flag ``TA_FLAG_INSTANCE_KEEP_ALIVE`` sets the configuration of this
+property. The boolean property is set to ``true`` if ``TA_FLAGS`` has the bit
+``TA_FLAG_INSTANCE_KEEP_ALIVE`` set, otherwise the boolean property is set to
 ``false``.
 
 Endianness
