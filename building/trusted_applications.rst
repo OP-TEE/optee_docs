@@ -218,7 +218,7 @@ A TA must implement a couple of mandatory entry points, these are:
 
 TA Properties
 *************
-Trusted Application properties shall be defined in a header file named
+Some Trusted Application properties shall be defined in a header file named
 ``user_ta_header_defines.h``, which should contain:
 
     - ``TA_UUID`` defines the TA uuid value
@@ -226,6 +226,15 @@ Trusted Application properties shall be defined in a header file named
     - ``TA_STACK_SIZE`` defines the RAM size to be reserved for TA stack
     - ``TA_DATA_SIZE`` defines the RAM size to be reserved for TA heap (TEE_Malloc()
       pool)
+
+Some Trusted Application properties may be defined in
+``user_ta_header_defines.h`` header file:
+
+    - ``TA_VERSION`` defines the string version ID of the TA
+    - ``TA_DESCRIPTION`` defines the string description property of the TA
+
+Other TA properties can be defined with ``TA_CURRENT_TA_EXT_PROPERTIES`` macro
+in ``user_ta_header_defines.h`` as illustrated in the example section below.
 
 Refer to :ref:`ta_properties` to understand how to configure these macros.
 
@@ -266,9 +275,15 @@ Example of a property header file
     #define TA_STACK_SIZE			(2 * 1024)
     #define TA_DATA_SIZE			(32 * 1024)
 
+    #define TA_DESCRIPTION              "Foo TA for some purpose."
+    #define TA_VERSION                  "1.0"
+
     #define TA_CURRENT_TA_EXT_PROPERTIES \
-        { "gp.ta.description", USER_TA_PROP_TYPE_STRING, "Foo TA for some purpose." }, \
-        { "gp.ta.version", USER_TA_PROP_TYPE_U32, &(const uint32_t){ 0x0100 } }
+        { \
+                "log-level", USER_TA_PROP_TYPE_U32, \
+                &(const uint32_t){ CFG_TEE_TA_LOG_LEVEL } \
+        } \
+        { "foo-string", USER_TA_PROP_TYPE_STRING, "some string" }
 
     #endif /* USER_TA_HEADER_DEFINES_H */
 
