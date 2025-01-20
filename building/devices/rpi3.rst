@@ -285,8 +285,8 @@ environment.
 
 .. code-block:: none
 
-    192.168.1.100   <--- This is your desktop computer (NFS server)
-    192.168.1.200   <--- This is the Raspberry Pi
+    192.168.0.100   <--- This is your desktop computer (NFS server)
+    192.168.0.200   <--- This is the Raspberry Pi
     /srv/nfs/rpi    <--- Location for the NFS share
 
 
@@ -305,15 +305,14 @@ Then edit the exports file,
     $ sudo vim /etc/exports
 
 In this file you shall tell where your files/folder are and the IP's allowed to
-access the files. The way it's written below will make it available to every
-machine on the same subnet (again, be careful about security here). Let's add
-this line to the file (it's the only line necessary in the file, but if you have
-several different filesystems available, then you should of course add them
-too, one line for each share).
+access the files. The way it's written below will make it available everywhere.
+Let's add this line to the file. If you want to additional shared, just add
+similar lines. If you want to limit access to certain IP's, then you can change
+the ``*`` to the IP of a subnet instead, something like ``192.168.0.0/24``.
 
 .. code-block:: none
 
-    /srv/nfs/rpi 192.168.1.0/24(rw,sync,no_root_squash,no_subtree_check)
+    /srv/nfs/rpi *(rw,sync,no_root_squash,no_subtree_check)
 
 Next create the folder where you are going to put the root filesystem
 
@@ -330,25 +329,45 @@ After this, restart the NFS kernel server
 .. hint::
 
     To see that your shares are correctly setup and that the NFS server is
-    running, you can run: ``$ showmount --all localhost`` and you should get a
-    list of ``IP:<path>'s`` based on what you have added in your exports file.
-    If you get nothing there, then your NFS server hasn't been setup correctly.
+    running, you can run: ``$ showmount --exports localhost`` and you should
+    get a list of folders exported based on what you have added in your exports
+    file. If you get nothing there, then your NFS server hasn't been setup
+    correctly.
 
 Prepare files to be shared
 ==========================
-We are now going to put the root filesystem on the location we prepared in the
-previous section.
+In the following step, we'll place the root filesystem in the location prepared
+earlier. To accomplish this, we must first extract the rootfs partition from
+the image generated during the build process for our device.
 
 .. note::
 
-    The path to the ``rootfs.cpio.gz`` refers to <rpi3-project>, replace this so
-    it matches your setup.
+    The path to the ``rpi3-sdcard.img`` refers to <rpi3-project>, replace this
+    so it matches your setup.
+
+.. code-block:: bash
+
+    $ sudo losetup -Pf <rpi3-project>/out/rpi3-sdcard.img
+    $ sudo mount /dev/loop0p2 /mnt
+
+If there were no errors when running the above, then you should be able to see
+the root filesystem file at ``/mnt`` and we're now ready to copy the content to
+the NFS share we've defined.
 
 .. code-block:: bash
 
     $ cd /srv/nfs/rpi
-    $ sudo gunzip -cd <rpi3-project>/out-br/images/rootfs.cpio.gz | sudo cpio -idmv
-    $ sudo rm -rf /srv/nfs/rpi/boot/*
+    $ sudo cp -a /mnt/* .
+    $ sudo umount /mnt
+    $ sudo losetup -d /dev/loop0
+
+.. hint::
+
+   Now it is likely a good idea to run ``chmod`` and/or ``chown`` on some
+   folders and files that we likely will use and update as a regular user
+   during development. For example ``/lib/optee_armtz``, if you want to be able
+   to replace TA's. Also ``/usr/bin`` and ``/usr/sbin`` might be of interest,
+   since that is where we put ``xtest``, ``tee-supplicant`` etc.
 
 uboot.env configuration
 =======================
@@ -368,18 +387,19 @@ In an editor open: ``<rpi3-project>/build/rpi3/firmware/uboot.env.txt`` and
 change:
 
     - ``nfsserverip`` to match the IP address of your NFS server.
-    - ``gatewayip`` to the IP address of your router.
+    - ``gatewayip`` to the IP address of your router. This by the way is not
+      used when you use ``dhcp`` as the argument to the parameter ``ip`` when
+      booting Linux.
     - ``nfspath`` to the exported filesystem in your NFS share.
 
 As an example a section of ``uboot.env.txt`` could look like this:
 
 .. code-block:: c
-    :emphasize-lines: 2,4,5
 
     # NFS/TFTP boot configuraton
-    gatewayip=192.168.1.1
+    gatewayip=192.168.0.1
     netmask=255.255.255.0
-    nfsserverip=192.168.1.100
+    nfsserverip=192.168.0.100
     nfspath=/srv/nfs/rpi
 
 Next, you need to re-generate ``uboot.env``:
@@ -403,8 +423,8 @@ key and will see the ``U-Boot>`` prompt. You can then update the
 
 .. code-block:: bash
 
-    U-Boot> setenv nfsserverip '192.168.1.100'
-    U-Boot> setenv gatewayip '192.168.1.1'
+    U-Boot> setenv nfsserverip '192.168.0.100'
+    U-Boot> setenv gatewayip '192.168.0.1'
     U-Boot> setenv nfspath '/srv/nfs/rpi'
 
 If you want those environment variables to persist between boots, then type.
