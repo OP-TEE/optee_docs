@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
+ENV FORCE_UNSAFE_CONFIGURE=1
 RUN apt update && apt upgrade -y
 RUN apt install -y \
     adb \
@@ -43,6 +44,7 @@ RUN apt install -y \
     python3-pip \
     python3-pyelftools \
     python3-serial \
+    python3-tomli \
     python-is-python3 \
     rsync \
     swig \
@@ -59,5 +61,5 @@ RUN mkdir /optee
 WORKDIR /optee
 RUN repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml && repo sync -j10
 WORKDIR /optee/build
-RUN make -j2 toolchains
+RUN make -j3 toolchains
 RUN make -j$(nproc) check
