@@ -298,6 +298,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Yes
      - Yes
 
+   * - `AMD/Xilinx Versal Net`_
+     - ``PLATFORM=versal-net``
+     - No
+     - Yes
+
    * - `Telechips TCC805x <https://topst.ai/product/topstD3>`_
      - ``PLATFORM=telechips-tcc805x``
      - Yes
