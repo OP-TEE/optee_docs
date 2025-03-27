@@ -152,7 +152,7 @@ done by setting the appropriate configuration variable. For example:
     $ make CFG_CRYPTO_{DSA,RSA,DH,ECC}=n # disable public key algorithms
     $ make CFG_CRYPTO=n                  # disable all algorithms
 
-Please refer to `core/lib/libtomcrypt/sub.mk`_ for the list of all supported
+Please refer to `core/crypto.mk` for the list of all supported
 variables.
 
 Note that the application interface is **not** modified when algorithms are
