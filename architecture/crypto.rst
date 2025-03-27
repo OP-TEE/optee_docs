@@ -57,7 +57,7 @@ two main purposes:
        versions.
 
     2. Provide an easy way to disable some families of algorithms at
-       compile-time to save space. See `LibTomCrypt` below.
+       compile-time to save space. See sw_crypto_lib_ below.
 
 [3] crypto_*()
 **************
@@ -128,9 +128,19 @@ binary format.
     void crypto_bignum_bn2bin(const struct bignum *from, uint8_t *to);
     /*...*/
 
+.. _sw_crypto_lib:
 
-[4] LibTomCrypt
-***************
+[4] Software crypto library
+***************************
+
+LibTomCrypt is the default software implementation for cryptographic
+operations. When so, this is stated by OP-TEE configuration directives
+``CFG_CRYPTOLIB_NAME=tomcrypt`` and
+``CFG_CRYPTOLIB_DIR=core/lib/libtomcrypt``.
+
+Mbed TLS can be embedded in OP-TEE core as a software cryptographic library
+alternative to LibTomCrypt. See :ref:`libmbedtls`.
+
 Some algorithms may be disabled at compile time if they are not needed, in order
 to reduce the size of the OP-TEE image and reduces its memory usage. This is
 done by setting the appropriate configuration variable. For example:
