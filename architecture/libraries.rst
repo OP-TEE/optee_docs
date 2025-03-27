@@ -43,11 +43,13 @@ library while some services for the API are implemented inside the OP-TEE core
 When ``CFG_ULIBS_SHARED`` is enabled, **libutee** is assigned UUID
 **4b3d937e-d57e-418b-8673-1c04f2420226**.
 
+.. _libmbedtls:
+
 libmbedtls
 **********
 
-OP-TEE OS source tree provides support of the Mbed TLS library, named
-**libmbedtls**.
+OP-TEE OS source tree provides support of the `Mbed TLS`_ library, named
+**libmbedtls**. Its source directory is located at `lib/libmbedtls/`.
 
 A specific build sequence can compile an instance of **libmbedtls** and link
 it to OP-TEE core. Another build sequence compiles an instance of
@@ -57,7 +59,7 @@ When Mbed TLS is embedded in OP-TEE core, it is used as the default software
 implementation for most cryptography operations. When so, **libtomcrypt** is
 still used as default software implementation for few crypto operations.
 Embedding Mbed TLS in OP-TEE core requires ``CFG_CRYPTOLIB_NAME=mbedtls``
-and ``CFG_CRYPTOLIB_DIR=core/lib/libmbedtls``.
+and ``CFG_CRYPTOLIB_DIR=lib/libmbedtls``.
 
 When ``CFG_ULIBS_SHARED`` is enabled, **libmbedtls** userland library is
 assigned UUID **87bb6ae8-4b1d-49fe-9986-2b966132c309**.
@@ -100,3 +102,4 @@ In order to support shared library, OP-TEE OS shall be built with
 **.elf** and **.ta** files, like Trusted Applications are, and shall be
 installed the same way as Trusted Applications are, see ref:`ta_locations`.
 
+.. _Mbed TLS: https://www.trustedfirmware.org/projects/mbed-tls/
