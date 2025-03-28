@@ -23,8 +23,8 @@ square brackets ([1], [2]...) refer to the sections below.
     [3]         crypto_*()                          (libtomcrypt.a and crypto.c)
     [4]           /* LibTomCrypt */                 (libtomcrypt.a)
 
-[1] The TEE Cryptographic Operations API
-****************************************
+The TEE Cryptographic Operations API
+************************************
 OP-TEE implements the Cryptographic Operations API defined by the GlobalPlatform
 association in the :ref:`tee_internal_core_api`. This includes cryptographic
 functions that span various cryptographic needs: message digests, symmetric
@@ -44,8 +44,8 @@ The *utee\_\** functions are declared in utee_syscalls.h_ and implemented in
 utee_syscalls_asm.S_ They are simple system call wrappers which use the *SVC*
 instruction to switch to the appropriate system service in the OP-TEE kernel.
 
-[2] The crypto services
-***********************
+The crypto services
+*******************
 All cryptography-related system calls are declared in tee_svc_cryp.h_ and
 implemented in tee_svc_cryp.c_. In addition to dealing with the usual work
 required at the user/kernel interface (checking parameters and copying memory
@@ -59,8 +59,8 @@ two main purposes:
     2. Provide an easy way to disable some families of algorithms at
        compile-time to save space. See sw_crypto_lib_ below.
 
-[3] crypto_*()
-**************
+crypto_*()
+**********
 The ``crypto_*()`` functions implement the actual algorithms and helper
 functions. TEE Core has one global active implementation of this interface. The
 default implementation, mostly based on LibTomCrypt_, is as follows:
@@ -130,8 +130,8 @@ binary format.
 
 .. _sw_crypto_lib:
 
-[4] Software crypto library
-***************************
+Software crypto library
+***********************
 
 LibTomCrypt is the default software implementation for cryptographic
 operations. When so, this is stated by OP-TEE configuration directives
@@ -180,8 +180,8 @@ crypto provider:
     - If you intend to make some algorithms optional, please try to re-use the
       same names for configuration variables as the default implementation.
 
-[5] Support for crypto IC
-*************************
+Support for crypto IC
+*********************
 Some cryptographic co-processors and secure elements are supported under a
 Generic Cryptographic Driver interface, connecting the TEE Crypto generic APIs
 to the HW driver interface. This interface is in
