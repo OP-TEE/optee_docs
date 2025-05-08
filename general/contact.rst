@@ -35,11 +35,11 @@ tree to figure out where to send your patches.
     $ ./scripts/get_maintainer.pl drivers/tee/
 
 
-IRC
-***
-Some of the OP-TEE developers can be reached at Freenode (``chat.freenode.net``)
-at channel ``#linaro-security``. Having that said, the activity there is a bit
-limited, so it is probably **not** the best place to discuss OP-TEE.
+Discord
+*******
+Some of the OP-TEE developers can be reached on the Trusted Firmware Discord
+Server, see the `TrustedFirmware.org FAQ`_. Having that said, the activity there
+is a bit limited, so it is probably **not** the best place to discuss OP-TEE.
 
 .. _vulnerability_reporting:
 
@@ -88,3 +88,4 @@ incidents.
 .. _Mailing Aliases: https://developer.trustedfirmware.org/w/collaboration/security_center/mailing_aliases
 .. _OP-TEE MAINTAINERS: https://github.com/OP-TEE/optee_os/blob/master/MAINTAINERS
 .. _TrustedFirmware.org security incident: https://developer.trustedfirmware.org/w/collaboration/security_center
+.. _TrustedFirmware.org FAQ: https://www.trustedfirmware.org/faq/
