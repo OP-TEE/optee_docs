@@ -256,6 +256,12 @@ to import keys and certificates from the Secure Element into OP-TEE's PKCS#11
 implementation. However, a user could still clear the Secure Element NVM memory
 and read certificates stored in it.
 
+.. note::
+    The OP-TEE version of the SE05x driver does not support the secure
+    element firmware upgrade. This inability to upgrade the SE05x firmware
+    in OP-TEE environments could potentially create a persistent attack
+    surface and may limit its regulatory compliance.
+
 .. Source files
 .. _core/crypto: https://github.com/OP-TEE/optee_os/blob/master/core/crypto
 .. _core/drivers/crypto/crypto_api: https://github.com/OP-TEE/optee_os/blob/master/core/drivers/crypto/crypto_api
