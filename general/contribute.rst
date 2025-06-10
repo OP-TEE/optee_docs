@@ -191,6 +191,9 @@ branch in order to update the pull request page.
 
     $ git push -f <my-remote> <my-branch>
 
+Add a message in the comments field saying something like "Fixed up commits
+with tag and ready to be merged" to notify the maintainers.
+
 After completing this it is the project maintainers job to apply your patches to
 the master branch.
 
