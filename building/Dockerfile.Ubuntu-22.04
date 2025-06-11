@@ -28,6 +28,7 @@ RUN apt install -y \
     libftdi-dev \
     libglib2.0-dev \
     libgmp3-dev \
+    libgnutls28-dev \
     libhidapi-dev \
     libmpc-dev \
     libncurses5-dev \
