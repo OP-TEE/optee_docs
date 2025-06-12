@@ -8,6 +8,7 @@ Device specific information
     :maxdepth: 1
 
     versal
+    versal_net
     devbox
     fvp
     hikey620
