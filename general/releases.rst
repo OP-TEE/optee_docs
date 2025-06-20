@@ -86,7 +86,7 @@ Release procedure
 *****************
 There are certain steps that needs to be done when making a release. This
 checklist here serves as guidance to the one in charge of making a new release.
-Roughly start with this 2-3 weeks before the targeted release date.
+Start with this 3 weeks before the targeted release date.
 
 tl;dr
 =====
@@ -107,19 +107,19 @@ tl;dr
       - Inform maintainers about upcoming release
       -
 
-    * - 1w
+    * - 2w
       - Increment the revision number in `mk/config.mk`_
       - ``CFG_OPTEE_REVISION_MAJOR ?= 3`` ``CFG_OPTEE_REVISION_MINOR ?= x``
 
-    * - 1w
+    * - 2w
       - Create release candidate tag in optee_* + build.git
       - git tag -a 3.x.y-rc1 -m "3.x.y-rc1"
 
-    * - 1w
+    * - 2w
       - Let maintainers know about the release candidate tag
       -
 
-    * - 1w
+    * - 2w
       - Test platform builds / devices
       -
 
