@@ -1,8 +1,8 @@
 FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV FORCE_UNSAFE_CONFIGURE=1
-RUN apt update && apt upgrade -y
-RUN apt install -y \
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
     adb \
     acpica-tools \
     autoconf \
@@ -22,6 +22,7 @@ RUN apt install -y \
     ftp-upload \
     gdisk \
     git \
+    libgnutls28-dev \
     libattr1-dev \
     libcap-ng-dev \
     libfdt-dev \
