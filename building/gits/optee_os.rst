@@ -46,15 +46,13 @@ Build using GNU Make
 ====================
 Since optee_os supports many devices and configurations it's impossible to give
 a examples to all variants. But below is how you for example would build for
-QEMU running Armv7-A (AArch32), with debugging enabled and the benchmark
-framework disabled and will put all built files in a folder name `out/arm` in
-the root of the git.
+QEMU running Armv7-A (AArch32), with debugging enabled and all built files in
+a folder named `out/arm` in the root of the git.
 
 .. code-block:: bash
     :linenos:
 
     $ make \
-        CFG_TEE_BENCHMARK=n \
         CFG_TEE_CORE_LOG_LEVEL=3 \
         CROSS_COMPILE=arm-linux-gnueabihf- \
         CROSS_COMPILE_core=arm-linux-gnueabihf- \
@@ -72,7 +70,6 @@ The same for an QEMU Armv8-A (AArch64) would look like this:
 
     $ make \
         CFG_ARM64_core=y \
-        CFG_TEE_BENCHMARK=n \
         CFG_TEE_CORE_LOG_LEVEL=3 \
         CROSS_COMPILE=aarch64-linux-gnu- \
         CROSS_COMPILE_core=aarch64-linux-gnu- \
