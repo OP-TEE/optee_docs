@@ -1526,7 +1526,7 @@ To benefit from noncontiguous shared memory buffers, platform shall enable
 dynamic shared memory (``CFG_CORE_DYN_SHM=y``). When enabled, OP-TEE core is
 given the main memory address range(s) seen from non-secure OS. Non-secure
 client application can simply register a memory buffer as (e.g. with
-``TEEC_RegisterSharedMmeory()``) so that it can be used
+``TEEC_RegisterSharedMemory()``) so that it can be used
 in OP-TEE communication.
 
 This feature requires Linux OP-TEE driver to properly handle the memory
