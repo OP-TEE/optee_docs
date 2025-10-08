@@ -20,6 +20,11 @@ available. Hereafter we provide Docker files which may be used as a reference.
         .. include:: Dockerfile.Ubuntu-20.04
            :code: text
 
+    .. tab:: Fedora 42
+
+        .. include:: Dockerfile.Fedora-42
+           :code: text
+
     .. tab:: Older
 
         .. note::

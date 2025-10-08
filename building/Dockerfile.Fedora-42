@@ -1,0 +1,86 @@
+FROM fedora:42
+
+# Set environment variables
+ENV FORCE_UNSAFE_CONFIGURE=1
+
+# Should be root by default
+ENV HOME=/root
+
+# Set these, so we have known and expected paths in case we want to volume
+# mount later on to host cached directories.
+ENV CCACHE_DIR=$HOME/.cache/ccache
+ENV BR2_CCACHE_DIR=$HOME/.cache/ccache
+ENV BR2_DL_DIR=$HOME/download
+
+# Install required packages using dnf
+RUN dnf update -y && dnf upgrade -y && \
+    dnf install -y \
+    acpica-tools \
+    android-tools \
+    autoconf \
+    automake \
+    bc \
+    bison \
+    ccache \
+    cpio \
+    cscope \
+    curl \
+    dtc \
+    e2tools \
+    expect \
+    flex \
+    gcc gcc-c++ make \
+    gdisk \
+    git \
+    glib2-devel \
+    gmp-devel \
+    gnutls-devel \
+    hidapi-devel \
+    lftp \
+    libattr-devel \
+    libcap-ng-devel \
+    libfdt-devel \
+    libftdi-devel \
+    libmpc-devel \
+    libslirp-devel \
+    libtool \
+    libusb1-devel \
+    libuuid-devel \
+    libxslt \
+    mtools \
+    ncurses-devel \
+    ninja-build \
+    nmap-ncat \
+    nvim \
+    openssl-devel \
+    openssl-devel-engine \
+    patch \
+    perl-core \
+    pixman-devel \
+    python3-cryptography \
+    python3-devel \
+    python3-pip \
+    python3-pyelftools \
+    python3-pyserial \
+    python3-tomli \
+    rsync \
+    swig \
+    unzip \
+    wget \
+    xdg-utils \
+    xterm \
+    xz \
+    zlib-devel
+
+# Install repo tool
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo && chmod a+x /bin/repo
+
+# Create working directory and initialize OP-TEE repo
+RUN mkdir /optee
+WORKDIR /optee
+RUN repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml && repo sync -j10
+
+# Build OP-TEE toolchains and run checks
+WORKDIR /optee/build
+RUN make -j3 toolchains
+RUN make -j$(nproc) check
