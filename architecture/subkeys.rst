@@ -117,7 +117,7 @@ second-level subkey above it would look like this:
 +------------------+----------------------+-----------------------------------+
 | Size in bytes    | Binary               |                                   |
 +------------------+----------------------+-----------------------------------+
-| first.img_size   | First-level subkey     | Signed by Root key              |
+| first.img_size   | First-level subkey   | Signed by Root key                |
 +------------------+----------------------+-----------------------------------+
 | first.name_size  | UUIDv5 name string   | Not signed, used to prove that    |
 |                  | for the next subkey  | the next UUID is in the namespace |
