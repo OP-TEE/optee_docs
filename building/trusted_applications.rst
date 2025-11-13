@@ -521,7 +521,7 @@ OP-TEE's pkcs11 in-tree TA is used.
 .. code-block:: sh
 
     sign_encrypt.py digest --key $TA_PUBLIC_KEY --uuid $UUID \
-        --elf $UUID.stripped.elf --dig $UUID.dig
+        --in $UUID.stripped.elf --dig $UUID.dig
 
 .. note::
         It may be necessary to make use of the ``--ta-version`` argument here in some cases, 
@@ -558,7 +558,7 @@ doesn't need to be set in this case, since it is stored in the HSM module.
 .. code-block:: sh
 
     sign_encrypt.py stitch --key $TA_PUBLIC_KEY --uuid $UUID \
-        --elf $UUID.stripped.elf --sig $UUID.sig --out $UUID.ta
+        --in $UUID.stripped.elf --sig $UUID.sig --out $UUID.ta
 
 .. note::
         If the ``--ta-version`` flag was used in step 3., it needs to be used here as well.
