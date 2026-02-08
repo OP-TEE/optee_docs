@@ -348,7 +348,14 @@ the image generated during the build process for our device.
 .. code-block:: bash
 
     $ sudo losetup -Pf <rpi3-project>/out/rpi3-sdcard.img
-    $ sudo mount /dev/loop0p2 /mnt
+    $ losetup -a | grep rpi3
+
+The latter command shows you which ``/dev/loop*`` file is associated
+with ``rpi3-sdcard.img``. Use this number to replace <num> in two commands below:
+
+.. code-block:: bash
+
+    $ sudo mount /dev/loop<num>p2 /mnt
 
 If there were no errors when running the above, then you should be able to see
 the root filesystem file at ``/mnt`` and we're now ready to copy the content to
@@ -359,7 +366,7 @@ the NFS share we've defined.
     $ cd /srv/nfs/rpi
     $ sudo cp -a /mnt/* .
     $ sudo umount /mnt
-    $ sudo losetup -d /dev/loop0
+    $ sudo losetup -d /dev/loop<num>
 
 .. hint::
 
