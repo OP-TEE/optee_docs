@@ -9,6 +9,7 @@ new to OP-TEE.
 
    about
    coding_standards
+   security_scope
    contribute
    contact
    license_headers
