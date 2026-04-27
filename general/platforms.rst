@@ -298,7 +298,7 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - Yes
      - Yes
 
-   * - `AMD/Xilinx Versal NET`_
+   * - AMD/Xilinx Versal NET
      - ``PLATFORM=versal-net``
      - No
      - Yes
