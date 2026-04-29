@@ -728,8 +728,7 @@ parameters.
     bytes, unless the buffer is supposed to be a single item of a certain type.
 
 .. code-block:: c
-    : caption: Example - Extending and reading Hardware PCR from within OP-TEE
-               OS
+    :caption: Example - Extending and reading Hardware PCR from within OP-TEE OS
 
     #include <drivers/versal_ocp.h>
 
