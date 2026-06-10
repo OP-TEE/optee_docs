@@ -85,7 +85,7 @@ incidents.
 .. _GitHub Security Advisories: https://github.com/OP-TEE/optee_os/security/advisories
 .. _issues: https://help.github.com/articles/about-issues/
 .. _issues at optee_os: https://github.com/OP-TEE/optee_os/issues
-.. _Mailing Aliases: https://developer.trustedfirmware.org/w/collaboration/security_center/mailing_aliases
+.. _Mailing Aliases: https://general.docs.trustedfirmware.org/en/latest/security_center/mailing_aliases.html
 .. _OP-TEE MAINTAINERS: https://github.com/OP-TEE/optee_os/blob/master/MAINTAINERS
-.. _TrustedFirmware.org security incident: https://developer.trustedfirmware.org/w/collaboration/security_center
+.. _TrustedFirmware.org security incident: https://general.docs.trustedfirmware.org/en/latest/security_center/index.html
 .. _TrustedFirmware.org FAQ: https://www.trustedfirmware.org/faq/

@@ -78,10 +78,10 @@ June 12 2014 was the day when OP-TEE was "born" as an open source project. At
 that day the OP-TEE team pushed the `first commit
 <https://github.com/OP-TEE/optee_os/commit/b01047730e77127c23a36591643eeb8bb0487d68>`_
 to GitHub. A bit after this Linaro also made a `press release
-<https://www.linaro.org/blog/op-tee-open-source-security-mass-market/>`_ about
-this. That press release contains a bit more information. At the first year as
-an open source project it was owned by STMicroelectronics but maintained by
-Linaro and STMicroelectronics. In 2015 there was an ownership transfer of
+<https://web.archive.org/web/20230511115829/https:/www.linaro.org/blog/op-tee-open-source-security-mass-market/>`_
+about this. That press release contains a bit more information. At the first
+year as an open source project it was owned by STMicroelectronics but maintained
+by Linaro and STMicroelectronics. In 2015 there was an ownership transfer of
 OP-TEE from STMicroelectronics to Linaro. In September 2019, ownership was
 transferred from Linaro to the TrustedFirmware.org project (see _blogpost for
 more information). Maintenance is a shared responsibility between the members
