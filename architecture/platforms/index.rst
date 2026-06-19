@@ -8,3 +8,4 @@ Platform documentation
     :maxdepth: 1
 
     nxp
+    qualcomm/index
