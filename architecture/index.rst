@@ -6,6 +6,7 @@ Architecture
 
    core
    Crypto <crypto>
+   stack_canaries
    device_tree
    device_tree_bindings/index
    file_structure
