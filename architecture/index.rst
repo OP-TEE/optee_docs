@@ -6,7 +6,7 @@ Architecture
 
    core
    Crypto <crypto>
-   aslr_riscv
+   aslr
    stack_canaries
    device_tree
    device_tree_bindings/index
