@@ -188,6 +188,16 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - No
      - Yes
 
+   * - `NVIDIA Jetson Orin (T234) <https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin>`_
+     - ``PLATFORM=tegra-t234``
+     - Yes
+     - Yes
+
+   * - `NVIDIA Jetson Thor (T264) <https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor>`_
+     - ``PLATFORM=tegra-t264``
+     - Yes
+     - Yes
+
    * - `Poplar Board (HiSilicon Hi3798C V200) <https://www.96boards.org/product/poplar>`_
      - ``PLATFORM=poplar``
      - Yes
