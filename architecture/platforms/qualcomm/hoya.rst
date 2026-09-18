@@ -18,7 +18,7 @@ The following drivers and services are available on the Hoya architecture:
 	- **RAMBLUR inline memory protection (v3)**
 	  (``CFG_QCOM_RAMBLUR_PIMEM_V3``) providing anti-rollback, integrity and
 	  confidentiality protection for secure memory windows.
-	- **Secure PRNG** hardware random number generator (``CFG_QCOM_PRNG``) used
+	- **Secure RNG** hardware random number generator (``CFG_QCOM_CSRNG``) used
 	  as the entropy source for ``hw_get_random_bytes()``.
 	- **Qualcomm clock driver** (``CFG_DRIVERS_QCOM_CLK``) built on the OP-TEE
 	  clock framework (``CFG_DRIVERS_CLK``).
@@ -41,8 +41,9 @@ In addition to the Hoya features above, the ``kodiak`` chipset enables the
 **Peripheral Authentication Service (PAS)** pseudo TA (``CFG_QCOM_PAS_PTA``).
 The PAS PTA authenticates and brings up remote subsystems such as the audio
 DSP (LPASS/QDSP6), the compute DSP (Turing) and the Wi-Fi processor subsystem
-(WPSS). It also applies the MX voltage-rail workaround required for QFPROM fuse
-blowing on this chipset (``CFG_QFPROM_MX_RAIL_WA``).
+(WPSS). QFPROM fuse blowing on this chipset requires managing a voltage rail,
+which is handled by also enabling the RPMh client driver
+(``CFG_QCOM_RPMH_CLIENT``).
 
 Lemans
 ======
