@@ -28,7 +28,8 @@ The following drivers and services are available on the Hoya architecture:
 	  and :ref:`qualcomm_qfprom_provisioning`.
 	- **Peripheral Authentication Service (PAS)**
 	  (``CFG_QCOM_PAS_PTA``) for authenticating and bringing up remote
-	  subsystem firmware. Chipset-specific subsystem coverage is described
+	  subsystem firmware. See :ref:`qualcomm_pas_authentication` for the
+	  overall architecture; chipset-specific subsystem coverage is described
 	  below.
 
 QFPROM supplies fuse-backed authentication data and supports provisioning at
@@ -70,6 +71,7 @@ This chipset enables certificate-based signature authentication support
 (``CFG_QCOM_FUSE_PTA``). With that support enabled, certificate/signature
 verification is skipped only when the secure-boot fuses explicitly report
 that secure boot is disabled; firmware segment hashes are still checked.
+See :ref:`qualcomm_pas_authentication` for details.
 
 This chipset also derives its Hardware Unique Key from the Hardware Key
 Manager (``CFG_QCOM_HWKM``) instead of using the OP-TEE core's default key.

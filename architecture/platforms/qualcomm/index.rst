@@ -9,6 +9,9 @@ is organised around *architecture families*, where each family groups a set of
 chipsets (``PLATFORM_FLAVOR``) that share the same CPU topology, drivers and
 memory layout.
 
+See :ref:`qualcomm_security_disclaimer` for the security expectations that
+apply across all Qualcomm platforms.
+
 Supported architectures
 ***********************
 The following architecture families and chipsets are currently supported:
@@ -58,7 +61,7 @@ Platform-dependent features
 ****************************
 Some features vary across Qualcomm chipsets rather than being available
 everywhere. The most significant is the **Peripheral Authentication
-Service (PAS)**, currently only
+Service (PAS)** (see :ref:`qualcomm_pas_authentication`), currently only
 available on the Hoya family, where it differs in scope and authentication
 strength between chipsets; see :ref:`qualcomm_hoya` for how Kodiak and
 Lemans compare. Other chipset-specific features, such as QFPROM, XPU and
@@ -83,4 +86,6 @@ across, or may eventually apply across, more than one architecture family:
 .. toctree::
 	:maxdepth: 1
 
+	pas_authentication
 	qfprom_provisioning
+	security_disclaimer
