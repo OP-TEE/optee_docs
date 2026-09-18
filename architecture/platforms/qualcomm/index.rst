@@ -33,8 +33,8 @@ flavor, for example:
 
 	$ make PLATFORM=qcom PLATFORM_FLAVOR=kodiak
 
-Common platform support
-***********************
+Common platform features
+*************************
 The following features are enabled for every Qualcomm chipset, regardless of the
 architecture family:
 
@@ -54,6 +54,16 @@ architecture family:
 	  ``tee_otp_get_hw_unique_key()`` implementation, so the default (test) key
 	  from the OP-TEE core is used unless a board-specific provider is added.
 
+Platform-dependent features
+****************************
+Some features vary across Qualcomm chipsets rather than being available
+everywhere. The most significant is the **Peripheral Authentication
+Service (PAS)**, currently only
+available on the Hoya family, where it differs in scope and authentication
+strength between chipsets; see :ref:`qualcomm_hoya` for how Kodiak and
+Lemans compare. Other chipset-specific features, such as QFPROM, XPU and
+watchdog support, are covered on the relevant architecture-family page.
+
 Per-architecture documentation
 ******************************
 Refer to the architecture-specific pages below for the drivers, services and
@@ -64,3 +74,13 @@ configuration available on each architecture family and its chipsets:
 
 	hoya
 	bobcat
+
+Security architecture topics
+*****************************
+Some security-relevant content is documented separately because it applies
+across, or may eventually apply across, more than one architecture family:
+
+.. toctree::
+	:maxdepth: 1
+
+	qfprom_provisioning
