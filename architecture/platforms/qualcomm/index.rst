@@ -22,10 +22,12 @@ The following architecture families and chipsets are currently supported:
 	- :ref:`qualcomm_bobcat` – networking processors
 		- ``ipq96xx``
 		- ``ipq52xx``
+	- :ref:`qualcomm_wildcat` – Oryon-based platforms
+		- ``nord``
 
 .. note::
 
-	Driver and feature support for both architecture families is still a
+	Driver and feature support for these architecture families is still a
 	work in progress. The per-architecture pages reflect the current state
 	of the upstream port and are expected to grow over time.
 
@@ -77,6 +79,7 @@ configuration available on each architecture family and its chipsets:
 
 	hoya
 	bobcat
+	wildcat
 
 Security architecture topics
 *****************************
