@@ -16,6 +16,7 @@ The following architecture families and chipsets are currently supported:
 	- :ref:`qualcomm_hoya` – application processors
 		- ``kodiak``
 		- ``lemans``
+		- ``monaco``
 	- :ref:`qualcomm_bobcat` – networking processors
 		- ``ipq96xx``
 		- ``ipq52xx``

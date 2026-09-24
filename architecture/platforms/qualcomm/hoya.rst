@@ -5,7 +5,7 @@ Hoya architecture
 #################
 
 The Hoya family targets Qualcomm application processors. It currently covers the
-``kodiak`` and ``lemans`` chipsets.
+``kodiak``, ``lemans`` and ``monaco`` chipsets.
 
 On top of the :ref:`common platform support <qualcomm>`, Hoya enables an 8-core
 Cortex-A (ARMv8) configuration with a GICv3 interrupt controller
@@ -48,3 +48,9 @@ Lemans
 ======
 The ``lemans`` chipset enables the Hoya drivers and services described above,
 including the Qualcomm clock driver and QFPROM fuse provisioning.
+
+Monaco
+======
+The ``monaco`` chipset (QCS8300 family) uses the common Hoya configuration. The
+Qualcomm clock driver, QFPROM fuse provisioning, HWKM and the PAS PTA are not
+enabled.
