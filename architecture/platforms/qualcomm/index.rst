@@ -55,6 +55,17 @@ architecture family:
 	  (test) key from the OP-TEE core is used unless a board-specific provider is
 	  added.
 
+Architecture topics
+*******************
+The following pages describe Qualcomm platform services shared by multiple
+chipsets:
+
+.. toctree::
+	:maxdepth: 1
+
+	clock_framework
+	pil_reset_sequence
+
 Per-architecture documentation
 ******************************
 Refer to the architecture-specific pages below for the drivers, services and

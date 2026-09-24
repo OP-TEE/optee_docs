@@ -21,7 +21,8 @@ The following drivers and services are available on the Hoya architecture:
 	- **Secure PRNG** hardware random number generator (``CFG_QCOM_PRNG``) used
 	  as the entropy source for ``hw_get_random_bytes()``.
 	- **Qualcomm clock driver** (``CFG_DRIVERS_QCOM_CLK``) built on the OP-TEE
-	  clock framework (``CFG_DRIVERS_CLK``).
+	  clock framework (``CFG_DRIVERS_CLK``). See
+	  :ref:`qualcomm_clock_framework`.
 	- **Command DB** (``CFG_QCOM_CMD_DB``), a read-only shared database used to
 	  look up RPMh resource addresses and metadata.
 	- **RPMh client** (``CFG_QCOM_RPMH_CLIENT``) to vote for shared resources
@@ -47,4 +48,6 @@ blowing on this chipset (``CFG_QFPROM_MX_RAIL_WA``).
 Lemans
 ======
 The ``lemans`` chipset enables the Hoya drivers and services described above,
-including the Qualcomm clock driver and QFPROM fuse provisioning.
+including the Qualcomm clock driver, QFPROM fuse provisioning and PAS support
+for QDSP6-based subsystems. See :ref:`qualcomm_pil_reset_sequence` for the
+clock/reset flow used around PAS firmware start.
