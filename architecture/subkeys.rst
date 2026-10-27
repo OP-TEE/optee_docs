@@ -82,7 +82,8 @@ little endian as:
 | 4         |   name_size       |  hash               | Size of the UUIDv5    |
 |           |                   |                     | name for the          |
 |           |                   |                     | next subkey or TA,    |
-|           |                   |                     | 0 for identiy subkeys |
+|           |                   |                     | 0 for identity        |
+|           |                   |                     | subkeys               |
 +-----------+-------------------+---------------------+-----------------------+
 | 4         |   subkey_version  |  hash               |                       |
 +-----------+-------------------+---------------------+-----------------------+
