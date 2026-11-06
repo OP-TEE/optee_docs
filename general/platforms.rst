@@ -313,6 +313,11 @@ please refer to the file MAINTAINERS_ for contact details for various platforms.
      - No
      - Yes
 
+   * - `AMD Versal Gen 2 <https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/ai-edge-series.html>`_
+     - ``PLATFORM=versal2``
+     - Yes
+     - Yes
+
    * - `Telechips TCC805x <https://topst.ai/product/topstD3>`_
      - ``PLATFORM=telechips-tcc805x``
      - Yes
