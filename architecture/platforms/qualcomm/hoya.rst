@@ -21,7 +21,13 @@ The following drivers and services are available on the Hoya architecture:
 	- **Secure RNG** hardware random number generator (``CFG_QCOM_CSRNG``) used
 	  as the entropy source for ``hw_get_random_bytes()``.
 	- **Qualcomm clock driver** (``CFG_DRIVERS_QCOM_CLK``) built on the OP-TEE
-	  clock framework (``CFG_DRIVERS_CLK``).
+	  clock framework (``CFG_DRIVERS_CLK``). See
+	  :ref:`qualcomm_clock_framework`.
+	- **Command DB** (``CFG_QCOM_CMD_DB``), a read-only shared database used to
+	  look up RPMh resource addresses and metadata.
+	- **RPMh client** (``CFG_QCOM_RPMH_CLIENT``) to vote for shared resources
+	  (clocks, regulators, etc.) through the RPMh subsystem. It depends on the
+	  Command DB driver.
 	- **QFPROM** (``CFG_QCOM_QFPROM``) for reading one-time-programmable
 	  fuses, with boot provisioning controlled by
 	  ``CFG_QCOM_QFPROM_FUSEPROV``. Enablement differs per chipset; see below
@@ -64,7 +70,8 @@ Lemans
 ======
 PAS on ``lemans`` brings up the audio DSP (LPASS/QDSP6), two compute DSPs
 (Turing), two general-purpose DSPs (GPDSP), the video codec (IRIS) and camera
-subsystems.
+subsystems. See :ref:`qualcomm_pil_reset_sequence` for the generic clock/reset
+flow used around PAS firmware start.
 
 This chipset enables certificate-based signature authentication support
 (``CFG_QCOM_PAS_AUTH``), backed by a restricted fuse-read service
