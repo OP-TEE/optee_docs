@@ -96,6 +96,18 @@ When you want to submit a patch to the OP-TEE project, you are supposed to
 create a `pull request`_ to the git where you forked your git from. How that is
 done using GitHub is explained at the GitHub `pull request`_ page.
 
+Draft pull requests
+===================
+The CI capacity is limited, so only the code style check runs on a draft pull
+request. The full CI, which builds the supported platforms and runs the QEMU
+tests, starts when the pull request is marked **Ready for review**. Converting
+a pull request back to a draft cancels its full CI run.
+
+Keep the pull request in draft status while it can't yet be merged, for
+instance because it depends on another pull request that hasn't been merged.
+Mark it ready for review when it can be merged. Reviewers can still comment on
+a draft.
+
 Commit messages
 ===============
 
