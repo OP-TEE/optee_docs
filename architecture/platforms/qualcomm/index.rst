@@ -69,6 +69,17 @@ strength between chipsets; see :ref:`qualcomm_hoya` for how Kodiak and
 Lemans compare. Other chipset-specific features, such as QFPROM, XPU and
 watchdog support, are covered on the relevant architecture-family page.
 
+Architecture topics
+*******************
+The following pages describe Qualcomm platform services shared by multiple
+chipsets:
+
+.. toctree::
+	:maxdepth: 1
+
+	clock_framework
+	pil_reset_sequence
+
 Per-architecture documentation
 ******************************
 Refer to the architecture-specific pages below for the drivers, services and
